@@ -166,7 +166,7 @@ read=read.csv(file="/Users/ahern/R/trophic_cascades/mc2/c13_glucose.csv",
               header=T)
 
 
-{par(mfcol=c(2,1),mar=c(4,5.5,1,1),xpd=T)
+{par(mfcol=c(1,2),mar=c(4,5.5,1,1),xpd=T)
 plot(time_glucose,glucose,type='o',ylim=c(0,12),xlab= "Time (hours)", ylab = "Glucose\n (um)",col='gray30',bg='#b65090',pch=21,cex.axis=1.3,cex.lab=1.2,cex=1.3)
   plot(read$T,read$Atom..13C,type='o',ylim=c(0,24),xlab="Time (hours)",
      ylab="Atom C13\n (%)", col='gray20',bg='gray50',
