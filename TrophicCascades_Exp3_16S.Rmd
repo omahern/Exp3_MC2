@@ -69,7 +69,7 @@ pH and DO over time with the 13C addition highlighted.
 
 Generated using some sort of coloration with a plate reader? Have to find kit info. 
 
-```{r, fig.height=5, fig.width=8}
+```{r, fig.height=5, fig.width=8, eval=FALSE}
 read=read.csv(file="/Users/ahern/R/trophic_cascades/mc2/states.csv",header=T)
 
 {par(mfrow=c(2,3),mar=c(2,6,3,1))
@@ -81,7 +81,7 @@ plot(read$Time,read$Glucose_um,type='o',ylim=c(0,12),xlab= "Time (hours)", ylab 
 
 ```
 
-```{r, fig.width=7, fig.height=8}
+```{r, fig.width=6, fig.height=8}
 read=read.csv(file="/Users/ahern/R/trophic_cascades/mc2/states.csv",header=T)
 
 {par(mfrow=c(5,1),mar=c(2,7,3,1),xpd=T)
@@ -157,14 +157,13 @@ text(240,14,"35.39")}
 Concentrations of different carbon substrates in the inflow. Lines represent sampling times for feed concentrations. Feed concentrations on top. Missing values represent no data. Unless there is the same feed for both MC1 and MC2? I'm not sure...
 
 ## Delta 13C
-```{r, fig.height=4, fig.width=6}
+```{r, fig.height=2.5, fig.width=7}
 read=read.csv(file="/Users/ahern/R/trophic_cascades/mc2/states.csv",header=T)
 glucose=read$Glucose_um
 time_glucose=read$Time
 
 read=read.csv(file="/Users/ahern/R/trophic_cascades/mc2/c13_glucose.csv",
               header=T)
-
 
 {par(mfcol=c(1,2),mar=c(4,5.5,1,1),xpd=T)
 plot(time_glucose,glucose,type='o',ylim=c(0,12),xlab= "Time (hours)", ylab = "Glucose\n (um)",col='gray30',bg='#b65090',pch=21,cex.axis=1.3,cex.lab=1.2,cex=1.3)
@@ -671,6 +670,8 @@ HR-SIP is good because...
 [and the Paper](https://www.nature.com/articles/ismej2015106)
 
 But first input parameters and get treatments to test against for DESeq.
+
+
 #### Inputting data
 Ok so I had some issues with this. With the l2fc function from DESeq2 you have to make sure that your control is the one being tested.
 
@@ -716,7 +717,7 @@ phyo2 = subset_taxa(phyo1, !Family=="Mitochondria")
 
 phyo_frac=subset_samples(phyo2, Comm_Frac=="Frac")
 input=otu_table(phyo_frac)
-d.subset <- codaSeq.filter(input, samples.by.row=F,min.reads=2,min.prop	=0.001)
+d.subset <- codaSeq.filter(input, samples.by.row=F,min.reads=2,min.prop	= 0.001)
 OTU=otu_table(d.subset,taxa_are_rows = T)
 phyo_frac=phyloseq(OTU,map,tax2,tree)
 
@@ -1034,7 +1035,7 @@ sw2=otu_table(sw, taxa_are_rows = T)
 phyo_hrsip_trans=phyloseq(sw2, map, tax2, tree)
 ```
 
-###### Rel Abund Community 
+##### Rel Abund Community 
 QSip community fraction. Which HR-SIP ASVs are present in the community samples?
 ```{r asv-qsip-comm, fig.height=4, fig.width=4,message=FALSE,error=FALSE}
 comm_hrsip=subset_samples(phyo_hrsip_trans, Comm_Frac=="Community")
@@ -1049,7 +1050,7 @@ box(which='plot')
 
 Ok turns out that the most abundant ASVs are in both teh community and fractionated samples. This makes sense because of the sparsity filtering. 
 
-###### Rel Abund Fracs
+##### Rel Abund Fracs
 ```{r asv-qsip-barplot, fig.height=5, fig.width=9, message=FALSE,error=FALSE}
 frac_hrsip=subset_samples(phyo_hrsip_trans, Comm_Frac=="Frac")
 frac_tab=as.matrix((otu_table(frac_hrsip)))
@@ -1071,7 +1072,7 @@ text(60,1.05,"15MC2 240h",font=1)
 
 Was there a shift in community and a shift in the fractions? 
 
-###### ASVs in most timepoints 
+##### ASVs in most timepoints 
 Five ASVs showed up in all five timepoints:
 
 | ASV        | Class               | Order                 | Family           | Genus        | Species                      |
@@ -1130,7 +1131,7 @@ axis(side=1, at =c(0,24,48,72,120,240))
 
 Lets look at the relative abundance of the ASVs that showed up in the most timepoints. 
 
-###### Top ASVs Rel Abund
+##### Top ASVs Rel Abund
 
 ```{r asv-top5-hrsip,message=F,warning=F, error=F, fig.height=6, fig.width=9}
 
@@ -1157,6 +1158,10 @@ legend(0,-.35, legend=c("3fa2974b Pseudoxanthobacter", "cf33813 Desulfococcus", 
 
 ```
 
+
+##### Heatmap of Incorporators
+
+
 ```{r,warning=FALSE,error=FALSE,message=FALSE, fig.height=8,fig.width=8}
 read=read.csv(file="/Users/ahern/TC_Exp3/subset_asvs.csv",header=T,row.names = 1)
 data=data.frame(read[,2:6], row.names=read$OTU)
@@ -1168,8 +1173,10 @@ c2=c('gray96',(rev(magma(10, begin=0.4))))
 {phylo.heatmap(hrsip_tree, data, colors=c2, mar=c(1,5,1,1),lwd=3,
               fsize=c(0.7,1,1),split=c(1,0.3),standardize = F)}
 
-
 ```
+
+
+
 
 Two ASVs only had significant values for 13C Glucose assimilation at 9MC2 T24
 
@@ -1247,16 +1254,39 @@ Ok we did the genus level and now I want to look at the genus level to look at c
  + if this is correct, we should gut out 24 hour RNA sampling from next round of experiments. only take cell counts and delta 13-C
 
 ```{r, message=FALSE}
-# get just the Fractionated samples 
+x<-read.csv(file='/Users/ahern/R/trophic_cascades/mc2/4Nov21/ASVs/asv-table_2.csv',header=TRUE,row.names=1)
+OTU = otu_table(x, taxa_are_rows=T)
+taxa<-read.csv(file="/Users/ahern/R/trophic_cascades/mc2/4Nov21/ASVs/taxonomy_4nov21.csv",header=TRUE,row.names=1)
+t<-as.matrix(taxa)
+tax2<-tax_table(t)
+map<-import_qiime_sample_data("/Users/ahern/R/trophic_cascades/mc2/26oct21/ASV_run3/map_2.txt")
+tree=read.tree("/Users/ahern/R/trophic_cascades/mc2/4Nov21/ASVs/tree.nwk")
+phyo = phyloseq(OTU, tax2,map,tree)
+phyo1 = subset_taxa(phyo, !Order=="Chloroplast")
+phyo2 = subset_taxa(phyo1, !Family=="Mitochondria")
+
 phyo_frac=subset_samples(phyo2, Comm_Frac=="Frac")
-phyo_frac_genus=tax_glom(phyo_frac,taxrank="Genus")
+phyo_frac_genus=tax_glom(phyo_frac, taxrank="Genus")
+input=otu_table(phyo_frac_genus)
+library(CoDaSeq)
+d.subset <- codaSeq.filter(input, samples.by.row=F,min.reads=2,min.prop	= 0.001)
+OTU=otu_table(d.subset,taxa_are_rows = T)
+tax3=tax_table(phyo_frac_genus)
+phyo_frac_genus=phyloseq(OTU,map,tax3,tree)
+
 params = get_treatment_params(phyo_frac_genus, c('Treatment', 'TP'))
+
 params = dplyr::filter(params, Treatment!="5MC2")
-ex = "(Treatment=='5MC2' & TP=='-0.45') | (Treatment=='${Treatment}' & TP == '${TP}')"
+
+ex = "(Treatment=='${Treatment}' & TP=='${TP}') | (Treatment=='5MC2' & TP == '-0.45')"
 sample_data(phyo_frac_genus)$Treatment <- relevel(as.factor(sample_data(phyo_frac_genus)$Treatment) , ref = "5MC2")
+#sample_data(all)$Treatment <- relevel(as.factor(get_variable(all, "Treatment")), ref="5MC2")
+
 physeq_S2D2_g = phyloseq_subset(phyo_frac_genus, params, ex)
 physeq_S2D2_g
 ```
+
+Again removed genera that did not compose 0.1% of the dataset and had counts greater than 2. So 76 genera are left 
 
 
 
@@ -1281,11 +1311,11 @@ No of Genera that incorporated 13-C
 
 | Treatment     | No ASV        |
 |---------------|:-------------:|
-| 9MC2 24h      | 4             |
-| 11MC2 48h     | 7             |
-| 12MC2 72h     | 9             |
-| 14MC2 120h    | 11            |
-| 15MC2 240h    | 11            |
+| 9MC2 24h      | 8             |
+| 11MC2 48h     | 8             |
+| 12MC2 72h     | 13            |
+| 14MC2 120h    | 14            |
+| 15MC2 240h    | 12            |
 
 
 ### The plots
@@ -1296,74 +1326,96 @@ No of Genera that incorporated 13-C
 ```{r}
 df_qsip_genus=read.csv(file='/Users/ahern/R/trophic_cascades/mc2/4Nov21/ASVs/HRSIP_genus.csv',header=T)
 
-t24=subset(df_qsip_genus, tp=="24")
-t48=subset(df_qsip_genus, tp=="48")
-t72=subset(df_qsip_genus, tp=="72")
-t120=subset(df_qsip_genus, tp=="120")
-t240=subset(df_qsip_genus, tp=="240")
+t24=subset(df_qsip_genus, timepoint=="24")
+t48=subset(df_qsip_genus, timepoint=="48")
+t72=subset(df_qsip_genus, timepoint=="72")
+t120=subset(df_qsip_genus, timepoint=="120")
+t240=subset(df_qsip_genus, timepoint=="240")
 
 {
 par(mfrow=c(1,5),mar=c(5,1,1,1))
-plot(t24$log2FoldChange,1:67,xlab="Log2 Fold Change", ylab=" ",pch=23, col='white',bg='white',main="9MC2 24h",
+plot(t24$log2FoldChange,1:46,xlab="Log2 Fold Change", ylab=" ",pch=23, col='white',bg='white',main="9MC2 24h",
      yaxt='n')
 abline(v=0, col ='black')
-segments(0,1:67,t24$log2FoldChange,1:67, col = t24$colors1)
-points(t24$log2FoldChange,1:67, pch = 23, bg=t24$colors,cex=1)
+segments(0,1:46,t24$log2FoldChange,1:46, col = t24$colors1)
+points(t24$log2FoldChange,1:46, pch = 23, bg=t24$colors,cex=1)
 
-plot(t48$log2FoldChange,1:65,xlab="Log2 Fold Change", ylab=" ",pch=23, col='white',bg='white',main="11MC2 48h",
+plot(t48$log2FoldChange,1:44,xlab="Log2 Fold Change", ylab=" ",pch=23, col='white',bg='white',main="11MC2 48h",
      yaxt='n')
 abline(v=0, col ='black')
-segments(0,1:65,t48$log2FoldChange,1:65, col = t48$colors1)
-points(t48$log2FoldChange,1:65, pch = 23, bg=t48$colors,cex=1)
+segments(0,1:44,t48$log2FoldChange,1:44, col = t48$colors1)
+points(t48$log2FoldChange,1:44, pch = 23, bg=t48$colors,cex=1)
 
-plot(t72$log2FoldChange,1:54,xlab="Log2 Fold Change", ylab=" ",pch=23, col='white',bg='white',main="12MC2 72h",
+plot(t72$log2FoldChange,1:43,xlab="Log2 Fold Change", ylab=" ",pch=23, col='white',bg='white',main="12MC2 72h",
      yaxt='n')
 abline(v=0, col ='black')
-segments(0,1:54,t72$log2FoldChange,1:54, col = t72$colors1)
-points(t72$log2FoldChange,1:54, pch = 23, bg=t72$colors,cex=1)
+segments(0,1:43,t72$log2FoldChange,1:43, col = t72$colors1)
+points(t72$log2FoldChange,1:43, pch = 23, bg=t72$colors,cex=1)
 
-plot(t120$log2FoldChange,1:61,xlab="Log2 Fold Change", ylab=" ",pch=23, col='white',bg='white',main="14MC2 120h",
+plot(t120$log2FoldChange,1:43,xlab="Log2 Fold Change", ylab=" ",pch=23, col='white',bg='white',main="14MC2 120h",
      yaxt='n')
 abline(v=0, col ='black')
-segments(0,1:61,t120$log2FoldChange,1:61, col = t120$colors1)
-points(t120$log2FoldChange,1:61, pch = 23, bg=t120$colors,cex=1)
+segments(0,1:43,t120$log2FoldChange,1:43, col = t120$colors1)
+points(t120$log2FoldChange,1:43, pch = 23, bg=t120$colors,cex=1)
 
-plot(t240$log2FoldChange,1:51,xlab="Log2 Fold Change", ylab=" ",pch=23, col='white',bg='white',main="14MC2 120h",
+plot(t240$log2FoldChange,1:42,xlab="Log2 Fold Change", ylab=" ",pch=23, col='white',bg='white',main="14MC2 120h",
      yaxt='n')
 abline(v=0, col ='black')
-segments(0,1:51,t240$log2FoldChange,1:51, col = t240$colors1)
-points(t240$log2FoldChange,1:51, pch = 23, bg=t240$colors,cex=1)
+segments(0,1:42,t240$log2FoldChange,1:42, col = t240$colors1)
+points(t240$log2FoldChange,1:42, pch = 23, bg=t240$colors,cex=1)
 }
 ```
 
 
-Genera that incorporated 13C in more than 3 time points
 
 | ID        | Class               | Order                 | Family           | Genus         | No TP Incorp 13C |
 |------------|:-------------------:|----------------------:|:----------------:|:------------:|:----------------:|
-| 5ed8f8f3    | Verrucomicrobiae    | Opitutales            | Opitutaceae      | Diplosphaera | 4                |
-| 801efb1    | Alphaproteobacteria | Rhodospirillales      | Terasakiellaceae |              | 4                |
-| a6db2d87   | Deltaproteobacteria | Myxococcales          | Nannocystaceae   | Nannocystis  | 5                |
-| cf33813   | Alphaproteobacteria | Rhizobiales           | Rhizobiaceae     | *below*      | 4                |
+| 5ed8f8f3    | Verrucomicrobiae    | Opitutales            | Opitutaceae      | *Diplosphaera* | 5                |
+| a6db2d87   | Deltaproteobacteria | Myxococcales          | Nannocystaceae   | *Nannocystis*  | 5                |
+| cf33813   | Alphaproteobacteria | Rhizobiales           | Rhizobiaceae     | *below*      | 5                |
+| 801efb1    | Alphaproteobacteria | Rhodospirillales      | Terasakiellaceae |  uncultured        | 4                |
+| 3fa2974    | Alphaproteobacteria | Rhizobiales      | Xanthobacteraceae |  *Pseudoxanthobacter*            | 4                |
 
-cf33813 Genus = Allorhizobium-Neorhizobium-Pararhizobium-Rhizobium
+cf33813 Genus = *Allorhizobium-Neorhizobium-Pararhizobium-Rhizobium*
 
+801efb1 significant at timepoints 11MC2 48h, 12MC2 72h, 14MC2 120h, & 15MC2 240h.
+
+3fa2974 significant at timepoints 9MC2 24h, 11MC2 48h, 12MC2 72h, & 14MC2 120h.
 
 #### Top Genera Rel Abund
 
-```{r, warning=FALSE, error=FALSE, message=FALSE,fig.height=8, fig.width=9, eval=FALSE}
-phyo_frac_genus=tax_glom(phyo2,taxrank="Genus")
-phyo_frac2=subset_samples(phyo_frac_genus, Comm_Frac=="Frac")
-phyo_genus_abund=transform_sample_counts(phyo_frac2, function(x) (x/sum(x)))
-five_four_points=subset_taxa(phyo_genus_abund, row.names(tax_table(phyo_genus_abund))=="a6db2d87f1e7a32216e5041a1920f12e" | row.names(tax_table(phyo_genus_abund))=="cf3381318906e1e08f58bca905636dc0" | row.names(tax_table(phyo_genus_abund))=="5ed8f8f3a98e669d81b30c56825e0870" | row.names(tax_table(phyo_genus_abund)) == "801efb14d6457f799fd2becee6d07b72")
-frac_tab=otu_table(five_four_points)
+```{r, warning=FALSE, error=FALSE, message=FALSE,echo=FALSE}
+x<-read.csv(file='/Users/ahern/R/trophic_cascades/mc2/4Nov21/ASVs/asv-table_2.csv',header=TRUE,row.names=1)
+OTU = otu_table(x, taxa_are_rows=T)
+taxa<-read.csv(file="/Users/ahern/R/trophic_cascades/mc2/4Nov21/ASVs/taxonomy_4nov21.csv",header=TRUE,row.names=1)
+t<-as.matrix(taxa)
+tax2<-tax_table(t)
+map<-import_qiime_sample_data("/Users/ahern/R/trophic_cascades/mc2/26oct21/ASV_run3/map_2.txt")
+tree=read.tree("/Users/ahern/R/trophic_cascades/mc2/4Nov21/ASVs/tree.nwk")
+phyo = phyloseq(OTU, tax2,map,tree)
+phyo1 = subset_taxa(phyo, !Order=="Chloroplast")
+phyo2 = subset_taxa(phyo1, !Family=="Mitochondria")
+```
+
+```{r, warning=FALSE, error=FALSE, message=FALSE,fig.height=8, fig.width=9}
+phyo_frac_gen=tax_glom(phyo2, taxrank="Genus")
+phyo_fracg=subset_samples(phyo_frac_gen, Comm_Frac=="Frac")
+
+genu_ab=transform_sample_counts(phyo_fracg, function(x) (x/sum(x)))
+frac_sub=otu_table(genu_ab)
+frac_tab=subset(frac_sub, row.names(frac_sub) =="a6db2d87f1e7a32216e5041a1920f12e" | row.names(frac_sub) =="cf3381318906e1e08f58bca905636dc0" | row.names(frac_sub) =="5ed8f8f3a98e669d81b30c56825e0870" | row.names(frac_sub) =="801efb14d6457f799fd2becee6d07b72" | row.names(frac_sub) =="3fa2974b1f70109275811beb1ae321c9")
+
+#gen_45_frac=subset_taxa(genu_ab, row.names(tax_table(genu_ab))== "a6db2d87f1e7a32216e5041a1920f12e" | row.names(tax_table(genu_ab))== "cf3381318906e1e08f58bca905636dc0" | row.names(tax_table(genu_ab))== "5ed8f8f3a98e669d81b30c56825e0870" | row.names(tax_table(genu_ab)) == "801efb14d6457f799fd2becee6d07b72" | row.names(tax_table(genu_ab)) == "3fa2974b1f70109275811beb1ae321c9")
+
 
 space=c(rep("0",10),0.5,rep("0",12),0.5,rep("0",8),0.5,rep("0",8),0.5,rep("0",9),0.5,(rep("0",8)))
-col_asv=c("#bb7438","#72ac5c","#7f64b9","#b94b75")
+#col_asv=c("#bb7438","#72ac5c","#7f64b9","#b94b75")
+library(nationalparkcolors)
+col_asv=park_palette("Arches",5)
 
 {par(mar=c(15,4,3,1),xpd=T)
 barplot(frac_tab, las=2,  cex.names = 0.7, col=col_asv,
-        ylab="Relative Abundance Bacterial ASVs",space=as.numeric(space))
+        ylab="Relative Abundance Bacterial Genera",space=as.numeric(space))
 box(which='plot')
 text(5,1.05,"5MC2 -0.45h",font=1)
 text(17,1.05, "9MC2 24h",font=1)
@@ -1371,28 +1423,76 @@ text(29,1.05,"11MC2 48h",font=1)
 text(40, 1.05,'12MC2 72h',font=1)
 text(50,1.05, "14MC2 120h",font=1)
 text(60,1.05,"15MC2 240h",font=1)
-legend(0,-.2, legend=c("Alphaproteobacteria Allorhizobium-Neorhizobium-Pararhizobium-Rhizobium","Alphaproteobacteria Terasakiellaceae", "Deltaproteobacteria Nannocystis","Verrucomicrobiae Diplosphaera"), pch =22, pt.bg= col_asv, bty='n',ncol=1, cex=0.8)
+legend(0,-.3, legend=c("Alphaproteobacteria Allorhizobium-Neorhizobium-Pararhizobium-Rhizobium","Alphaproteobacteria Terasakiellaceae", "Deltaproteobacteria Nannocystis","Verrucomicrobiae Diplosphaera", "Alphaproteobacteria Pseudoxanthobacter"), pch =22, pt.bg= col_asv, bty='n',ncol=1, cex=0.8)
 }
 ```
 
-
+#### Top Genera Rel Abund
 
 Relative abundance in the community 
-```{r, warning=FALSE,error=FALSE, message=FALSE,fig.width=4,fig.height=7, eval=FALSE}
-phyo_g=subset_samples(phyo2, Comm_Frac=="Community")
-phyo_comm_g=tax_glom(phyo_g, taxrank = "Genus")
-phyo_genus_abund=transform_sample_counts(phyo_comm_g, function(x) (x/sum(x)))
-five_four_points=subset_taxa(phyo_genus_abund, row.names(tax_table(phyo_genus_abund))=="a6db2d87f1e7a32216e5041a1920f12e" | row.names(tax_table(phyo_genus_abund))=="cf3381318906e1e08f58bca905636dc0" | row.names(tax_table(phyo_genus_abund))=="5ed8f8f3a98e669d81b30c56825e0870" | row.names(tax_table(phyo_genus_abund)) == "801efb14d6457f799fd2becee6d07b72")
-frac_tab=otu_table(five_four_points)
-comm_tab=as.matrix((otu_table(five_four_points)))
-col_asv=c("#bb7438","#72ac5c","#7f64b9","#b94b75")
+```{r, warning=FALSE,error=FALSE, message=FALSE,fig.width=4,fig.height=7}
+phyo_comm_g=subset_samples(phyo_frac_gen, Comm_Frac == "Community")
+genu_c=transform_sample_counts(phyo_comm_g, function(x) (x/sum(x)))
+
+frac_sub=otu_table(genu_c)
+comm_tab=subset(frac_sub, row.names(frac_sub) =="a6db2d87f1e7a32216e5041a1920f12e" | row.names(frac_sub) =="cf3381318906e1e08f58bca905636dc0" | row.names(frac_sub) =="5ed8f8f3a98e669d81b30c56825e0870" | row.names(frac_sub) =="801efb14d6457f799fd2becee6d07b72" | row.names(frac_sub) =="3fa2974b1f70109275811beb1ae321c9")
+
+#gen_45_comm=subset_taxa(genu_c, row.names(tax_table(genu_c))=="a6db2d87f1e7a32216e5041a1920f12e" | row.names(tax_table(genu_c))=="cf3381318906e1e08f58bca905636dc0" | row.names(tax_table(genu_c))=="5ed8f8f3a98e669d81b30c56825e0870" | row.names(tax_table(genu_c)) == "801efb14d6457f799fd2becee6d07b72" | row.names(tax_table(genu_c)) == "3fa2974b1f70109275811beb1ae321c9")
+#col_asv=c("#bb7438","#72ac5c","#7f64b9","#b94b75")
+col_asv=park_palette("Arches",5)
 
 {
 par(mar=c(20,5,1,1),xpd=T)
 barplot(comm_tab, las=2, cex.names = 1, col=col_asv,
         ylab="Relative Abundance Bacterial Genera",space=0)
 box(which='plot')
-legend(0,-.2, legend=c("Alphaproteobacteria Allorhizobium-Neorhizobium-Pararhizobium-Rhizobium","Alphaproteobacteria Terasakiellaceae", "Deltaproteobacteria Nannocystis","Verrucomicrobiae Diplosphaera"), pch =22, pt.bg= col_asv, bty='n',ncol=1, cex=0.8)
+legend(0,-.3, legend=c("Alphaproteobacteria Allorhizobium-Neorhizobium-Pararhizobium-Rhizobium","Alphaproteobacteria Terasakiellaceae", "Deltaproteobacteria Nannocystis","Verrucomicrobiae Diplosphaera", "Alphaproteobacteria Pseudoxanthobacter"), pch =22, pt.bg= col_asv, bty='n',ncol=1, cex=0.8)
 }
 ```
 
+
+#### Heatmap of Incorporators 
+
+```{r,warning=FALSE,error=FALSE,message=FALSE, fig.height=8,fig.width=8, eval=TRUE}
+# script how to get log fold change into dataframe 
+#sub=subset(df_qsip_genus, incorp=="TRUE")
+#d=dcast(sub, OTU ~ timepoint, value.var = "log2FoldChange", fun.aggregate = sum)
+#write.csv(d, '/Users/ahern/R/trophic_cascades/mc2/4Nov21/ASVs/subset_genus_hrsip.csv')
+read=read.csv(file='/Users/ahern/R/trophic_cascades/mc2/4Nov21/ASVs/subset_genus_hrsip.csv',header=T,row.names = 1)
+data=data.frame(read[,2:6], row.names=read$OTU)
+otu=read$IDS
+my_subset <- subset(tax_table(phyo_frac_gen), rownames(tax_table(phyo_frac_gen)) %in% otu)
+phyo_frac_gen2=phyloseq(otu_table(phyo_frac_gen), my_subset, tree)
+hrsip_tree_gen=phy_tree(phyo_frac_gen2)
+library(viridis)
+library(phytools)
+c2=c('gray96',(rev(magma(10, begin=0.5))))
+d2=log(data+1)
+{phylo.heatmap(hrsip_tree_gen, d2, colors=c2, mar=c(1,5,1,1),lwd=3,
+               fsize=c(0.7,1,1),split=c(1,0.3),standardize = F)}
+
+```
+
+
+
+```{r,warning=FALSE,error=FALSE,message=FALSE, fig.height=8,fig.width=8, eval=TRUE}
+# script how to get log fold change into dataframe 
+#sub=subset(df_qsip_genus, incorp=="TRUE")
+#d=dcast(sub, OTU ~ timepoint, value.var = "log2FoldChange", fun.aggregate = sum)
+#write.csv(d, '/Users/ahern/R/trophic_cascades/mc2/4Nov21/ASVs/subset_genus_hrsip.csv')
+read=read.csv(file='/Users/ahern/R/trophic_cascades/mc2/4Nov21/ASVs/subset_genus_hrsip.csv',header=T,row.names = 1)
+data=data.frame(read[,2:6], row.names=read$IDS2)
+row.names(data)=read$IDS2
+otu=read$IDS
+my_subset <- subset(tax_table(phyo_frac_gen), rownames(tax_table(phyo_frac_gen)) %in% otu)
+phyo_frac_gen2=phyloseq(otu_table(phyo_frac_gen), my_subset, tree)
+hrsip_tree_gen=phy_tree(phyo_frac_gen2)
+#write.csv(hrsip_tree_gen$tip.label, 'gen_tiplabs.csv')
+hrsip_tree_gen$tip.label=c('Alphaproteobacteria Paracaedibacteraceae uncultured','Alphaproteobacteria Ancylobacter','Alphaproteobacteria Pseudoxanthobacter','Alphaproteobacteria Allo-Neo-Para-Rhizobium','Alphaproteobacteria Hirschia','Alphaproteobacteria Terasakiellaceae uncultured','Campylobacteria Thioreductor','Campylobacteria Caminibacter','Deltaproteobacteria Nannocystis','Bacteroidia Dyadobacter','Bacteroidia Cryomorphaceae uncultured','Bacteroidia Sediminibacterium','Rhodothermia Balneolaceae uncultured','Gammaproteobacteria Legionella','Gammaproteobacteria Janthinobacterium','Gammaproteobacteria Zoogloea','Gammaproteobacteria Dechloromonas','Gammaproteobacteria Methylotenera','Gammaproteobacteria Methylophilus','Gammaproteobacteria Denitratisoma','Gammaproteobacteria Aquabacterium','Verrucomicrobiae Diplosphaera','Verrucomicrobiae Cephaloticoccus','Verrucomicrobiae Opitutus')
+library(viridis)
+library(phytools)
+c2=c('gray96',(rev(magma(10, begin=0.5))))
+d2=log(data+1)
+{phylo.heatmap(hrsip_tree_gen, d2, colors=c2, mar=c(1,5,1,1),lwd=3,
+               fsize=c(0.7,1,1),split=c(1,0.3),standardize = F)}
+```

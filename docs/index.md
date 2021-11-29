@@ -84,8 +84,6 @@ plot(read$Time,read$Xylose_um,type='o',ylim=c(0,12),xlab= "Time (hours)", ylab =
 plot(read$Time,read$Glucose_um,type='o',ylim=c(0,12),xlab= "Time (hours)", ylab = "Concentration\n (um)",col='gray30',bg='#b65090',pch=21,cex.axis=1.3,cex.lab=1.2,cex=1.3,main="Glucose")}
 ```
 
-![](/Users/ahern/Documents/GitHub/Exp3_MC2/docs/index_files/figure-html/unnamed-chunk-2-1.png)<!-- -->
-
 
 ```r
 read=read.csv(file="/Users/ahern/R/trophic_cascades/mc2/states.csv",header=T)
@@ -172,7 +170,6 @@ time_glucose=read$Time
 
 read=read.csv(file="/Users/ahern/R/trophic_cascades/mc2/c13_glucose.csv",
               header=T)
-
 
 {par(mfcol=c(1,2),mar=c(4,5.5,1,1),xpd=T)
 plot(time_glucose,glucose,type='o',ylim=c(0,12),xlab= "Time (hours)", ylab = "Glucose\n (um)",col='gray30',bg='#b65090',pch=21,cex.axis=1.3,cex.lab=1.2,cex=1.3)
@@ -1004,6 +1001,8 @@ HR-SIP is good because...
 [and the Paper](https://www.nature.com/articles/ismej2015106)
 
 But first input parameters and get treatments to test against for DESeq.
+
+
 #### Inputting data
 Ok so I had some issues with this. With the l2fc function from DESeq2 you have to make sure that your control is the one being tested.
 
@@ -1053,7 +1052,7 @@ phyo2 = subset_taxa(phyo1, !Family=="Mitochondria")
 
 phyo_frac=subset_samples(phyo2, Comm_Frac=="Frac")
 input=otu_table(phyo_frac)
-d.subset <- codaSeq.filter(input, samples.by.row=F,min.reads=2,min.prop	=0.001)
+d.subset <- codaSeq.filter(input, samples.by.row=F,min.reads=2,min.prop	= 0.001)
 OTU=otu_table(d.subset,taxa_are_rows = T)
 phyo_frac=phyloseq(OTU,map,tax2,tree)
 
@@ -1117,277 +1116,271 @@ physeq_S2D2_l_df = SIP_betaDiv_ord(physeq_S2D2_l, parallel=TRUE, method="unifrac
 
 ```
 ## Run 0 stress 0.03922615 
-## Run 1 stress 0.09563253 
+## Run 1 stress 0.1122065 
 ## Run 2 stress 0.03922615 
-## ... Procrustes: rmse 8.89935e-06  max resid 3.191312e-05 
+## ... Procrustes: rmse 4.182941e-06  max resid 1.553118e-05 
 ## ... Similar to previous best
-## Run 3 stress 0.1118231 
+## Run 3 stress 0.03922615 
+## ... Procrustes: rmse 4.621002e-06  max resid 1.185997e-05 
+## ... Similar to previous best
 ## Run 4 stress 0.03922615 
-## ... Procrustes: rmse 7.567045e-06  max resid 3.08061e-05 
+## ... Procrustes: rmse 6.894037e-06  max resid 2.860006e-05 
 ## ... Similar to previous best
-## Run 5 stress 0.1124714 
+## Run 5 stress 0.03922615 
+## ... Procrustes: rmse 6.004412e-06  max resid 2.395084e-05 
+## ... Similar to previous best
 ## Run 6 stress 0.03922615 
-## ... New best solution
-## ... Procrustes: rmse 3.781872e-06  max resid 8.674834e-06 
+## ... Procrustes: rmse 3.948809e-06  max resid 9.131602e-06 
 ## ... Similar to previous best
-## Run 7 stress 0.09551269 
-## Run 8 stress 0.03922615 
-## ... Procrustes: rmse 5.775534e-06  max resid 1.980562e-05 
+## Run 7 stress 0.1259013 
+## Run 8 stress 0.1124714 
+## Run 9 stress 0.03922615 
+## ... Procrustes: rmse 4.843906e-06  max resid 1.034732e-05 
 ## ... Similar to previous best
-## Run 9 stress 0.0955126 
 ## Run 10 stress 0.03922615 
-## ... New best solution
-## ... Procrustes: rmse 2.102442e-06  max resid 5.91962e-06 
+## ... Procrustes: rmse 4.348706e-06  max resid 1.333703e-05 
 ## ... Similar to previous best
 ## Run 11 stress 0.03922615 
-## ... Procrustes: rmse 4.986174e-06  max resid 1.807252e-05 
+## ... Procrustes: rmse 5.579405e-06  max resid 1.513411e-05 
 ## ... Similar to previous best
-## Run 12 stress 0.09563258 
+## Run 12 stress 0.09551259 
 ## Run 13 stress 0.03922615 
-## ... Procrustes: rmse 4.972806e-06  max resid 1.793301e-05 
-## ... Similar to previous best
-## Run 14 stress 0.03922615 
-## ... Procrustes: rmse 2.643427e-06  max resid 5.544566e-06 
-## ... Similar to previous best
-## Run 15 stress 0.09551261 
-## Run 16 stress 0.09551265 
-## Run 17 stress 0.03922615 
 ## ... New best solution
-## ... Procrustes: rmse 2.138556e-06  max resid 5.657731e-06 
+## ... Procrustes: rmse 2.909176e-06  max resid 8.809863e-06 
+## ... Similar to previous best
+## Run 14 stress 0.1124714 
+## Run 15 stress 0.09563252 
+## Run 16 stress 0.03922615 
+## ... Procrustes: rmse 5.236159e-06  max resid 2.157569e-05 
+## ... Similar to previous best
+## Run 17 stress 0.03922615 
+## ... Procrustes: rmse 4.301731e-06  max resid 1.635826e-05 
 ## ... Similar to previous best
 ## Run 18 stress 0.03922615 
-## ... Procrustes: rmse 6.029342e-06  max resid 2.040425e-05 
+## ... Procrustes: rmse 3.317919e-06  max resid 1.152143e-05 
 ## ... Similar to previous best
 ## Run 19 stress 0.03922615 
-## ... Procrustes: rmse 7.136966e-06  max resid 2.663331e-05 
+## ... Procrustes: rmse 8.911455e-06  max resid 3.766555e-05 
 ## ... Similar to previous best
-## Run 20 stress 0.1257575 
+## Run 20 stress 0.03922615 
+## ... Procrustes: rmse 1.192511e-05  max resid 4.597779e-05 
+## ... Similar to previous best
 ## *** Solution reached
 ## Run 0 stress 0.04587765 
-## Run 1 stress 0.2166286 
+## Run 1 stress 0.04587765 
+## ... Procrustes: rmse 7.399031e-06  max resid 2.582112e-05 
+## ... Similar to previous best
 ## Run 2 stress 0.04587765 
-## ... Procrustes: rmse 2.570521e-06  max resid 8.755599e-06 
+## ... Procrustes: rmse 2.928242e-06  max resid 9.868843e-06 
 ## ... Similar to previous best
-## Run 3 stress 0.04587765 
+## Run 3 stress 0.2167683 
+## Run 4 stress 0.04587765 
 ## ... New best solution
-## ... Procrustes: rmse 5.650745e-06  max resid 1.963533e-05 
+## ... Procrustes: rmse 1.869168e-06  max resid 6.41442e-06 
 ## ... Similar to previous best
-## Run 4 stress 0.2032271 
-## Run 5 stress 0.2633068 
-## Run 6 stress 0.2560263 
+## Run 5 stress 0.04587765 
+## ... Procrustes: rmse 5.999303e-06  max resid 2.040702e-05 
+## ... Similar to previous best
+## Run 6 stress 0.04587765 
+## ... Procrustes: rmse 1.380172e-06  max resid 3.938494e-06 
+## ... Similar to previous best
 ## Run 7 stress 0.04587765 
-## ... New best solution
-## ... Procrustes: rmse 2.207377e-06  max resid 7.447084e-06 
+## ... Procrustes: rmse 2.846649e-06  max resid 9.804666e-06 
 ## ... Similar to previous best
 ## Run 8 stress 0.04587765 
-## ... Procrustes: rmse 4.109818e-06  max resid 1.438057e-05 
+## ... Procrustes: rmse 1.273463e-06  max resid 4.342109e-06 
 ## ... Similar to previous best
 ## Run 9 stress 0.04587765 
-## ... Procrustes: rmse 9.999101e-07  max resid 2.883268e-06 
+## ... Procrustes: rmse 6.389162e-06  max resid 2.222525e-05 
 ## ... Similar to previous best
 ## Run 10 stress 0.04587765 
-## ... Procrustes: rmse 3.705077e-06  max resid 1.246316e-05 
+## ... Procrustes: rmse 4.545686e-06  max resid 1.569595e-05 
 ## ... Similar to previous best
 ## Run 11 stress 0.04587765 
-## ... Procrustes: rmse 5.263884e-06  max resid 1.768749e-05 
+## ... Procrustes: rmse 3.206486e-06  max resid 1.108877e-05 
 ## ... Similar to previous best
-## Run 12 stress 0.2358263 
-## Run 13 stress 0.2454574 
+## Run 12 stress 0.3107267 
+## Run 13 stress 0.04587765 
+## ... Procrustes: rmse 1.24725e-06  max resid 4.145372e-06 
+## ... Similar to previous best
 ## Run 14 stress 0.04587765 
-## ... Procrustes: rmse 4.520292e-06  max resid 1.473864e-05 
+## ... Procrustes: rmse 6.111902e-06  max resid 2.122009e-05 
 ## ... Similar to previous best
 ## Run 15 stress 0.04587765 
-## ... Procrustes: rmse 2.342231e-06  max resid 7.695257e-06 
+## ... Procrustes: rmse 3.257383e-06  max resid 1.108664e-05 
 ## ... Similar to previous best
 ## Run 16 stress 0.04587765 
-## ... Procrustes: rmse 2.418863e-06  max resid 8.035305e-06 
+## ... Procrustes: rmse 5.106246e-06  max resid 1.775109e-05 
 ## ... Similar to previous best
-## Run 17 stress 0.04587765 
-## ... Procrustes: rmse 1.950875e-06  max resid 4.408496e-06 
-## ... Similar to previous best
+## Run 17 stress 0.2044861 
 ## Run 18 stress 0.04587765 
-## ... Procrustes: rmse 2.912562e-06  max resid 9.681447e-06 
+## ... Procrustes: rmse 5.426871e-06  max resid 1.888094e-05 
 ## ... Similar to previous best
-## Run 19 stress 0.04587765 
-## ... Procrustes: rmse 1.395665e-06  max resid 3.665442e-06 
-## ... Similar to previous best
+## Run 19 stress 0.2166055 
 ## Run 20 stress 0.04587765 
-## ... Procrustes: rmse 4.516034e-06  max resid 1.370148e-05 
+## ... Procrustes: rmse 9.129158e-07  max resid 2.595214e-06 
 ## ... Similar to previous best
 ## *** Solution reached
 ## Run 0 stress 0.03459215 
-## Run 1 stress 0.03459215 
+## Run 1 stress 0.03459208 
 ## ... New best solution
-## ... Procrustes: rmse 1.502278e-05  max resid 3.614567e-05 
+## ... Procrustes: rmse 5.755438e-05  max resid 0.0002192442 
 ## ... Similar to previous best
-## Run 2 stress 0.1047437 
-## Run 3 stress 0.03459213 
+## Run 2 stress 0.0345921 
+## ... Procrustes: rmse 3.274787e-05  max resid 0.0001270556 
+## ... Similar to previous best
+## Run 3 stress 0.03459208 
+## ... Procrustes: rmse 6.492728e-05  max resid 0.0002525327 
+## ... Similar to previous best
+## Run 4 stress 0.1020201 
+## Run 5 stress 0.03459211 
+## ... Procrustes: rmse 3.598623e-05  max resid 0.0001393442 
+## ... Similar to previous best
+## Run 6 stress 0.06024649 
+## Run 7 stress 0.1034541 
+## Run 8 stress 0.03459209 
+## ... Procrustes: rmse 7.362627e-05  max resid 0.0002867538 
+## ... Similar to previous best
+## Run 9 stress 0.03459213 
+## ... Procrustes: rmse 5.039956e-05  max resid 0.000195993 
+## ... Similar to previous best
+## Run 10 stress 0.06024633 
+## Run 11 stress 0.1034542 
+## Run 12 stress 0.03459207 
 ## ... New best solution
-## ... Procrustes: rmse 1.260033e-05  max resid 4.857316e-05 
+## ... Procrustes: rmse 4.078482e-05  max resid 0.0001588437 
 ## ... Similar to previous best
-## Run 4 stress 0.1034541 
-## Run 5 stress 0.03459212 
+## Run 13 stress 0.1155008 
+## Run 14 stress 0.0345921 
+## ... Procrustes: rmse 5.924076e-05  max resid 0.0002289297 
+## ... Similar to previous best
+## Run 15 stress 0.03459207 
 ## ... New best solution
-## ... Procrustes: rmse 1.042114e-05  max resid 3.542827e-05 
+## ... Procrustes: rmse 1.446819e-06  max resid 3.613186e-06 
 ## ... Similar to previous best
-## Run 6 stress 0.0345921 
-## ... New best solution
-## ... Procrustes: rmse 2.922571e-05  max resid 0.0001103828 
+## Run 16 stress 0.03459215 
+## ... Procrustes: rmse 9.450453e-05  max resid 0.0003646758 
 ## ... Similar to previous best
-## Run 7 stress 0.03459208 
-## ... New best solution
-## ... Procrustes: rmse 3.603747e-05  max resid 0.0001297704 
+## Run 17 stress 0.03459208 
+## ... Procrustes: rmse 4.787486e-05  max resid 0.0001864193 
 ## ... Similar to previous best
-## Run 8 stress 0.0345921 
-## ... Procrustes: rmse 4.092227e-05  max resid 0.0001583272 
+## Run 18 stress 0.03459214 
+## ... Procrustes: rmse 9.643274e-05  max resid 0.0003744568 
 ## ... Similar to previous best
-## Run 9 stress 0.1063514 
-## Run 10 stress 0.0345921 
-## ... Procrustes: rmse 4.879322e-05  max resid 0.0001879845 
+## Run 19 stress 0.03459209 
+## ... Procrustes: rmse 5.47768e-05  max resid 0.0002119197 
 ## ... Similar to previous best
-## Run 11 stress 0.03459209 
-## ... Procrustes: rmse 6.036567e-05  max resid 0.0002347221 
-## ... Similar to previous best
-## Run 12 stress 0.03459208 
-## ... Procrustes: rmse 2.14765e-05  max resid 8.017805e-05 
-## ... Similar to previous best
-## Run 13 stress 0.06024671 
-## Run 14 stress 0.03459209 
-## ... Procrustes: rmse 3.047518e-05  max resid 0.0001159813 
-## ... Similar to previous best
-## Run 15 stress 0.06024646 
-## Run 16 stress 0.03459209 
-## ... Procrustes: rmse 3.617106e-05  max resid 0.0001387467 
-## ... Similar to previous best
-## Run 17 stress 0.06024668 
-## Run 18 stress 0.06024713 
-## Run 19 stress 0.03459207 
-## ... New best solution
-## ... Procrustes: rmse 2.625045e-05  max resid 0.0001003781 
-## ... Similar to previous best
-## Run 20 stress 0.03459216 
-## ... Procrustes: rmse 5.608004e-05  max resid 0.0002056237 
+## Run 20 stress 0.03459209 
+## ... Procrustes: rmse 2.195479e-05  max resid 8.201947e-05 
 ## ... Similar to previous best
 ## *** Solution reached
 ## Run 0 stress 0.03673642 
 ## Run 1 stress 0.03673642 
-## ... Procrustes: rmse 1.399729e-05  max resid 4.501321e-05 
+## ... New best solution
+## ... Procrustes: rmse 1.14022e-05  max resid 3.915339e-05 
 ## ... Similar to previous best
 ## Run 2 stress 0.03673642 
-## ... New best solution
-## ... Procrustes: rmse 1.322021e-05  max resid 4.466512e-05 
+## ... Procrustes: rmse 1.590105e-06  max resid 4.692622e-06 
 ## ... Similar to previous best
-## Run 3 stress 0.03673642 
-## ... Procrustes: rmse 2.239124e-05  max resid 7.423726e-05 
-## ... Similar to previous best
+## Run 3 stress 0.1912754 
 ## Run 4 stress 0.03673642 
-## ... Procrustes: rmse 8.100411e-06  max resid 2.587071e-05 
+## ... Procrustes: rmse 4.349857e-06  max resid 1.218799e-05 
 ## ... Similar to previous best
 ## Run 5 stress 0.03673642 
 ## ... New best solution
-## ... Procrustes: rmse 5.734745e-06  max resid 1.720965e-05 
+## ... Procrustes: rmse 5.15709e-06  max resid 1.61245e-05 
 ## ... Similar to previous best
 ## Run 6 stress 0.03673642 
-## ... Procrustes: rmse 2.520152e-06  max resid 7.236634e-06 
+## ... Procrustes: rmse 5.442775e-06  max resid 1.92133e-05 
 ## ... Similar to previous best
-## Run 7 stress 0.03673642 
-## ... Procrustes: rmse 1.112307e-05  max resid 3.914004e-05 
-## ... Similar to previous best
+## Run 7 stress 0.1133693 
 ## Run 8 stress 0.03673642 
-## ... New best solution
-## ... Procrustes: rmse 1.300241e-06  max resid 4.343078e-06 
+## ... Procrustes: rmse 7.566365e-06  max resid 2.439346e-05 
 ## ... Similar to previous best
-## Run 9 stress 0.1133693 
+## Run 9 stress 0.03673642 
+## ... Procrustes: rmse 5.221758e-06  max resid 1.795576e-05 
+## ... Similar to previous best
 ## Run 10 stress 0.03673642 
-## ... Procrustes: rmse 4.646596e-06  max resid 1.168787e-05 
+## ... Procrustes: rmse 1.147772e-05  max resid 3.784434e-05 
 ## ... Similar to previous best
-## Run 11 stress 0.03673642 
-## ... Procrustes: rmse 7.610273e-06  max resid 2.796569e-05 
+## Run 11 stress 0.1136535 
+## Run 12 stress 0.03673642 
+## ... Procrustes: rmse 3.826466e-06  max resid 1.119581e-05 
 ## ... Similar to previous best
-## Run 12 stress 0.1136534 
 ## Run 13 stress 0.03673642 
-## ... Procrustes: rmse 3.109334e-06  max resid 7.075892e-06 
+## ... Procrustes: rmse 5.184758e-06  max resid 1.65203e-05 
 ## ... Similar to previous best
 ## Run 14 stress 0.03673642 
-## ... Procrustes: rmse 1.363167e-05  max resid 4.53888e-05 
+## ... Procrustes: rmse 1.10359e-05  max resid 3.598803e-05 
 ## ... Similar to previous best
-## Run 15 stress 0.03673642 
-## ... Procrustes: rmse 3.705793e-06  max resid 1.008162e-05 
-## ... Similar to previous best
+## Run 15 stress 0.1928032 
 ## Run 16 stress 0.03673642 
-## ... Procrustes: rmse 1.359333e-05  max resid 4.400027e-05 
+## ... Procrustes: rmse 4.41505e-06  max resid 1.541707e-05 
 ## ... Similar to previous best
-## Run 17 stress 0.03673643 
-## ... Procrustes: rmse 8.515926e-06  max resid 2.867526e-05 
+## Run 17 stress 0.03673642 
+## ... Procrustes: rmse 9.352914e-06  max resid 2.804969e-05 
 ## ... Similar to previous best
 ## Run 18 stress 0.03673642 
-## ... Procrustes: rmse 2.484802e-06  max resid 8.112134e-06 
+## ... Procrustes: rmse 3.722964e-06  max resid 1.095788e-05 
 ## ... Similar to previous best
 ## Run 19 stress 0.03673642 
-## ... Procrustes: rmse 6.62796e-06  max resid 2.226901e-05 
+## ... Procrustes: rmse 9.826767e-06  max resid 3.118949e-05 
 ## ... Similar to previous best
 ## Run 20 stress 0.03673642 
-## ... Procrustes: rmse 1.502939e-05  max resid 5.380453e-05 
+## ... Procrustes: rmse 6.795624e-06  max resid 1.994389e-05 
 ## ... Similar to previous best
 ## *** Solution reached
 ## Run 0 stress 0.01746445 
-## Run 1 stress 0.01746449 
-## ... Procrustes: rmse 0.0001407515  max resid 0.0003057243 
+## Run 1 stress 0.01746446 
+## ... Procrustes: rmse 0.0001208613  max resid 0.0002698541 
 ## ... Similar to previous best
-## Run 2 stress 0.01746446 
-## ... Procrustes: rmse 0.0001155869  max resid 0.0002578658 
+## Run 2 stress 0.03804718 
+## Run 3 stress 0.03804724 
+## Run 4 stress 0.0174645 
+## ... Procrustes: rmse 0.0001443538  max resid 0.0003249854 
 ## ... Similar to previous best
-## Run 3 stress 0.01746446 
-## ... Procrustes: rmse 0.0001124466  max resid 0.0002509769 
+## Run 5 stress 0.0174645 
+## ... Procrustes: rmse 0.0001428517  max resid 0.000318465 
 ## ... Similar to previous best
-## Run 4 stress 0.01746443 
+## Run 6 stress 0.01746445 
 ## ... New best solution
-## ... Procrustes: rmse 8.65684e-05  max resid 0.0001998754 
-## ... Similar to previous best
-## Run 5 stress 0.03804679 
-## Run 6 stress 0.01746447 
-## ... Procrustes: rmse 3.615221e-05  max resid 7.404495e-05 
+## ... Procrustes: rmse 0.0001077081  max resid 0.0002461329 
 ## ... Similar to previous best
 ## Run 7 stress 0.01746446 
-## ... Procrustes: rmse 3.053034e-05  max resid 6.28104e-05 
+## ... Procrustes: rmse 1.710782e-05  max resid 3.471453e-05 
 ## ... Similar to previous best
-## Run 8 stress 0.0380467 
-## Run 9 stress 0.0174645 
-## ... Procrustes: rmse 5.766156e-05  max resid 0.0001282582 
+## Run 8 stress 0.01746447 
+## ... Procrustes: rmse 2.619475e-05  max resid 6.229047e-05 
 ## ... Similar to previous best
-## Run 10 stress 0.03804701 
+## Run 9 stress 0.03804703 
+## Run 10 stress 0.01746445 
+## ... Procrustes: rmse 1.818893e-06  max resid 4.889553e-06 
+## ... Similar to previous best
 ## Run 11 stress 0.01746443 
 ## ... New best solution
-## ... Procrustes: rmse 5.194162e-05  max resid 9.449987e-05 
+## ... Procrustes: rmse 4.718093e-05  max resid 8.434706e-05 
 ## ... Similar to previous best
-## Run 12 stress 0.01746442 
-## ... New best solution
-## ... Procrustes: rmse 1.448156e-05  max resid 3.678924e-05 
+## Run 12 stress 0.01746444 
+## ... Procrustes: rmse 4.22352e-05  max resid 7.554299e-05 
 ## ... Similar to previous best
-## Run 13 stress 0.01746451 
-## ... Procrustes: rmse 0.0001135617  max resid 0.0002502535 
+## Run 13 stress 0.01746443 
+## ... Procrustes: rmse 2.356738e-05  max resid 5.941958e-05 
 ## ... Similar to previous best
-## Run 14 stress 0.01746443 
-## ... Procrustes: rmse 3.236609e-05  max resid 6.588506e-05 
-## ... Similar to previous best
+## Run 14 stress 0.0380471 
 ## Run 15 stress 0.01746445 
-## ... Procrustes: rmse 7.98295e-05  max resid 0.0001647384 
+## ... Procrustes: rmse 4.776507e-05  max resid 8.520525e-05 
 ## ... Similar to previous best
-## Run 16 stress 0.01746446 
-## ... Procrustes: rmse 8.518163e-05  max resid 0.000181349 
+## Run 16 stress 0.01746444 
+## ... Procrustes: rmse 4.201069e-05  max resid 7.401293e-05 
 ## ... Similar to previous best
-## Run 17 stress 0.01746445 
-## ... Procrustes: rmse 7.707468e-05  max resid 0.0001648046 
+## Run 17 stress 0.01746447 
+## ... Procrustes: rmse 6.146802e-05  max resid 0.0001100402 
 ## ... Similar to previous best
-## Run 18 stress 0.01746447 
-## ... Procrustes: rmse 9.562773e-05  max resid 0.0002045988 
+## Run 18 stress 0.03804706 
+## Run 19 stress 0.01746452 
+## ... Procrustes: rmse 9.295314e-05  max resid 0.0001669541 
 ## ... Similar to previous best
-## Run 19 stress 0.01746449 
-## ... Procrustes: rmse 0.0001051172  max resid 0.0002215444 
-## ... Similar to previous best
-## Run 20 stress 0.01746448 
-## ... Procrustes: rmse 9.862721e-05  max resid 0.0002085844 
-## ... Similar to previous best
+## Run 20 stress 0.03804674 
 ## *** Solution reached
 ```
 
@@ -1446,13 +1439,13 @@ wmean %>% head(n=3)
 ## 2       0 MCP_5MC207 0.11436009           1          TRUE    1.807    1.813
 ## 3       0 MCP_5MC208 0.11954049           1          TRUE    1.801    1.807
 ##   BD_range.x perc_overlap n_over_fracs wmean_dist wmean_dist_CI_low_global
-## 1      0.007     14.28571            2  0.0856853               0.01112399
-## 2      0.006    100.00000            1  0.1143601               0.01112399
-## 3      0.006    100.00000            1  0.1195405               0.01112399
+## 1      0.007     14.28571            2  0.0856853               0.01594532
+## 2      0.006    100.00000            1  0.1143601               0.01594532
+## 3      0.006    100.00000            1  0.1195405               0.01594532
 ##   wmean_dist_CI_high_global wmean_dist_CI_low wmean_dist_CI_high
-## 1                0.05355522        0.03225976         0.06920755
-## 2                0.05355522        0.01998241         0.04530392
-## 3                0.05355522        0.01125077         0.04409095
+## 1                0.05235721        0.03106297         0.06715601
+## 2                0.05235721        0.01842034         0.04642488
+## 3                0.05235721        0.01079882         0.04537163
 ```
 
 ```r
@@ -1811,7 +1804,7 @@ sw2=otu_table(sw, taxa_are_rows = T)
 phyo_hrsip_trans=phyloseq(sw2, map, tax2, tree)
 ```
 
-###### Rel Abund Community 
+##### Rel Abund Community 
 QSip community fraction. Which HR-SIP ASVs are present in the community samples?
 
 ```r
@@ -1829,7 +1822,7 @@ box(which='plot')
 
 Ok turns out that the most abundant ASVs are in both teh community and fractionated samples. This makes sense because of the sparsity filtering. 
 
-###### Rel Abund Fracs
+##### Rel Abund Fracs
 
 ```r
 frac_hrsip=subset_samples(phyo_hrsip_trans, Comm_Frac=="Frac")
@@ -1853,7 +1846,7 @@ text(60,1.05,"15MC2 240h",font=1)
 
 Was there a shift in community and a shift in the fractions? 
 
-###### ASVs in most timepoints 
+##### ASVs in most timepoints 
 Five ASVs showed up in all five timepoints:
 
 | ASV        | Class               | Order                 | Family           | Genus        | Species                      |
@@ -1914,7 +1907,7 @@ axis(side=1, at =c(0,24,48,72,120,240))
 
 Lets look at the relative abundance of the ASVs that showed up in the most timepoints. 
 
-###### Top ASVs Rel Abund
+##### Top ASVs Rel Abund
 
 
 ```r
@@ -1943,6 +1936,10 @@ legend(0,-.35, legend=c("3fa2974b Pseudoxanthobacter", "cf33813 Desulfococcus", 
 ![](/Users/ahern/Documents/GitHub/Exp3_MC2/docs/index_files/figure-html/asv-top5-hrsip-1.png)<!-- -->
 
 
+##### Heatmap of Incorporators
+
+
+
 ```r
 read=read.csv(file="/Users/ahern/TC_Exp3/subset_asvs.csv",header=T,row.names = 1)
 data=data.frame(read[,2:6], row.names=read$OTU)
@@ -1956,6 +1953,9 @@ c2=c('gray96',(rev(magma(10, begin=0.4))))
 ```
 
 ![](/Users/ahern/Documents/GitHub/Exp3_MC2/docs/index_files/figure-html/unnamed-chunk-23-1.png)<!-- -->
+
+
+
 
 Two ASVs only had significant values for 13C Glucose assimilation at 9MC2 T24
 
@@ -2041,53 +2041,76 @@ Ok we did the genus level and now I want to look at the genus level to look at c
 
 
 ```r
-# get just the Fractionated samples 
+x<-read.csv(file='/Users/ahern/R/trophic_cascades/mc2/4Nov21/ASVs/asv-table_2.csv',header=TRUE,row.names=1)
+OTU = otu_table(x, taxa_are_rows=T)
+taxa<-read.csv(file="/Users/ahern/R/trophic_cascades/mc2/4Nov21/ASVs/taxonomy_4nov21.csv",header=TRUE,row.names=1)
+t<-as.matrix(taxa)
+tax2<-tax_table(t)
+map<-import_qiime_sample_data("/Users/ahern/R/trophic_cascades/mc2/26oct21/ASV_run3/map_2.txt")
+tree=read.tree("/Users/ahern/R/trophic_cascades/mc2/4Nov21/ASVs/tree.nwk")
+phyo = phyloseq(OTU, tax2,map,tree)
+phyo1 = subset_taxa(phyo, !Order=="Chloroplast")
+phyo2 = subset_taxa(phyo1, !Family=="Mitochondria")
+
 phyo_frac=subset_samples(phyo2, Comm_Frac=="Frac")
-phyo_frac_genus=tax_glom(phyo_frac,taxrank="Genus")
+phyo_frac_genus=tax_glom(phyo_frac, taxrank="Genus")
+input=otu_table(phyo_frac_genus)
+library(CoDaSeq)
+d.subset <- codaSeq.filter(input, samples.by.row=F,min.reads=2,min.prop	= 0.001)
+OTU=otu_table(d.subset,taxa_are_rows = T)
+tax3=tax_table(phyo_frac_genus)
+phyo_frac_genus=phyloseq(OTU,map,tax3,tree)
+
 params = get_treatment_params(phyo_frac_genus, c('Treatment', 'TP'))
+
 params = dplyr::filter(params, Treatment!="5MC2")
-ex = "(Treatment=='5MC2' & TP=='-0.45') | (Treatment=='${Treatment}' & TP == '${TP}')"
+
+ex = "(Treatment=='${Treatment}' & TP=='${TP}') | (Treatment=='5MC2' & TP == '-0.45')"
 sample_data(phyo_frac_genus)$Treatment <- relevel(as.factor(sample_data(phyo_frac_genus)$Treatment) , ref = "5MC2")
+#sample_data(all)$Treatment <- relevel(as.factor(get_variable(all, "Treatment")), ref="5MC2")
+
 physeq_S2D2_g = phyloseq_subset(phyo_frac_genus, params, ex)
 physeq_S2D2_g
 ```
 
 ```
-## $`(Treatment=='5MC2' & TP=='-0.45') | (Treatment=='9MC2' & TP == '24.00')`
+## $`(Treatment=='9MC2' & TP=='24.00') | (Treatment=='5MC2' & TP == '-0.45')`
 ## phyloseq-class experiment-level object
-## otu_table()   OTU Table:         [ 361 taxa and 23 samples ]
+## otu_table()   OTU Table:         [ 76 taxa and 23 samples ]
 ## sample_data() Sample Data:       [ 23 samples by 15 sample variables ]
-## tax_table()   Taxonomy Table:    [ 361 taxa by 8 taxonomic ranks ]
-## phy_tree()    Phylogenetic Tree: [ 361 tips and 360 internal nodes ]
+## tax_table()   Taxonomy Table:    [ 76 taxa by 8 taxonomic ranks ]
+## phy_tree()    Phylogenetic Tree: [ 76 tips and 75 internal nodes ]
 ## 
-## $`(Treatment=='5MC2' & TP=='-0.45') | (Treatment=='11MC2' & TP == '48.00')`
+## $`(Treatment=='11MC2' & TP=='48.00') | (Treatment=='5MC2' & TP == '-0.45')`
 ## phyloseq-class experiment-level object
-## otu_table()   OTU Table:         [ 361 taxa and 19 samples ]
+## otu_table()   OTU Table:         [ 76 taxa and 19 samples ]
 ## sample_data() Sample Data:       [ 19 samples by 15 sample variables ]
-## tax_table()   Taxonomy Table:    [ 361 taxa by 8 taxonomic ranks ]
-## phy_tree()    Phylogenetic Tree: [ 361 tips and 360 internal nodes ]
+## tax_table()   Taxonomy Table:    [ 76 taxa by 8 taxonomic ranks ]
+## phy_tree()    Phylogenetic Tree: [ 76 tips and 75 internal nodes ]
 ## 
-## $`(Treatment=='5MC2' & TP=='-0.45') | (Treatment=='12MC2' & TP == '72.00')`
+## $`(Treatment=='12MC2' & TP=='72.00') | (Treatment=='5MC2' & TP == '-0.45')`
 ## phyloseq-class experiment-level object
-## otu_table()   OTU Table:         [ 361 taxa and 19 samples ]
+## otu_table()   OTU Table:         [ 76 taxa and 19 samples ]
 ## sample_data() Sample Data:       [ 19 samples by 15 sample variables ]
-## tax_table()   Taxonomy Table:    [ 361 taxa by 8 taxonomic ranks ]
-## phy_tree()    Phylogenetic Tree: [ 361 tips and 360 internal nodes ]
+## tax_table()   Taxonomy Table:    [ 76 taxa by 8 taxonomic ranks ]
+## phy_tree()    Phylogenetic Tree: [ 76 tips and 75 internal nodes ]
 ## 
-## $`(Treatment=='5MC2' & TP=='-0.45') | (Treatment=='14MC2' & TP == '120.00')`
+## $`(Treatment=='14MC2' & TP=='120.00') | (Treatment=='5MC2' & TP == '-0.45')`
 ## phyloseq-class experiment-level object
-## otu_table()   OTU Table:         [ 361 taxa and 20 samples ]
+## otu_table()   OTU Table:         [ 76 taxa and 20 samples ]
 ## sample_data() Sample Data:       [ 20 samples by 15 sample variables ]
-## tax_table()   Taxonomy Table:    [ 361 taxa by 8 taxonomic ranks ]
-## phy_tree()    Phylogenetic Tree: [ 361 tips and 360 internal nodes ]
+## tax_table()   Taxonomy Table:    [ 76 taxa by 8 taxonomic ranks ]
+## phy_tree()    Phylogenetic Tree: [ 76 tips and 75 internal nodes ]
 ## 
-## $`(Treatment=='5MC2' & TP=='-0.45') | (Treatment=='15MC2' & TP == '240.00')`
+## $`(Treatment=='15MC2' & TP=='240.00') | (Treatment=='5MC2' & TP == '-0.45')`
 ## phyloseq-class experiment-level object
-## otu_table()   OTU Table:         [ 361 taxa and 19 samples ]
+## otu_table()   OTU Table:         [ 76 taxa and 19 samples ]
 ## sample_data() Sample Data:       [ 19 samples by 15 sample variables ]
-## tax_table()   Taxonomy Table:    [ 361 taxa by 8 taxonomic ranks ]
-## phy_tree()    Phylogenetic Tree: [ 361 tips and 360 internal nodes ]
+## tax_table()   Taxonomy Table:    [ 76 taxa by 8 taxonomic ranks ]
+## phy_tree()    Phylogenetic Tree: [ 76 tips and 75 internal nodes ]
 ```
+
+Again removed genera that did not compose 0.1% of the dataset and had counts greater than 2. So 76 genera are left 
 
 
 
@@ -2113,11 +2136,11 @@ No of Genera that incorporated 13-C
 
 | Treatment     | No ASV        |
 |---------------|:-------------:|
-| 9MC2 24h      | 4             |
-| 11MC2 48h     | 7             |
-| 12MC2 72h     | 9             |
-| 14MC2 120h    | 11            |
-| 15MC2 240h    | 11            |
+| 9MC2 24h      | 8             |
+| 11MC2 48h     | 8             |
+| 12MC2 72h     | 13            |
+| 14MC2 120h    | 14            |
+| 15MC2 240h    | 12            |
 
 
 ### The plots
@@ -2129,77 +2152,88 @@ No of Genera that incorporated 13-C
 ```r
 df_qsip_genus=read.csv(file='/Users/ahern/R/trophic_cascades/mc2/4Nov21/ASVs/HRSIP_genus.csv',header=T)
 
-t24=subset(df_qsip_genus, tp=="24")
-t48=subset(df_qsip_genus, tp=="48")
-t72=subset(df_qsip_genus, tp=="72")
-t120=subset(df_qsip_genus, tp=="120")
-t240=subset(df_qsip_genus, tp=="240")
+t24=subset(df_qsip_genus, timepoint=="24")
+t48=subset(df_qsip_genus, timepoint=="48")
+t72=subset(df_qsip_genus, timepoint=="72")
+t120=subset(df_qsip_genus, timepoint=="120")
+t240=subset(df_qsip_genus, timepoint=="240")
 
 {
 par(mfrow=c(1,5),mar=c(5,1,1,1))
-plot(t24$log2FoldChange,1:67,xlab="Log2 Fold Change", ylab=" ",pch=23, col='white',bg='white',main="9MC2 24h",
+plot(t24$log2FoldChange,1:46,xlab="Log2 Fold Change", ylab=" ",pch=23, col='white',bg='white',main="9MC2 24h",
      yaxt='n')
 abline(v=0, col ='black')
-segments(0,1:67,t24$log2FoldChange,1:67, col = t24$colors1)
-points(t24$log2FoldChange,1:67, pch = 23, bg=t24$colors,cex=1)
+segments(0,1:46,t24$log2FoldChange,1:46, col = t24$colors1)
+points(t24$log2FoldChange,1:46, pch = 23, bg=t24$colors,cex=1)
 
-plot(t48$log2FoldChange,1:65,xlab="Log2 Fold Change", ylab=" ",pch=23, col='white',bg='white',main="11MC2 48h",
+plot(t48$log2FoldChange,1:44,xlab="Log2 Fold Change", ylab=" ",pch=23, col='white',bg='white',main="11MC2 48h",
      yaxt='n')
 abline(v=0, col ='black')
-segments(0,1:65,t48$log2FoldChange,1:65, col = t48$colors1)
-points(t48$log2FoldChange,1:65, pch = 23, bg=t48$colors,cex=1)
+segments(0,1:44,t48$log2FoldChange,1:44, col = t48$colors1)
+points(t48$log2FoldChange,1:44, pch = 23, bg=t48$colors,cex=1)
 
-plot(t72$log2FoldChange,1:54,xlab="Log2 Fold Change", ylab=" ",pch=23, col='white',bg='white',main="12MC2 72h",
+plot(t72$log2FoldChange,1:43,xlab="Log2 Fold Change", ylab=" ",pch=23, col='white',bg='white',main="12MC2 72h",
      yaxt='n')
 abline(v=0, col ='black')
-segments(0,1:54,t72$log2FoldChange,1:54, col = t72$colors1)
-points(t72$log2FoldChange,1:54, pch = 23, bg=t72$colors,cex=1)
+segments(0,1:43,t72$log2FoldChange,1:43, col = t72$colors1)
+points(t72$log2FoldChange,1:43, pch = 23, bg=t72$colors,cex=1)
 
-plot(t120$log2FoldChange,1:61,xlab="Log2 Fold Change", ylab=" ",pch=23, col='white',bg='white',main="14MC2 120h",
+plot(t120$log2FoldChange,1:43,xlab="Log2 Fold Change", ylab=" ",pch=23, col='white',bg='white',main="14MC2 120h",
      yaxt='n')
 abline(v=0, col ='black')
-segments(0,1:61,t120$log2FoldChange,1:61, col = t120$colors1)
-points(t120$log2FoldChange,1:61, pch = 23, bg=t120$colors,cex=1)
+segments(0,1:43,t120$log2FoldChange,1:43, col = t120$colors1)
+points(t120$log2FoldChange,1:43, pch = 23, bg=t120$colors,cex=1)
 
-plot(t240$log2FoldChange,1:51,xlab="Log2 Fold Change", ylab=" ",pch=23, col='white',bg='white',main="14MC2 120h",
+plot(t240$log2FoldChange,1:42,xlab="Log2 Fold Change", ylab=" ",pch=23, col='white',bg='white',main="14MC2 120h",
      yaxt='n')
 abline(v=0, col ='black')
-segments(0,1:51,t240$log2FoldChange,1:51, col = t240$colors1)
-points(t240$log2FoldChange,1:51, pch = 23, bg=t240$colors,cex=1)
+segments(0,1:42,t240$log2FoldChange,1:42, col = t240$colors1)
+points(t240$log2FoldChange,1:42, pch = 23, bg=t240$colors,cex=1)
 }
 ```
 
 ![](/Users/ahern/Documents/GitHub/Exp3_MC2/docs/index_files/figure-html/unnamed-chunk-29-1.png)<!-- -->
 
 
-Genera that incorporated 13C in more than 3 time points
 
 | ID        | Class               | Order                 | Family           | Genus         | No TP Incorp 13C |
 |------------|:-------------------:|----------------------:|:----------------:|:------------:|:----------------:|
-| 5ed8f8f3    | Verrucomicrobiae    | Opitutales            | Opitutaceae      | Diplosphaera | 4                |
-| 801efb1    | Alphaproteobacteria | Rhodospirillales      | Terasakiellaceae |              | 4                |
-| a6db2d87   | Deltaproteobacteria | Myxococcales          | Nannocystaceae   | Nannocystis  | 5                |
-| cf33813   | Alphaproteobacteria | Rhizobiales           | Rhizobiaceae     | *below*      | 4                |
+| 5ed8f8f3    | Verrucomicrobiae    | Opitutales            | Opitutaceae      | *Diplosphaera* | 5                |
+| a6db2d87   | Deltaproteobacteria | Myxococcales          | Nannocystaceae   | *Nannocystis*  | 5                |
+| cf33813   | Alphaproteobacteria | Rhizobiales           | Rhizobiaceae     | *below*      | 5                |
+| 801efb1    | Alphaproteobacteria | Rhodospirillales      | Terasakiellaceae |  uncultured        | 4                |
+| 3fa2974    | Alphaproteobacteria | Rhizobiales      | Xanthobacteraceae |  *Pseudoxanthobacter*            | 4                |
 
-cf33813 Genus = Allorhizobium-Neorhizobium-Pararhizobium-Rhizobium
+cf33813 Genus = *Allorhizobium-Neorhizobium-Pararhizobium-Rhizobium*
 
+801efb1 significant at timepoints 11MC2 48h, 12MC2 72h, 14MC2 120h, & 15MC2 240h.
+
+3fa2974 significant at timepoints 9MC2 24h, 11MC2 48h, 12MC2 72h, & 14MC2 120h.
 
 #### Top Genera Rel Abund
 
 
+
+
 ```r
-phyo_frac_genus=tax_glom(phyo2,taxrank="Genus")
-phyo_frac2=subset_samples(phyo_frac_genus, Comm_Frac=="Frac")
-phyo_genus_abund=transform_sample_counts(phyo_frac2, function(x) (x/sum(x)))
-five_four_points=subset_taxa(phyo_genus_abund, row.names(tax_table(phyo_genus_abund))=="a6db2d87f1e7a32216e5041a1920f12e" | row.names(tax_table(phyo_genus_abund))=="cf3381318906e1e08f58bca905636dc0" | row.names(tax_table(phyo_genus_abund))=="5ed8f8f3a98e669d81b30c56825e0870" | row.names(tax_table(phyo_genus_abund)) == "801efb14d6457f799fd2becee6d07b72")
-frac_tab=otu_table(five_four_points)
+phyo_frac_gen=tax_glom(phyo2, taxrank="Genus")
+phyo_fracg=subset_samples(phyo_frac_gen, Comm_Frac=="Frac")
+
+genu_ab=transform_sample_counts(phyo_fracg, function(x) (x/sum(x)))
+frac_sub=otu_table(genu_ab)
+frac_tab=subset(frac_sub, row.names(frac_sub) =="a6db2d87f1e7a32216e5041a1920f12e" | row.names(frac_sub) =="cf3381318906e1e08f58bca905636dc0" | row.names(frac_sub) =="5ed8f8f3a98e669d81b30c56825e0870" | row.names(frac_sub) =="801efb14d6457f799fd2becee6d07b72" | row.names(frac_sub) =="3fa2974b1f70109275811beb1ae321c9")
+
+#gen_45_frac=subset_taxa(genu_ab, row.names(tax_table(genu_ab))== "a6db2d87f1e7a32216e5041a1920f12e" | row.names(tax_table(genu_ab))== "cf3381318906e1e08f58bca905636dc0" | row.names(tax_table(genu_ab))== "5ed8f8f3a98e669d81b30c56825e0870" | row.names(tax_table(genu_ab)) == "801efb14d6457f799fd2becee6d07b72" | row.names(tax_table(genu_ab)) == "3fa2974b1f70109275811beb1ae321c9")
+
 
 space=c(rep("0",10),0.5,rep("0",12),0.5,rep("0",8),0.5,rep("0",8),0.5,rep("0",9),0.5,(rep("0",8)))
-col_asv=c("#bb7438","#72ac5c","#7f64b9","#b94b75")
+#col_asv=c("#bb7438","#72ac5c","#7f64b9","#b94b75")
+library(nationalparkcolors)
+col_asv=park_palette("Arches",5)
 
 {par(mar=c(15,4,3,1),xpd=T)
 barplot(frac_tab, las=2,  cex.names = 0.7, col=col_asv,
-        ylab="Relative Abundance Bacterial ASVs",space=as.numeric(space))
+        ylab="Relative Abundance Bacterial Genera",space=as.numeric(space))
 box(which='plot')
 text(5,1.05,"5MC2 -0.45h",font=1)
 text(17,1.05, "9MC2 24h",font=1)
@@ -2207,29 +2241,86 @@ text(29,1.05,"11MC2 48h",font=1)
 text(40, 1.05,'12MC2 72h',font=1)
 text(50,1.05, "14MC2 120h",font=1)
 text(60,1.05,"15MC2 240h",font=1)
-legend(0,-.2, legend=c("Alphaproteobacteria Allorhizobium-Neorhizobium-Pararhizobium-Rhizobium","Alphaproteobacteria Terasakiellaceae", "Deltaproteobacteria Nannocystis","Verrucomicrobiae Diplosphaera"), pch =22, pt.bg= col_asv, bty='n',ncol=1, cex=0.8)
+legend(0,-.3, legend=c("Alphaproteobacteria Allorhizobium-Neorhizobium-Pararhizobium-Rhizobium","Alphaproteobacteria Terasakiellaceae", "Deltaproteobacteria Nannocystis","Verrucomicrobiae Diplosphaera", "Alphaproteobacteria Pseudoxanthobacter"), pch =22, pt.bg= col_asv, bty='n',ncol=1, cex=0.8)
 }
 ```
 
+![](/Users/ahern/Documents/GitHub/Exp3_MC2/docs/index_files/figure-html/unnamed-chunk-31-1.png)<!-- -->
 
+#### Top Genera Rel Abund
 
 Relative abundance in the community 
 
 ```r
-phyo_g=subset_samples(phyo2, Comm_Frac=="Community")
-phyo_comm_g=tax_glom(phyo_g, taxrank = "Genus")
-phyo_genus_abund=transform_sample_counts(phyo_comm_g, function(x) (x/sum(x)))
-five_four_points=subset_taxa(phyo_genus_abund, row.names(tax_table(phyo_genus_abund))=="a6db2d87f1e7a32216e5041a1920f12e" | row.names(tax_table(phyo_genus_abund))=="cf3381318906e1e08f58bca905636dc0" | row.names(tax_table(phyo_genus_abund))=="5ed8f8f3a98e669d81b30c56825e0870" | row.names(tax_table(phyo_genus_abund)) == "801efb14d6457f799fd2becee6d07b72")
-frac_tab=otu_table(five_four_points)
-comm_tab=as.matrix((otu_table(five_four_points)))
-col_asv=c("#bb7438","#72ac5c","#7f64b9","#b94b75")
+phyo_comm_g=subset_samples(phyo_frac_gen, Comm_Frac == "Community")
+genu_c=transform_sample_counts(phyo_comm_g, function(x) (x/sum(x)))
+
+frac_sub=otu_table(genu_c)
+comm_tab=subset(frac_sub, row.names(frac_sub) =="a6db2d87f1e7a32216e5041a1920f12e" | row.names(frac_sub) =="cf3381318906e1e08f58bca905636dc0" | row.names(frac_sub) =="5ed8f8f3a98e669d81b30c56825e0870" | row.names(frac_sub) =="801efb14d6457f799fd2becee6d07b72" | row.names(frac_sub) =="3fa2974b1f70109275811beb1ae321c9")
+
+#gen_45_comm=subset_taxa(genu_c, row.names(tax_table(genu_c))=="a6db2d87f1e7a32216e5041a1920f12e" | row.names(tax_table(genu_c))=="cf3381318906e1e08f58bca905636dc0" | row.names(tax_table(genu_c))=="5ed8f8f3a98e669d81b30c56825e0870" | row.names(tax_table(genu_c)) == "801efb14d6457f799fd2becee6d07b72" | row.names(tax_table(genu_c)) == "3fa2974b1f70109275811beb1ae321c9")
+#col_asv=c("#bb7438","#72ac5c","#7f64b9","#b94b75")
+col_asv=park_palette("Arches",5)
 
 {
 par(mar=c(20,5,1,1),xpd=T)
 barplot(comm_tab, las=2, cex.names = 1, col=col_asv,
         ylab="Relative Abundance Bacterial Genera",space=0)
 box(which='plot')
-legend(0,-.2, legend=c("Alphaproteobacteria Allorhizobium-Neorhizobium-Pararhizobium-Rhizobium","Alphaproteobacteria Terasakiellaceae", "Deltaproteobacteria Nannocystis","Verrucomicrobiae Diplosphaera"), pch =22, pt.bg= col_asv, bty='n',ncol=1, cex=0.8)
+legend(0,-.3, legend=c("Alphaproteobacteria Allorhizobium-Neorhizobium-Pararhizobium-Rhizobium","Alphaproteobacteria Terasakiellaceae", "Deltaproteobacteria Nannocystis","Verrucomicrobiae Diplosphaera", "Alphaproteobacteria Pseudoxanthobacter"), pch =22, pt.bg= col_asv, bty='n',ncol=1, cex=0.8)
 }
 ```
 
+![](/Users/ahern/Documents/GitHub/Exp3_MC2/docs/index_files/figure-html/unnamed-chunk-32-1.png)<!-- -->
+
+
+#### Heatmap of Incorporators 
+
+
+```r
+# script how to get log fold change into dataframe 
+#sub=subset(df_qsip_genus, incorp=="TRUE")
+#d=dcast(sub, OTU ~ timepoint, value.var = "log2FoldChange", fun.aggregate = sum)
+#write.csv(d, '/Users/ahern/R/trophic_cascades/mc2/4Nov21/ASVs/subset_genus_hrsip.csv')
+read=read.csv(file='/Users/ahern/R/trophic_cascades/mc2/4Nov21/ASVs/subset_genus_hrsip.csv',header=T,row.names = 1)
+data=data.frame(read[,2:6], row.names=read$OTU)
+otu=read$IDS
+my_subset <- subset(tax_table(phyo_frac_gen), rownames(tax_table(phyo_frac_gen)) %in% otu)
+phyo_frac_gen2=phyloseq(otu_table(phyo_frac_gen), my_subset, tree)
+hrsip_tree_gen=phy_tree(phyo_frac_gen2)
+library(viridis)
+library(phytools)
+c2=c('gray96',(rev(magma(10, begin=0.5))))
+d2=log(data+1)
+{phylo.heatmap(hrsip_tree_gen, d2, colors=c2, mar=c(1,5,1,1),lwd=3,
+               fsize=c(0.7,1,1),split=c(1,0.3),standardize = F)}
+```
+
+![](/Users/ahern/Documents/GitHub/Exp3_MC2/docs/index_files/figure-html/unnamed-chunk-33-1.png)<!-- -->
+
+
+
+
+```r
+# script how to get log fold change into dataframe 
+#sub=subset(df_qsip_genus, incorp=="TRUE")
+#d=dcast(sub, OTU ~ timepoint, value.var = "log2FoldChange", fun.aggregate = sum)
+#write.csv(d, '/Users/ahern/R/trophic_cascades/mc2/4Nov21/ASVs/subset_genus_hrsip.csv')
+read=read.csv(file='/Users/ahern/R/trophic_cascades/mc2/4Nov21/ASVs/subset_genus_hrsip.csv',header=T,row.names = 1)
+data=data.frame(read[,2:6], row.names=read$IDS2)
+row.names(data)=read$IDS2
+otu=read$IDS
+my_subset <- subset(tax_table(phyo_frac_gen), rownames(tax_table(phyo_frac_gen)) %in% otu)
+phyo_frac_gen2=phyloseq(otu_table(phyo_frac_gen), my_subset, tree)
+hrsip_tree_gen=phy_tree(phyo_frac_gen2)
+#write.csv(hrsip_tree_gen$tip.label, 'gen_tiplabs.csv')
+hrsip_tree_gen$tip.label=c('Alphaproteobacteria Paracaedibacteraceae uncultured','Alphaproteobacteria Ancylobacter','Alphaproteobacteria Pseudoxanthobacter','Alphaproteobacteria Allo-Neo-Para-Rhizobium','Alphaproteobacteria Hirschia','Alphaproteobacteria Terasakiellaceae uncultured','Campylobacteria Thioreductor','Campylobacteria Caminibacter','Deltaproteobacteria Nannocystis','Bacteroidia Dyadobacter','Bacteroidia Cryomorphaceae uncultured','Bacteroidia Sediminibacterium','Rhodothermia Balneolaceae uncultured','Gammaproteobacteria Legionella','Gammaproteobacteria Janthinobacterium','Gammaproteobacteria Zoogloea','Gammaproteobacteria Dechloromonas','Gammaproteobacteria Methylotenera','Gammaproteobacteria Methylophilus','Gammaproteobacteria Denitratisoma','Gammaproteobacteria Aquabacterium','Verrucomicrobiae Diplosphaera','Verrucomicrobiae Cephaloticoccus','Verrucomicrobiae Opitutus')
+library(viridis)
+library(phytools)
+c2=c('gray96',(rev(magma(10, begin=0.5))))
+d2=log(data+1)
+{phylo.heatmap(hrsip_tree_gen, d2, colors=c2, mar=c(1,5,1,1),lwd=3,
+               fsize=c(0.7,1,1),split=c(1,0.3),standardize = F)}
+```
+
+![](/Users/ahern/Documents/GitHub/Exp3_MC2/docs/index_files/figure-html/unnamed-chunk-34-1.png)<!-- -->
