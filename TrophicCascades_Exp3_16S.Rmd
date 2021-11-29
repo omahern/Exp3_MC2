@@ -256,6 +256,7 @@ legend('topright', legend=c('5MC2','15MC2'), pt.bg=c(col[1], col[6]),
 
 # Bacterial Community
 
+
 ```{r setup, include=TRUE, message=FALSE, warning=FALSE}
 #setwd('/Users/ahern/R/trophic_cascades/mc2/4Nov21/ASVs/')
 library(HTSSIP)
@@ -1169,14 +1170,26 @@ phyo_hrsip_f=subset_samples(phyo_hrsip,Comm_Frac=="Frac" )
 hrsip_tree=phy_tree(phyo_hrsip_f)
 library(viridis)
 library(phytools)
-c2=c('gray96',(rev(magma(10, begin=0.4))))
+c2=c('gray96',(rev(magma(30))))
 {phylo.heatmap(hrsip_tree, data, colors=c2, mar=c(1,5,1,1),lwd=3,
               fsize=c(0.7,1,1),split=c(1,0.3),standardize = F)}
 
 ```
 
 
-
+```{r, message=FALSE,error=FALSE,warning=FALSE, fig.height=8, fig.width=8}
+read=read.csv(file="/Users/ahern/TC_Exp3/subset_asvs.csv",header=T,row.names = 1)
+data=data.frame(read[,2:6], row.names=read$ID2)
+colnames(data)=c("9MC2","11MC2","12MC2","14MC2","15MC2")
+phyo_hrsip_f=subset_samples(phyo_hrsip,Comm_Frac=="Frac" )
+hrsip_tree=phy_tree(phyo_hrsip_f)
+hrsip_tree$tip.label=c('Alphaproteobacteria Paracaedibacteraceae 6310bd','Alphaproteobacteria Ancylobacter 1583d8','Alphaproteobacteria Pseudoxanthobacter 3fa297','Alphaproteobacteria Allo-Neo-Para-Rhizobium cf3381','Alphaproteobacteria Allo-Neo-Para-Rhizobium 98f535','Alphaproteobacteria Hirschia a5e4fa','Alphaproteobacteria Terasakiellaceae 801efb','Alphaproteobacteria Magnetospirillum d23dba','Alphaproteobacteria Rickettsiaceae 9d5fa8','Alphaproteobacteria Rickettsiaceae d40d89','Deltaproteobacteria Nannocystis a6db2d','Bacteroidia OLB12 f1e343','Rhodothermia uncultured bacterium 8b1b6b','Gammaproteobacteria Oceanobacter 3e5cc4','Gammaproteobacteria Legionella b93f0c','Gammaproteobacteria Janthinobacterium efbe1f','Gammaproteobacteria Zoogloea 83c246','Gammaproteobacteria Dechloromonas 7af6ae','Gammaproteobacteria Rhodocyclaceae acc960','Gammaproteobacteria Gallionellaceae 2bb6b6','Gammaproteobacteria Methylotenera e416d0','Gammaproteobacteria Methylophilus 1e104b','Gammaproteobacteria Denitratisoma 7a4067','Gammaproteobacteria Denitratisoma 8a37f0','Gammaproteobacteria Burkholderiaceae 27af01','Gammaproteobacteria Aquabacterium c1d9ea','Verrucomicrobiae Diplosphaera 5ed8f8','Verrucomicrobiae Opitutus 5c21f0')
+library(viridis)
+library(phytools)
+c2=c('gray96',(rev(magma(30))))
+{phylo.heatmap(hrsip_tree,data, colors=c2, mar=c(1,5,1,1),lwd=2,
+               fsize=c(0.7,1,1),split=c(1,0.3),standardize = F)}
+```
 
 Two ASVs only had significant values for 13C Glucose assimilation at 9MC2 T24
 
@@ -1460,55 +1473,34 @@ genu_ab=transform_sample_counts(phyo_fracg, function(x) (x/sum(x)))
 
 genu_ab_sub=subset_samples(genu_ab, Buoyant_density > 1.759)
 
-five_points=subset_taxa(genu_ab_sub, row.names(tax_table(genu_ab))== "a6db2d87f1e7a32216e5041a1920f12e" | row.names(tax_table(genu_ab))== "cf3381318906e1e08f58bca905636dc0" | row.names(tax_table(genu_ab))== "5ed8f8f3a98e669d81b30c56825e0870" | row.names(tax_table(genu_ab)) == "801efb14d6457f799fd2becee6d07b72" | row.names(tax_table(genu_ab)) == "3fa2974b1f70109275811beb1ae321c9")
-otu=otu_table(five_points)
+frac_sub=otu_table(genu_ab_sub)
+frac_tab=subset(frac_sub, row.names(frac_sub) =="a6db2d87f1e7a32216e5041a1920f12e" | row.names(frac_sub) =="cf3381318906e1e08f58bca905636dc0" | row.names(frac_sub) =="5ed8f8f3a98e669d81b30c56825e0870" | row.names(frac_sub) =="801efb14d6457f799fd2becee6d07b72" | row.names(frac_sub) =="3fa2974b1f70109275811beb1ae321c9")
+otu=frac_tab
 
 {
   par(mar=c(5,5,1,1),mfcol=c(3,2))
-  plot(sample_data(five_points)$TP, otu[1,], bg=sample_data(five_points)$col, 
-       pch =sample_data(five_points)$pch_sip,cex=2,log='y', xlab="Time (hours)", 
+  plot(sample_data(genu_ab_sub)$TP, otu[1,], bg=sample_data(genu_ab_sub)$col, 
+       pch =sample_data(genu_ab_sub)$pch_sip,cex=2, xlab="Time (hours)", 
        ylab="Rel Abund \n Pseudoxanthobacter",
        xaxt='n')
   axis(side=1, at =c(0,24,48,72,120,240))
-  plot(sample_data(five_points)$TP, otu[2,], bg=sample_data(five_points)$col, 
-       pch =sample_data(five_points)$pch_sip,cex=2,log='y',xlab="Time (hours)", 
+  plot(sample_data(genu_ab_sub)$TP, otu[2,], bg=sample_data(genu_ab_sub)$col, 
+       pch =sample_data(genu_ab_sub)$pch_sip,cex=2,xlab="Time (hours)", 
        ylab="Relative Abundance \n Allo-Neo-Para-Rhizobium",xaxt='n')
   axis(side=1, at =c(0,24,48,72,120,240))
-  plot(sample_data(five_points)$TP, otu[3,], bg=sample_data(five_points)$col, 
-       pch =sample_data(five_points)$pch_sip,cex=2,log='y', xlab = "Time (hours)", ylab="Relative Abundance \n Terasakiellaceae",xaxt='n')
+  plot(sample_data(genu_ab_sub)$TP, otu[3,], bg=sample_data(genu_ab_sub)$col, 
+       pch =sample_data(genu_ab_sub)$pch_sip,cex=2, xlab = "Time (hours)", ylab="Relative Abundance \n Terasakiellaceae",xaxt='n')
   axis(side=1, at =c(0,24,48,72,120,240))
-  plot(sample_data(five_points)$TP, otu[4,], bg=sample_data(five_points)$col, 
-       pch =sample_data(five_points)$pch_sip,cex=2,log='y', xlab = "Time (hours)", ylab="Relative Abundance \n Nannocystis",xaxt='n')
+  plot(sample_data(genu_ab_sub)$TP, otu[4,], bg=sample_data(genu_ab_sub)$col, 
+       pch =sample_data(genu_ab_sub)$pch_sip,cex=2, xlab = "Time (hours)", ylab="Relative Abundance \n Nannocystis",xaxt='n')
   axis(side=1, at =c(0,24,48,72,120,240))
-  plot(sample_data(five_points)$TP, otu[5,], bg=sample_data(five_points)$col, 
-       pch =sample_data(five_points)$pch_sip,cex=2,log='y', xlab = "Time (hours)", ylab="Relative Abundance \n Diplosphaera",xaxt='n')
+  plot(sample_data(genu_ab_sub)$TP, otu[5,], bg=sample_data(genu_ab_sub)$col, 
+       pch =sample_data(genu_ab_sub)$pch_sip,cex=2, xlab = "Time (hours)", ylab="Relative Abundance \n Diplosphaera",xaxt='n')
   axis(side=1, at =c(0,24,48,72,120,240))
 }
 ```
 
 #### Heatmap of Incorporators 
-
-```{r,warning=FALSE,error=FALSE,message=FALSE, fig.height=8,fig.width=8, eval=TRUE}
-# script how to get log fold change into dataframe 
-#sub=subset(df_qsip_genus, incorp=="TRUE")
-#d=dcast(sub, OTU ~ timepoint, value.var = "log2FoldChange", fun.aggregate = sum)
-#write.csv(d, '/Users/ahern/R/trophic_cascades/mc2/4Nov21/ASVs/subset_genus_hrsip.csv')
-read=read.csv(file='/Users/ahern/R/trophic_cascades/mc2/4Nov21/ASVs/subset_genus_hrsip.csv',header=T,row.names = 1)
-data=data.frame(read[,2:6], row.names=read$OTU)
-otu=read$IDS
-my_subset <- subset(tax_table(phyo_frac_gen), rownames(tax_table(phyo_frac_gen)) %in% otu)
-phyo_frac_gen2=phyloseq(otu_table(phyo_frac_gen), my_subset, tree)
-hrsip_tree_gen=phy_tree(phyo_frac_gen2)
-library(viridis)
-library(phytools)
-c2=c('gray96',(rev(magma(10, begin=0.5))))
-d2=log(data+1)
-{phylo.heatmap(hrsip_tree_gen, d2, colors=c2, mar=c(1,5,1,1),lwd=3,
-               fsize=c(0.7,1,1),split=c(1,0.3),standardize = F)}
-
-```
-
-
 
 ```{r,warning=FALSE,error=FALSE,message=FALSE, fig.height=8,fig.width=8, eval=TRUE}
 # script how to get log fold change into dataframe 
