@@ -1166,6 +1166,7 @@ legend(0,-.35, legend=c("3fa2974b Pseudoxanthobacter", "cf33813 Desulfococcus", 
 ```{r,warning=FALSE,error=FALSE,message=FALSE, fig.height=8,fig.width=8}
 read=read.csv(file="/Users/ahern/TC_Exp3/subset_asvs.csv",header=T,row.names = 1)
 data=data.frame(read[,2:6], row.names=read$OTU)
+colnames(data)=c("9MC2","11MC2","12MC2","14MC2","15MC2")
 phyo_hrsip_f=subset_samples(phyo_hrsip,Comm_Frac=="Frac" )
 hrsip_tree=phy_tree(phyo_hrsip_f)
 library(viridis)
@@ -1509,6 +1510,7 @@ otu=frac_tab
 #write.csv(d, '/Users/ahern/R/trophic_cascades/mc2/4Nov21/ASVs/subset_genus_hrsip.csv')
 read=read.csv(file='/Users/ahern/R/trophic_cascades/mc2/4Nov21/ASVs/subset_genus_hrsip.csv',header=T,row.names = 1)
 data=data.frame(read[,2:6], row.names=read$IDS2)
+colnames(data)=c("9MC2","11MC2","12MC2","14MC2","15MC2")
 row.names(data)=read$IDS2
 otu=read$IDS
 my_subset <- subset(tax_table(phyo_frac_gen), rownames(tax_table(phyo_frac_gen)) %in% otu)
