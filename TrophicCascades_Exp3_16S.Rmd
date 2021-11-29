@@ -1451,6 +1451,41 @@ legend(0,-.3, legend=c("Alphaproteobacteria Allorhizobium-Neorhizobium-Pararhizo
 ```
 
 
+#### Top Rel Abund over Time
+
+```{r, warning=FALSE, error=FALSE, message=FALSE,echo=TRUE}
+phyo_fracg=subset_samples(phyo_frac_gen, Comm_Frac=="Frac")
+
+genu_ab=transform_sample_counts(phyo_fracg, function(x) (x/sum(x)))
+
+genu_ab_sub=subset_samples(genu_ab, Buoyant_density > 1.759)
+
+five_points=subset_taxa(genu_ab_sub, row.names(tax_table(genu_ab))== "a6db2d87f1e7a32216e5041a1920f12e" | row.names(tax_table(genu_ab))== "cf3381318906e1e08f58bca905636dc0" | row.names(tax_table(genu_ab))== "5ed8f8f3a98e669d81b30c56825e0870" | row.names(tax_table(genu_ab)) == "801efb14d6457f799fd2becee6d07b72" | row.names(tax_table(genu_ab)) == "3fa2974b1f70109275811beb1ae321c9")
+otu=otu_table(five_points)
+
+{
+  par(mar=c(5,5,1,1),mfcol=c(3,2))
+  plot(sample_data(five_points)$TP, otu[1,], bg=sample_data(five_points)$col, 
+       pch =sample_data(five_points)$pch_sip,cex=2,log='y', xlab="Time (hours)", 
+       ylab="Rel Abund \n Pseudoxanthobacter",
+       xaxt='n')
+  axis(side=1, at =c(0,24,48,72,120,240))
+  plot(sample_data(five_points)$TP, otu[2,], bg=sample_data(five_points)$col, 
+       pch =sample_data(five_points)$pch_sip,cex=2,log='y',xlab="Time (hours)", 
+       ylab="Relative Abundance \n Allo-Neo-Para-Rhizobium",xaxt='n')
+  axis(side=1, at =c(0,24,48,72,120,240))
+  plot(sample_data(five_points)$TP, otu[3,], bg=sample_data(five_points)$col, 
+       pch =sample_data(five_points)$pch_sip,cex=2,log='y', xlab = "Time (hours)", ylab="Relative Abundance \n Terasakiellaceae",xaxt='n')
+  axis(side=1, at =c(0,24,48,72,120,240))
+  plot(sample_data(five_points)$TP, otu[4,], bg=sample_data(five_points)$col, 
+       pch =sample_data(five_points)$pch_sip,cex=2,log='y', xlab = "Time (hours)", ylab="Relative Abundance \n Nannocystis",xaxt='n')
+  axis(side=1, at =c(0,24,48,72,120,240))
+  plot(sample_data(five_points)$TP, otu[5,], bg=sample_data(five_points)$col, 
+       pch =sample_data(five_points)$pch_sip,cex=2,log='y', xlab = "Time (hours)", ylab="Relative Abundance \n Diplosphaera",xaxt='n')
+  axis(side=1, at =c(0,24,48,72,120,240))
+}
+```
+
 #### Heatmap of Incorporators 
 
 ```{r,warning=FALSE,error=FALSE,message=FALSE, fig.height=8,fig.width=8, eval=TRUE}
