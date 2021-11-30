@@ -657,7 +657,7 @@ PCA of centered log ratio transformed ASV abundance of fractionated samples. Poi
 
 # Can I find heavy ASVs?
 
-## HR-SIP: ASVs 
+## HR-SIP: ASVs > 0.1%
 HR-SIP = high resolution stable isotope probing
 
 
@@ -967,12 +967,14 @@ No of ASVs that incorporated 13-C
 | 14MC2 120h    | 18            |
 | 15MC2 240h    | 18            |
 
-####  HR-SIP ASVs Plots
+Out of the 70 points where there were incorporators, 60 had a sparsity threshold of 0.2 while 10 had a sparsity threshold of 0.3.
+
+####  The Plots
 
 ##### ASVs log2 fold change
 Plot log2 fold change (relative to the control 5MC2) for each time timepoint.
 
-```{r hrsip-allasvs-allresults, fig.width=8, fig.height=5}
+```{r hrsip-0.1pct-allresults, fig.width=8, fig.height=5}
 t24=subset(df_l2fc, timepoint=="24")
 t48=subset(df_l2fc, timepoint=="48")
 t72=subset(df_l2fc, timepoint=="72")
@@ -1256,9 +1258,142 @@ plot(sample_data(f1)$TP,otu_table(f1), bg = sample_data(f1)$col, pch =sample_dat
 
 ```
 
+## HR-SIP: ASVs All
+
+### Input Data 
+```{r, message=FALSE,error=FALSE, warning=FALSE}
+# get just the Fractionated samples 
+x<-read.csv(file='/Users/ahern/R/trophic_cascades/mc2/4Nov21/ASVs/asv-table_2.csv',header=TRUE,row.names=1)
+OTU = otu_table(x, taxa_are_rows=T)
+taxa<-read.csv(file="/Users/ahern/R/trophic_cascades/mc2/4Nov21/ASVs/taxonomy_4nov21.csv",header=TRUE,row.names=1)
+t<-as.matrix(taxa)
+tax2<-tax_table(t)
+map<-import_qiime_sample_data("/Users/ahern/R/trophic_cascades/mc2/26oct21/ASV_run3/map_2.txt")
+tree=read.tree("/Users/ahern/R/trophic_cascades/mc2/4Nov21/ASVs/tree.nwk")
+phyo = phyloseq(OTU, tax2,map,tree)
+phyo1 = subset_taxa(phyo, !Order=="Chloroplast")
+phyo2 = subset_taxa(phyo1, !Family=="Mitochondria")
+
+phyo_frac=subset_samples(phyo2, Comm_Frac=="Frac")
+params = get_treatment_params(phyo_frac, c('Treatment', 'TP'))
+params = dplyr::filter(params, Treatment!="5MC2")
+ex = "(Treatment=='${Treatment}' & TP=='${TP}') | (Treatment=='5MC2' & TP == '-0.45')"
+sample_data(phyo_frac)$Treatment <- relevel(as.factor(sample_data(phyo_frac)$Treatment) , ref = "5MC2")
+#sample_data(all)$Treatment <- relevel(as.factor(get_variable(all, "Treatment")), ref="5MC2")
+
+physeq_S2D2_l = phyloseq_subset(phyo_frac, params, ex)
+physeq_S2D2_l
+```
 
 
-## HR-SIP: Genus  
+### The code 
+```{r, message = FALSE, warning=FALSE, eval=FALSE}
+ncores=1
+density_windows = data.frame(density_min = c(1.76,1.77,1.78), density_max = c(1.81,1.815,1.82))
+doParallel::registerDoParallel(ncores)
+df_l2fc = plyr::ldply(physeq_S2D2_l, 
+                      HRSIP, 
+                      design = ~Treatment, 
+                      density_windows=density_windows,
+                      padj_cutoff = 0.1,sparsity_apply = "all",
+                      sparsity_threshold = c(0.2,0.25,0.3),
+                      .parallel=FALSE)
+# save it 
+write.csv(df_l2fc, '/Users/ahern/R/trophic_cascades/mc2/4Nov21/ASVs/HRSIP_asvs_all_30Nov21.csv')
+```
+
+
+### The plots/results
+```{r}
+asvs_all_df=read.csv(file='/Users/ahern/R/trophic_cascades/mc2/4Nov21/ASVs/HRSIP_asvs_all_30Nov21.csv',header=T, row.names=1)
+
+sub=subset(asvs_all_df, incorp=="TRUE")
+#sort(summary(as.factor(sub$OTU)),decreasing=T)
+```
+
+No of ASVs that incorporated 13-C 
+
+| Treatment     | No ASV >0.1%  | No ASV All    |
+|---------------|:-------------:|:-------------:|
+| 9MC2 24h      | 10            | 9             |
+| 11MC2 48h     | 11            | 11            |
+| 12MC2 72h     | 13            | 13            |
+| 14MC2 120h    | 18            | 27            |
+| 15MC2 240h    | 18            | 20            |
+
+More ASVs using all of them as opposed to just those who were greater than 0.1%. 
+
+In terms of sparsity thresholds, 27 of the incorporators were at 0.2, 33 incorporators were at 0.25, and 20 of the incorporators were at 0.3. 
+
+
+Five ASVs showed up at all five time points and four ASVs showed up at four timepoints. [These were the same ASVs as the >0.1%.][##### ASVs in most timepoints]
+
+#### Log2 Fold Change
+```{r hrsip-all-allresults, fig.width=8, fig.height=5}
+t24=subset(asvs_all_df, timepoint=="24")
+t48=subset(asvs_all_df, timepoint=="48")
+t72=subset(asvs_all_df, timepoint=="72")
+t120=subset(asvs_all_df, timepoint=="120")
+t240=subset(asvs_all_df, timepoint=="240")
+
+
+{
+par(mfrow=c(1,5),mar=c(5,1,1,1))
+plot(t24$log2FoldChange,1:72,xlab="Log2 Fold Change", ylab=" ",pch=23, col='white',bg='white',main="9MC2 24h",
+     yaxt='n')
+abline(v=0, col ='black')
+segments(0,1:72,t24$log2FoldChange,1:72, col = t24$colors1)
+points(t24$log2FoldChange,1:72, pch = 23, bg=t24$colors,cex=1)
+
+plot(t48$log2FoldChange,1:69,xlab="Log2 Fold Change", ylab=" ",pch=23, col='white',bg='white',main="11MC2 48h",
+     yaxt='n')
+abline(v=0, col ='black')
+segments(0,1:69,t48$log2FoldChange,1:69, col = t48$colors1)
+points(t48$log2FoldChange,1:69, pch = 23, bg=t48$colors,cex=1)
+
+plot(t72$log2FoldChange,1:82,xlab="Log2 Fold Change", ylab=" ",pch=23, col='white',bg='white',main="12MC2 72h",
+     yaxt='n')
+abline(v=0, col ='black')
+segments(0,1:82,t72$log2FoldChange,1:82, col = t72$colors1)
+points(t72$log2FoldChange,1:82, pch = 23, bg=t72$colors,cex=1)
+
+plot(t120$log2FoldChange,1:90,xlab="Log2 Fold Change", ylab=" ",pch=23, col='white',bg='white',main="14MC2 120h",
+     yaxt='n')
+abline(v=0, col ='black')
+segments(0,1:90,t120$log2FoldChange,1:90, col = t120$colors1)
+points(t120$log2FoldChange,1:90, pch = 23, bg=t120$colors,cex=1)
+
+plot(t240$log2FoldChange,1:77,xlab="Log2 Fold Change", ylab=" ",pch=23, col='white',bg='white',main="14MC2 120h",
+     yaxt='n')
+abline(v=0, col ='black')
+segments(0,1:77,t240$log2FoldChange,1:77, col = t240$colors1)
+points(t240$log2FoldChange,1:77, pch = 23, bg=t240$colors,cex=1)
+}
+```
+
+#### Tree Heatmap
+```{r hrsip-allasvs-tree, fig.width=8, fig.height=5,error=FALSE,message=FALSE,warning=FALSE}
+# script how to get log fold change into dataframe 
+#sub=subset(df_qsip_genus, incorp=="TRUE")
+#d=dcast(sub, OTU ~ timepoint, value.var = "log2FoldChange", fun.aggregate = sum)
+#write.csv(d, '/Users/ahern/R/trophic_cascades/mc2/4Nov21/ASVs/subset_asvs_all_hrsip.csv')
+read=read.csv(file='/Users/ahern/R/trophic_cascades/mc2/4Nov21/ASVs/subset_asvs_all_hrsip.csv',header=T,row.names = 1)
+data=data.frame(read[,2:6], row.names=read$IDS2)
+colnames(data)=c("9MC2","11MC2","12MC2","14MC2","15MC2")
+row.names(data)=read$OTU
+otu=read$OTU
+my_subset <- subset(tax_table(phyo_frac), rownames(tax_table(phyo_frac)) %in% otu)
+phyo_frac_asvs2=phyloseq(otu_table(phyo_frac), my_subset, tree)
+hrsip_tree_asvs_all=phy_tree(phyo_frac_asvs2)
+library(viridis)
+library(phytools)
+c2=c('gray96',(rev(magma(30))))
+d2=log(data+1)
+{phylo.heatmap(hrsip_tree_asvs_all, data, colors=c2, mar=c(1,5,1,1),lwd=1,
+               fsize=c(0.7,1,1),split=c(1.4,0.2),standardize = F)}
+```
+
+## HR-SIP: Genus >0.1%
 Ok we did the genus level and now I want to look at the genus level to look at changes. No ASV was found across all timepoints. Though, after thinking this through with Joe and Julie, there are either two explanations to this:
 
 1. Microdiversity perhaps hampering the 13-C signal. 100% ASVs resulting in less incorporators? Microdiversity may over represent the actual diversity in the chemostat. So I want to see if there are any genera that are present at all timepoints. 
@@ -1266,6 +1401,8 @@ Ok we did the genus level and now I want to look at the genus level to look at c
 2. No ASVs at all timepoints due to the nature of the chemostat. At TP 0, Ashleigh input 13-C labelled glucose at a turnover rate of 1 day^-1. So, only at the end of the 24 hours did the chemostat have glucose that was 100% 13-C enriched. I'm not 100% on this, but a theory is that it will take a bit for the bacteria to see the 13-C glucose, take it up, and then incorporate into its RNA. Therefore, we only see the signal 48 hours later and any ASVs that show up at 24 hours are potentially noise. 
  + Other papers I've seen have only used a 48 hour timepoint for 13-C incorporation, not 24 hour (i.e [this paper](https://www.nature.com/articles/ismej2015106)). Need to do more research. 
  + if this is correct, we should gut out 24 hour RNA sampling from next round of experiments. only take cell counts and delta 13-C
+ 
+### Input Data 
 
 ```{r, message=FALSE}
 x<-read.csv(file='/Users/ahern/R/trophic_cascades/mc2/4Nov21/ASVs/asv-table_2.csv',header=TRUE,row.names=1)
@@ -1332,10 +1469,9 @@ No of Genera that incorporated 13-C
 | 15MC2 240h    | 12            |
 
 
-### The plots
+### The plots/results
 
-#### Log2 Fold Change
-
+#### Genera Log2 Fold Change
 
 ```{r}
 df_qsip_genus=read.csv(file='/Users/ahern/R/trophic_cascades/mc2/4Nov21/ASVs/HRSIP_genus.csv',header=T)
