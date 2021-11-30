@@ -984,7 +984,7 @@ deco=decostand(t(try),'pa')
 
 Incorporators were found in 71.03% of community samples 
 
-####  The Plots
+#### Log2Fold Change Plots
 
 ##### ASVs log2 fold change
 Plot log2 fold change (relative to the control 5MC2) for each time timepoint.
@@ -1033,6 +1033,41 @@ points(t240$log2FoldChange,1:54, pch = 23, bg=t240$colors,cex=1)
 
 ASVs that took up 13-C are in black with the red lines from the vertical line. 
 
+##### Heatmap of Incorporators
+
+Lets see how they did 
+
+```{r,warning=FALSE,error=FALSE,message=FALSE, fig.height=8,fig.width=8}
+read=read.csv(file="/Users/ahern/TC_Exp3/subset_asvs.csv",header=T,row.names = 1)
+data=data.frame(read[,2:6], row.names=read$OTU)
+colnames(data)=c("9MC2","11MC2","12MC2","14MC2","15MC2")
+phyo_hrsip_f=subset_samples(phyo_hrsip,Comm_Frac=="Frac" )
+hrsip_tree=phy_tree(phyo_hrsip_f)
+library(viridis)
+library(phytools)
+c2=c('gray96',(rev(magma(30))))
+{phylo.heatmap(hrsip_tree, data, colors=c2, mar=c(1,5,1,1),lwd=3,
+              fsize=c(0.7,1,1),split=c(1,0.3),standardize = F)}
+
+```
+
+
+```{r, message=FALSE,error=FALSE,warning=FALSE, fig.height=8, fig.width=8}
+read=read.csv(file="/Users/ahern/TC_Exp3/subset_asvs.csv",header=T,row.names = 1)
+data=data.frame(read[,2:6], row.names=read$ID2)
+colnames(data)=c("9MC2","11MC2","12MC2","14MC2","15MC2")
+phyo_hrsip_f=subset_samples(phyo_hrsip,Comm_Frac=="Frac" )
+hrsip_tree=phy_tree(phyo_hrsip_f)
+hrsip_tree$tip.label=c('Alphaproteobacteria Paracaedibacteraceae 6310bd','Alphaproteobacteria Ancylobacter 1583d8','Alphaproteobacteria Pseudoxanthobacter 3fa297','Alphaproteobacteria Allo-Neo-Para-Rhizobium cf3381','Alphaproteobacteria Allo-Neo-Para-Rhizobium 98f535','Alphaproteobacteria Hirschia a5e4fa','Alphaproteobacteria Terasakiellaceae 801efb','Alphaproteobacteria Magnetospirillum d23dba','Alphaproteobacteria Rickettsiaceae 9d5fa8','Alphaproteobacteria Rickettsiaceae d40d89','Deltaproteobacteria Nannocystis a6db2d','Bacteroidia OLB12 f1e343','Rhodothermia uncultured bacterium 8b1b6b','Gammaproteobacteria Oceanobacter 3e5cc4','Gammaproteobacteria Legionella b93f0c','Gammaproteobacteria Janthinobacterium efbe1f','Gammaproteobacteria Zoogloea 83c246','Gammaproteobacteria Dechloromonas 7af6ae','Gammaproteobacteria Rhodocyclaceae acc960','Gammaproteobacteria Gallionellaceae 2bb6b6','Gammaproteobacteria Methylotenera e416d0','Gammaproteobacteria Methylophilus 1e104b','Gammaproteobacteria Denitratisoma 7a4067','Gammaproteobacteria Denitratisoma 8a37f0','Gammaproteobacteria Burkholderiaceae 27af01','Gammaproteobacteria Aquabacterium c1d9ea','Verrucomicrobiae Diplosphaera 5ed8f8','Verrucomicrobiae Opitutus 5c21f0')
+library(viridis)
+library(phytools)
+c2=c('gray96',(rev(magma(30))))
+{phylo.heatmap(hrsip_tree,data, colors=c2, mar=c(1,5,1,1),lwd=2,
+               fsize=c(0.7,1,1),split=c(1,0.3),standardize = F)}
+```
+
+
+### Relative Abundance Plots 
 
 ##### Relative Abundance ASVs
 Get just the ASVs that incorporated 13C
@@ -1064,9 +1099,16 @@ barplot(comm_tab, las=2, cex.names = 1, col=colors$x,
         ylab="Relative Abundance Bacterial ASVs",space=0)
 box(which='plot')
 }
+
 ```
 
-Ok turns out that the most abundant ASVs are in both teh community and fractionated samples. This makes sense because of the sparsity filtering. 
+Ok turns out that the most abundant ASVs are in both teh community and fractionated samples. This makes sense because of the sparsity filtering.
+
+
+What proportion of the community samples did not take up 13-C Glucose 
+```{r}
+1-colSums(comm_tab)
+```
 
 ##### Rel Abund Fracs
 ```{r asv-qsip-barplot, fig.height=5, fig.width=9, message=FALSE,error=FALSE}
@@ -1090,6 +1132,8 @@ text(60,1.05,"15MC2 240h",font=1)
 
 Was there a shift in community and a shift in the fractions? 
 
+
+#### Top ASVs 
 ##### ASVs in most timepoints 
 Five ASVs showed up in all five timepoints:
 
@@ -1207,37 +1251,39 @@ legend(0,-.35, legend=c("3fa2974b Pseudoxanthobacter", "cf33813 Desulfococcus", 
 ```
 
 
-##### Heatmap of Incorporators
 
 
-```{r,warning=FALSE,error=FALSE,message=FALSE, fig.height=8,fig.width=8}
-read=read.csv(file="/Users/ahern/TC_Exp3/subset_asvs.csv",header=T,row.names = 1)
-data=data.frame(read[,2:6], row.names=read$OTU)
-colnames(data)=c("9MC2","11MC2","12MC2","14MC2","15MC2")
-phyo_hrsip_f=subset_samples(phyo_hrsip,Comm_Frac=="Frac" )
-hrsip_tree=phy_tree(phyo_hrsip_f)
-library(viridis)
-library(phytools)
-c2=c('gray96',(rev(magma(30))))
-{phylo.heatmap(hrsip_tree, data, colors=c2, mar=c(1,5,1,1),lwd=3,
-              fsize=c(0.7,1,1),split=c(1,0.3),standardize = F)}
 
+#### What proportion did not Glucose?
+So there were 28 taxa that took up 13-C Glucose. 
+
+```{r,message=FALSE,error=FALSE,warning=FALSE,fig.width=4,fig.height=5}
+sub=subset(df_l2fc, incorp=="TRUE")
+phyo_comm=subset_samples(phyo2, Comm_Frac=="Community" & Treatment!="SidersPond")
+phyo_comm2=transform_sample_counts(phyo_comm, function(x) (x/sum(x)))
+otu=sub$OTU
+'%!in%' <- function(x,y)!('%in%'(x,y))
+my_subset <- subset(tax_table(phyo_comm2), rownames(tax_table(phyo_comm2)) %!in% otu)
+comm_tab1=phyloseq(otu_table(phyo_comm2), my_subset, tree)
+try=otu_table(comm_tab1)
+
+{par(mar=c(7,5,1,1))
+  barplot(try,las=2,cex.names = 1,ylim=c(0,1),space=0,
+          ylab="Percentage Incorp ASVs \n in Comm Samples")
+  box(which='plot')}
 ```
 
+```{r}
+1-colSums(frac_tab)
 
-```{r, message=FALSE,error=FALSE,warning=FALSE, fig.height=8, fig.width=8}
-read=read.csv(file="/Users/ahern/TC_Exp3/subset_asvs.csv",header=T,row.names = 1)
-data=data.frame(read[,2:6], row.names=read$ID2)
-colnames(data)=c("9MC2","11MC2","12MC2","14MC2","15MC2")
-phyo_hrsip_f=subset_samples(phyo_hrsip,Comm_Frac=="Frac" )
-hrsip_tree=phy_tree(phyo_hrsip_f)
-hrsip_tree$tip.label=c('Alphaproteobacteria Paracaedibacteraceae 6310bd','Alphaproteobacteria Ancylobacter 1583d8','Alphaproteobacteria Pseudoxanthobacter 3fa297','Alphaproteobacteria Allo-Neo-Para-Rhizobium cf3381','Alphaproteobacteria Allo-Neo-Para-Rhizobium 98f535','Alphaproteobacteria Hirschia a5e4fa','Alphaproteobacteria Terasakiellaceae 801efb','Alphaproteobacteria Magnetospirillum d23dba','Alphaproteobacteria Rickettsiaceae 9d5fa8','Alphaproteobacteria Rickettsiaceae d40d89','Deltaproteobacteria Nannocystis a6db2d','Bacteroidia OLB12 f1e343','Rhodothermia uncultured bacterium 8b1b6b','Gammaproteobacteria Oceanobacter 3e5cc4','Gammaproteobacteria Legionella b93f0c','Gammaproteobacteria Janthinobacterium efbe1f','Gammaproteobacteria Zoogloea 83c246','Gammaproteobacteria Dechloromonas 7af6ae','Gammaproteobacteria Rhodocyclaceae acc960','Gammaproteobacteria Gallionellaceae 2bb6b6','Gammaproteobacteria Methylotenera e416d0','Gammaproteobacteria Methylophilus 1e104b','Gammaproteobacteria Denitratisoma 7a4067','Gammaproteobacteria Denitratisoma 8a37f0','Gammaproteobacteria Burkholderiaceae 27af01','Gammaproteobacteria Aquabacterium c1d9ea','Verrucomicrobiae Diplosphaera 5ed8f8','Verrucomicrobiae Opitutus 5c21f0')
-library(viridis)
-library(phytools)
-c2=c('gray96',(rev(magma(30))))
-{phylo.heatmap(hrsip_tree,data, colors=c2, mar=c(1,5,1,1),lwd=2,
-               fsize=c(0.7,1,1),split=c(1,0.3),standardize = F)}
+frac_hrsip=subset_samples(phyo_hrsip_trans, Buoyant_density<1.759)
+frac1=otu_table(frac_hrsip)
 ```
+
+On average. 86.98 ± 9.56% of the fractionated samples included the 13-C glucose incorporators. The heavier fractions (> 1.759) 89.39 ± 8.12% of the community were 13-C glucose incorporators while, in  the lighter fractions (<1.759), the incorporators composed of 81.37 ± 10.42% of the community. 
+
+#### Random plots for Olivia 
+This is to look at the relative abundance of the randos in the heatmap who assimilated glucose at random timepoints. 
 
 Two ASVs only had significant values for 13C Glucose assimilation at 9MC2 T24
 
