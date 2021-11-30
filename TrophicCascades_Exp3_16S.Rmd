@@ -969,6 +969,21 @@ No of ASVs that incorporated 13-C
 
 Out of the 70 points where there were incorporators, 60 had a sparsity threshold of 0.2 while 10 had a sparsity threshold of 0.3.
 
+```{r,message=FALSE,error=FALSE,warning=FALSE}
+sub=subset(df_l2fc, incorp=="TRUE")
+phyo_comm=subset_samples(phyo2, Comm_Frac=="Community" & Treatment!="SidersPond")
+otu=sub$OTU
+my_subset <- subset(tax_table(phyo_comm), rownames(tax_table(phyo_comm)) %in% otu)
+comm_abund=phyloseq(otu_table(phyo_comm), my_subset, tree)
+try=otu_table(comm_abund)
+deco=decostand(t(try),'pa')
+{heatmap(t(deco), col=c('white','black'), Rowv = NA, Colv=NA)}
+
+#sort(summary(as.factor(sub$OTU)),decreasing=T)
+```
+
+Incorporators were found in 71.03% of community samples 
+
 ####  The Plots
 
 ##### ASVs log2 fold change
@@ -1326,7 +1341,22 @@ More ASVs using all of them as opposed to just those who were greater than 0.1%.
 In terms of sparsity thresholds, 27 of the incorporators were at 0.2, 33 incorporators were at 0.25, and 20 of the incorporators were at 0.3. 
 
 
-Five ASVs showed up at all five time points and four ASVs showed up at four timepoints. [These were the same ASVs as the >0.1%.][##### ASVs in most timepoints]
+Five ASVs showed up at all five time points and four ASVs showed up at four timepoints. [These were the same ASVs as the >0.1%.](##### ASVs in most timepoints)
+
+```{r,message=FALSE,error=FALSE,warning=FALSE}
+sub=subset(asvs_all_df, incorp=="TRUE")
+phyo_comm=subset_samples(phyo2, Comm_Frac=="Community" & Treatment!="SidersPond")
+otu=sub$OTU
+my_subset <- subset(tax_table(phyo_comm), rownames(tax_table(phyo_comm)) %in% otu)
+comm_abund=phyloseq(otu_table(phyo_comm), my_subset, tree)
+try=otu_table(comm_abund)
+deco=decostand(t(try),'pa')
+{heatmap(t(deco), col=c('white','black'), Rowv = NA, Colv=NA)}
+
+#sort(summary(as.factor(sub$OTU)),decreasing=T)
+```
+
+ASVs were found in 61.52% of community samples excluding SidersPond
 
 #### Log2 Fold Change
 ```{r hrsip-all-allresults, fig.width=8, fig.height=5}
@@ -1458,6 +1488,8 @@ df_l2fc = plyr::ldply(physeq_S2D2_g,
 write.csv(df_l2fc, '/Users/ahern/R/trophic_cascades/mc2/4Nov21/ASVs/HRSIP_genus.csv')
 ```
 
+### The plots/results
+
 No of Genera that incorporated 13-C 
 
 | Treatment     | No ASV        |
@@ -1469,7 +1501,23 @@ No of Genera that incorporated 13-C
 | 15MC2 240h    | 12            |
 
 
-### The plots/results
+```{r,message=FALSE,error=FALSE,warning=FALSE}
+df_qsip_genus=read.csv(file='/Users/ahern/R/trophic_cascades/mc2/4Nov21/ASVs/HRSIP_genus.csv',header=T)
+sub=subset(df_qsip_genus, incorp=="TRUE")
+phyo_genus=tax_glom(phyo2, taxrank="Genus")
+phyo_comm=subset_samples(phyo_genus, Comm_Frac=="Community" & Treatment!="SidersPond")
+otu=sub$OTU
+my_subset <- subset(tax_table(phyo_comm), rownames(tax_table(phyo_comm)) %in% otu)
+comm_abund=phyloseq(otu_table(phyo_comm), my_subset, tree)
+try=otu_table(comm_abund)
+deco=decostand(t(try),'pa')
+{heatmap(t(deco), col=c('white','black'), Rowv = NA, Colv=NA)}
+
+#sort(summary(as.factor(sub$OTU)),decreasing=T)
+```
+
+Incorporators were found in 71.30% of the community samples 
+
 
 #### Genera Log2 Fold Change
 
