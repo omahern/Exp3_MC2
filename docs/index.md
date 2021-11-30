@@ -1118,272 +1118,264 @@ physeq_S2D2_l_df = SIP_betaDiv_ord(physeq_S2D2_l, parallel=TRUE, method="unifrac
 ```
 ## Run 0 stress 0.03922615 
 ## Run 1 stress 0.03922615 
-## ... Procrustes: rmse 5.682374e-06  max resid 2.085043e-05 
+## ... Procrustes: rmse 2.668498e-06  max resid 8.64847e-06 
 ## ... Similar to previous best
-## Run 2 stress 0.09563254 
-## Run 3 stress 0.09563253 
-## Run 4 stress 0.03922615 
-## ... New best solution
-## ... Procrustes: rmse 2.14457e-06  max resid 6.908968e-06 
+## Run 2 stress 0.03922615 
+## ... Procrustes: rmse 4.936019e-06  max resid 1.462441e-05 
 ## ... Similar to previous best
-## Run 5 stress 0.09563261 
-## Run 6 stress 0.1124714 
+## Run 3 stress 0.09551262 
+## Run 4 stress 0.1286681 
+## Run 5 stress 0.03922615 
+## ... Procrustes: rmse 5.583594e-06  max resid 2.165232e-05 
+## ... Similar to previous best
+## Run 6 stress 0.03922615 
+## ... Procrustes: rmse 1.276167e-05  max resid 5.27947e-05 
+## ... Similar to previous best
 ## Run 7 stress 0.03922615 
-## ... Procrustes: rmse 3.787227e-06  max resid 1.445782e-05 
+## ... Procrustes: rmse 5.619111e-06  max resid 2.182518e-05 
 ## ... Similar to previous best
-## Run 8 stress 0.03922615 
-## ... Procrustes: rmse 4.222362e-06  max resid 1.454755e-05 
-## ... Similar to previous best
+## Run 8 stress 0.1286419 
 ## Run 9 stress 0.03922615 
 ## ... New best solution
-## ... Procrustes: rmse 1.490035e-06  max resid 4.077091e-06 
+## ... Procrustes: rmse 3.964777e-06  max resid 1.369136e-05 
 ## ... Similar to previous best
-## Run 10 stress 0.09551262 
-## Run 11 stress 0.03922615 
-## ... Procrustes: rmse 3.689629e-06  max resid 8.303028e-06 
+## Run 10 stress 0.03922615 
+## ... Procrustes: rmse 5.364771e-06  max resid 2.083902e-05 
 ## ... Similar to previous best
-## Run 12 stress 0.09551265 
-## Run 13 stress 0.09551264 
-## Run 14 stress 0.09563255 
-## Run 15 stress 0.03922615 
-## ... Procrustes: rmse 3.25028e-06  max resid 1.292289e-05 
+## Run 11 stress 0.03922616 
+## ... Procrustes: rmse 1.013518e-05  max resid 2.918843e-05 
 ## ... Similar to previous best
-## Run 16 stress 0.03922615 
-## ... Procrustes: rmse 3.349225e-06  max resid 1.241057e-05 
+## Run 12 stress 0.0955126 
+## Run 13 stress 0.03922615 
+## ... Procrustes: rmse 7.580626e-06  max resid 2.434731e-05 
 ## ... Similar to previous best
-## Run 17 stress 0.1118231 
+## Run 14 stress 0.09563252 
+## Run 15 stress 0.09563253 
+## Run 16 stress 0.09551264 
+## Run 17 stress 0.1124714 
 ## Run 18 stress 0.03922615 
-## ... New best solution
-## ... Procrustes: rmse 2.549214e-06  max resid 9.372664e-06 
+## ... Procrustes: rmse 7.183229e-06  max resid 2.907112e-05 
 ## ... Similar to previous best
-## Run 19 stress 0.1216365 
-## Run 20 stress 0.09551263 
+## Run 19 stress 0.09563253 
+## Run 20 stress 0.1254631 
 ## *** Solution reached
 ## Run 0 stress 0.04587765 
 ## Run 1 stress 0.04587765 
-## ... New best solution
-## ... Procrustes: rmse 5.946139e-06  max resid 1.998536e-05 
+## ... Procrustes: rmse 7.178231e-06  max resid 2.502684e-05 
 ## ... Similar to previous best
 ## Run 2 stress 0.04587765 
-## ... New best solution
-## ... Procrustes: rmse 3.149009e-06  max resid 9.662373e-06 
+## ... Procrustes: rmse 9.116677e-06  max resid 3.179072e-05 
 ## ... Similar to previous best
 ## Run 3 stress 0.04587765 
-## ... New best solution
-## ... Procrustes: rmse 1.44513e-06  max resid 2.467863e-06 
+## ... Procrustes: rmse 5.125171e-06  max resid 1.734526e-05 
 ## ... Similar to previous best
 ## Run 4 stress 0.04587765 
-## ... Procrustes: rmse 4.080545e-06  max resid 1.328698e-05 
+## ... New best solution
+## ... Procrustes: rmse 2.646414e-06  max resid 9.150049e-06 
 ## ... Similar to previous best
 ## Run 5 stress 0.04587765 
-## ... New best solution
-## ... Procrustes: rmse 1.061401e-06  max resid 1.999134e-06 
+## ... Procrustes: rmse 3.767522e-06  max resid 1.303619e-05 
 ## ... Similar to previous best
 ## Run 6 stress 0.04587765 
-## ... Procrustes: rmse 3.782569e-06  max resid 1.318132e-05 
+## ... Procrustes: rmse 4.745741e-06  max resid 1.647814e-05 
 ## ... Similar to previous best
 ## Run 7 stress 0.04587765 
-## ... New best solution
-## ... Procrustes: rmse 5.523595e-07  max resid 1.488579e-06 
+## ... Procrustes: rmse 2.362925e-06  max resid 7.744211e-06 
 ## ... Similar to previous best
 ## Run 8 stress 0.04587765 
-## ... Procrustes: rmse 1.084616e-06  max resid 3.799902e-06 
+## ... Procrustes: rmse 1.426126e-06  max resid 4.802446e-06 
 ## ... Similar to previous best
 ## Run 9 stress 0.04587765 
-## ... Procrustes: rmse 2.326702e-06  max resid 8.292315e-06 
+## ... Procrustes: rmse 3.616332e-06  max resid 1.25964e-05 
 ## ... Similar to previous best
 ## Run 10 stress 0.04587765 
-## ... Procrustes: rmse 5.480325e-06  max resid 1.941568e-05 
+## ... Procrustes: rmse 2.255113e-06  max resid 7.145777e-06 
 ## ... Similar to previous best
 ## Run 11 stress 0.04587765 
-## ... Procrustes: rmse 4.713858e-06  max resid 1.665161e-05 
+## ... Procrustes: rmse 4.553483e-06  max resid 1.537834e-05 
 ## ... Similar to previous best
 ## Run 12 stress 0.04587765 
-## ... Procrustes: rmse 2.227617e-06  max resid 8.156022e-06 
+## ... Procrustes: rmse 2.648538e-06  max resid 8.881911e-06 
 ## ... Similar to previous best
-## Run 13 stress 0.04587765 
-## ... Procrustes: rmse 2.83219e-06  max resid 1.013091e-05 
-## ... Similar to previous best
+## Run 13 stress 0.2167682 
 ## Run 14 stress 0.04587765 
-## ... Procrustes: rmse 1.50525e-06  max resid 5.419939e-06 
+## ... Procrustes: rmse 4.470376e-06  max resid 1.558068e-05 
 ## ... Similar to previous best
 ## Run 15 stress 0.04587765 
-## ... Procrustes: rmse 3.212298e-06  max resid 1.15313e-05 
+## ... Procrustes: rmse 3.207399e-06  max resid 1.11878e-05 
 ## ... Similar to previous best
-## Run 16 stress 0.04587765 
-## ... Procrustes: rmse 2.047116e-06  max resid 6.370465e-06 
-## ... Similar to previous best
+## Run 16 stress 0.1880269 
 ## Run 17 stress 0.04587765 
-## ... Procrustes: rmse 4.627469e-06  max resid 1.176875e-05 
+## ... Procrustes: rmse 5.726501e-06  max resid 2.072928e-05 
 ## ... Similar to previous best
-## Run 18 stress 0.204486 
+## Run 18 stress 0.2003726 
 ## Run 19 stress 0.04587765 
-## ... Procrustes: rmse 1.729896e-06  max resid 6.212295e-06 
+## ... Procrustes: rmse 1.436166e-06  max resid 4.819158e-06 
 ## ... Similar to previous best
 ## Run 20 stress 0.04587765 
-## ... Procrustes: rmse 6.888591e-06  max resid 2.326212e-05 
+## ... Procrustes: rmse 4.939826e-06  max resid 1.721159e-05 
 ## ... Similar to previous best
 ## *** Solution reached
 ## Run 0 stress 0.03459215 
-## Run 1 stress 0.06024665 
-## Run 2 stress 0.03459208 
+## Run 1 stress 0.1020201 
+## Run 2 stress 0.06024648 
+## Run 3 stress 0.03459211 
 ## ... New best solution
-## ... Procrustes: rmse 0.0001244834  max resid 0.0004826256 
+## ... Procrustes: rmse 2.513392e-05  max resid 8.779018e-05 
 ## ... Similar to previous best
-## Run 3 stress 0.1063513 
-## Run 4 stress 0.03459207 
+## Run 4 stress 0.03459212 
+## ... Procrustes: rmse 7.195099e-05  max resid 0.0002748597 
+## ... Similar to previous best
+## Run 5 stress 0.06024695 
+## Run 6 stress 0.03459512 
+## ... Procrustes: rmse 0.0004523959  max resid 0.001736165 
+## ... Similar to previous best
+## Run 7 stress 0.1100201 
+## Run 8 stress 0.0345921 
 ## ... New best solution
-## ... Procrustes: rmse 2.431624e-05  max resid 9.455837e-05 
+## ... Procrustes: rmse 5.224583e-06  max resid 1.756924e-05 
 ## ... Similar to previous best
-## Run 5 stress 0.1111055 
-## Run 6 stress 0.03459213 
-## ... Procrustes: rmse 8.390355e-05  max resid 0.000324639 
+## Run 9 stress 0.06024646 
+## Run 10 stress 0.03459208 
+## ... New best solution
+## ... Procrustes: rmse 3.471708e-05  max resid 0.0001351796 
 ## ... Similar to previous best
-## Run 7 stress 0.0345921 
-## ... Procrustes: rmse 7.297088e-05  max resid 0.0002838852 
+## Run 11 stress 0.2573914 
+## Run 12 stress 0.1155561 
+## Run 13 stress 0.03459208 
+## ... Procrustes: rmse 9.703322e-06  max resid 3.77447e-05 
 ## ... Similar to previous best
-## Run 8 stress 0.03460501 
-## ... Procrustes: rmse 0.001256588  max resid 0.004891501 
+## Run 14 stress 0.06024651 
+## Run 15 stress 0.03459208 
+## ... Procrustes: rmse 4.902934e-06  max resid 1.121605e-05 
 ## ... Similar to previous best
-## Run 9 stress 0.06024671 
-## Run 10 stress 0.10879 
-## Run 11 stress 0.03459209 
-## ... Procrustes: rmse 5.62505e-05  max resid 0.0002185491 
+## Run 16 stress 0.03459208 
+## ... Procrustes: rmse 3.849381e-06  max resid 1.088744e-05 
 ## ... Similar to previous best
-## Run 12 stress 0.03459208 
-## ... Procrustes: rmse 4.51004e-05  max resid 0.0001753382 
+## Run 17 stress 0.03459211 
+## ... Procrustes: rmse 3.882539e-05  max resid 0.0001504117 
 ## ... Similar to previous best
-## Run 13 stress 0.03459207 
-## ... Procrustes: rmse 5.94848e-06  max resid 2.311401e-05 
-## ... Similar to previous best
-## Run 14 stress 0.0345921 
-## ... Procrustes: rmse 3.782093e-05  max resid 0.000140147 
-## ... Similar to previous best
-## Run 15 stress 0.0345921 
-## ... Procrustes: rmse 6.853515e-05  max resid 0.0002668708 
-## ... Similar to previous best
-## Run 16 stress 0.03459207 
-## ... Procrustes: rmse 3.124137e-05  max resid 0.0001216649 
-## ... Similar to previous best
-## Run 17 stress 0.03459209 
-## ... Procrustes: rmse 6.112482e-05  max resid 0.0002380349 
-## ... Similar to previous best
-## Run 18 stress 0.0345921 
-## ... Procrustes: rmse 6.909212e-05  max resid 0.0002690867 
-## ... Similar to previous best
-## Run 19 stress 0.03459208 
-## ... Procrustes: rmse 1.392232e-05  max resid 5.374874e-05 
+## Run 18 stress 0.06024652 
+## Run 19 stress 0.03459211 
+## ... Procrustes: rmse 9.423451e-05  max resid 0.000366887 
 ## ... Similar to previous best
 ## Run 20 stress 0.03459213 
-## ... Procrustes: rmse 9.733478e-05  max resid 0.0003790437 
+## ... Procrustes: rmse 5.877273e-05  max resid 0.000228772 
 ## ... Similar to previous best
 ## *** Solution reached
 ## Run 0 stress 0.03673642 
 ## Run 1 stress 0.03673642 
 ## ... New best solution
-## ... Procrustes: rmse 2.78819e-06  max resid 7.504324e-06 
+## ... Procrustes: rmse 9.043107e-06  max resid 3.134072e-05 
 ## ... Similar to previous best
 ## Run 2 stress 0.03673642 
-## ... Procrustes: rmse 1.417548e-05  max resid 5.04637e-05 
+## ... Procrustes: rmse 1.729048e-05  max resid 5.785206e-05 
 ## ... Similar to previous best
 ## Run 3 stress 0.03673642 
-## ... New best solution
-## ... Procrustes: rmse 4.967578e-06  max resid 1.17658e-05 
+## ... Procrustes: rmse 9.170391e-07  max resid 1.884774e-06 
 ## ... Similar to previous best
-## Run 4 stress 0.1133694 
-## Run 5 stress 0.120662 
+## Run 4 stress 0.03673642 
+## ... Procrustes: rmse 3.808266e-06  max resid 1.142132e-05 
+## ... Similar to previous best
+## Run 5 stress 0.03673642 
+## ... Procrustes: rmse 8.015857e-06  max resid 2.68179e-05 
+## ... Similar to previous best
 ## Run 6 stress 0.03673642 
-## ... Procrustes: rmse 4.85104e-06  max resid 1.571616e-05 
-## ... Similar to previous best
-## Run 7 stress 0.03673642 
 ## ... New best solution
-## ... Procrustes: rmse 3.476642e-06  max resid 6.9526e-06 
+## ... Procrustes: rmse 2.469078e-06  max resid 6.175555e-06 
 ## ... Similar to previous best
+## Run 7 stress 0.3653547 
 ## Run 8 stress 0.03673642 
-## ... Procrustes: rmse 9.98546e-06  max resid 3.479488e-05 
+## ... Procrustes: rmse 5.912937e-06  max resid 1.747428e-05 
 ## ... Similar to previous best
 ## Run 9 stress 0.03673642 
-## ... Procrustes: rmse 2.936867e-06  max resid 7.099406e-06 
+## ... Procrustes: rmse 5.176054e-06  max resid 1.863652e-05 
 ## ... Similar to previous best
-## Run 10 stress 0.2155519 
+## Run 10 stress 0.03673642 
+## ... Procrustes: rmse 1.018894e-05  max resid 3.59554e-05 
+## ... Similar to previous best
 ## Run 11 stress 0.03673642 
-## ... Procrustes: rmse 4.832698e-06  max resid 1.674596e-05 
+## ... Procrustes: rmse 5.159116e-06  max resid 1.640339e-05 
 ## ... Similar to previous best
-## Run 12 stress 0.1941542 
-## Run 13 stress 0.1133692 
+## Run 12 stress 0.03673642 
+## ... Procrustes: rmse 4.875157e-06  max resid 1.749256e-05 
+## ... Similar to previous best
+## Run 13 stress 0.03673642 
+## ... Procrustes: rmse 7.369175e-06  max resid 2.45155e-05 
+## ... Similar to previous best
 ## Run 14 stress 0.03673642 
-## ... Procrustes: rmse 9.382763e-06  max resid 3.035842e-05 
+## ... Procrustes: rmse 1.515304e-05  max resid 5.221783e-05 
 ## ... Similar to previous best
 ## Run 15 stress 0.03673642 
-## ... Procrustes: rmse 7.978893e-06  max resid 2.847739e-05 
+## ... Procrustes: rmse 7.164008e-06  max resid 2.557184e-05 
 ## ... Similar to previous best
-## Run 16 stress 0.03673643 
-## ... Procrustes: rmse 2.399873e-05  max resid 7.979531e-05 
+## Run 16 stress 0.03673642 
+## ... Procrustes: rmse 3.836881e-06  max resid 7.187603e-06 
 ## ... Similar to previous best
-## Run 17 stress 0.03673642 
-## ... New best solution
-## ... Procrustes: rmse 2.179539e-06  max resid 7.137267e-06 
+## Run 17 stress 0.1133692 
+## Run 18 stress 0.03673642 
+## ... Procrustes: rmse 3.825639e-06  max resid 1.085648e-05 
 ## ... Similar to previous best
-## Run 18 stress 0.1133692 
 ## Run 19 stress 0.03673642 
-## ... Procrustes: rmse 3.220958e-06  max resid 1.095602e-05 
+## ... Procrustes: rmse 1.732889e-05  max resid 5.854223e-05 
 ## ... Similar to previous best
 ## Run 20 stress 0.03673642 
-## ... Procrustes: rmse 1.454694e-05  max resid 4.739081e-05 
+## ... Procrustes: rmse 8.608073e-06  max resid 2.70692e-05 
 ## ... Similar to previous best
 ## *** Solution reached
 ## Run 0 stress 0.01746445 
-## Run 1 stress 0.01746448 
-## ... Procrustes: rmse 0.0001328946  max resid 0.0002994782 
+## Run 1 stress 0.01746451 
+## ... Procrustes: rmse 0.0001524069  max resid 0.0003493715 
 ## ... Similar to previous best
-## Run 2 stress 0.01746442 
+## Run 2 stress 0.01746448 
+## ... Procrustes: rmse 0.0001336822  max resid 0.0002916016 
+## ... Similar to previous best
+## Run 3 stress 0.01746445 
 ## ... New best solution
-## ... Procrustes: rmse 4.202667e-05  max resid 0.0001016372 
+## ... Procrustes: rmse 0.0001082206  max resid 0.0002496767 
 ## ... Similar to previous best
-## Run 3 stress 0.01746446 
-## ... Procrustes: rmse 4.954543e-05  max resid 0.0001169471 
+## Run 4 stress 0.03804712 
+## Run 5 stress 0.01746455 
+## ... Procrustes: rmse 5.211788e-05  max resid 0.0001235156 
 ## ... Similar to previous best
-## Run 4 stress 0.04392407 
-## Run 5 stress 0.01746445 
-## ... Procrustes: rmse 6.927831e-05  max resid 0.0001489123 
-## ... Similar to previous best
-## Run 6 stress 0.01746447 
-## ... Procrustes: rmse 8.486841e-05  max resid 0.0001799323 
+## Run 6 stress 0.01746446 
+## ... Procrustes: rmse 7.834502e-06  max resid 1.511939e-05 
 ## ... Similar to previous best
 ## Run 7 stress 0.01746448 
-## ... Procrustes: rmse 9.090022e-05  max resid 0.0001902065 
+## ... Procrustes: rmse 3.055778e-05  max resid 7.388913e-05 
 ## ... Similar to previous best
-## Run 8 stress 0.03804701 
-## Run 9 stress 0.03804653 
-## Run 10 stress 0.01746443 
-## ... Procrustes: rmse 3.772639e-05  max resid 8.002406e-05 
+## Run 8 stress 0.2278521 
+## Run 9 stress 0.01746442 
+## ... New best solution
+## ... Procrustes: rmse 5.821857e-05  max resid 0.0001254844 
 ## ... Similar to previous best
-## Run 11 stress 0.01746447 
-## ... Procrustes: rmse 8.086953e-05  max resid 0.0001482104 
+## Run 10 stress 0.03804703 
+## Run 11 stress 0.01746443 
+## ... Procrustes: rmse 4.047559e-05  max resid 8.191779e-05 
 ## ... Similar to previous best
-## Run 12 stress 0.04392434 
-## Run 13 stress 0.01746443 
-## ... Procrustes: rmse 3.988049e-05  max resid 8.247301e-05 
+## Run 12 stress 0.01746443 
+## ... Procrustes: rmse 3.151163e-05  max resid 6.38401e-05 
+## ... Similar to previous best
+## Run 13 stress 0.01746449 
+## ... Procrustes: rmse 8.769202e-05  max resid 0.0001706547 
 ## ... Similar to previous best
 ## Run 14 stress 0.01746448 
-## ... Procrustes: rmse 9.389363e-05  max resid 0.0002075329 
+## ... Procrustes: rmse 7.977526e-05  max resid 0.000169864 
 ## ... Similar to previous best
-## Run 15 stress 0.01746443 
-## ... Procrustes: rmse 5.155113e-05  max resid 0.0001121008 
+## Run 15 stress 0.0174645 
+## ... Procrustes: rmse 8.883102e-05  max resid 0.0002122099 
 ## ... Similar to previous best
-## Run 16 stress 0.04392439 
-## Run 17 stress 0.01746449 
-## ... Procrustes: rmse 9.366973e-05  max resid 0.0002049838 
+## Run 16 stress 0.03804704 
+## Run 17 stress 0.01746443 
+## ... Procrustes: rmse 3.222413e-05  max resid 6.267401e-05 
 ## ... Similar to previous best
-## Run 18 stress 0.0174645 
-## ... Procrustes: rmse 0.0001012696  max resid 0.0002139161 
+## Run 18 stress 0.01746452 
+## ... Procrustes: rmse 0.0001021863  max resid 0.0002116941 
 ## ... Similar to previous best
-## Run 19 stress 0.01746444 
-## ... Procrustes: rmse 5.491563e-05  max resid 0.0001238974 
+## Run 19 stress 0.01746442 
+## ... Procrustes: rmse 2.506408e-05  max resid 4.856596e-05 
 ## ... Similar to previous best
-## Run 20 stress 0.01746443 
-## ... Procrustes: rmse 5.225994e-05  max resid 0.0001116945 
-## ... Similar to previous best
+## Run 20 stress 0.03804702 
 ## *** Solution reached
 ```
 
@@ -1442,13 +1434,13 @@ wmean %>% head(n=3)
 ## 2       0 MCP_5MC207 0.11436009           1          TRUE    1.807    1.813
 ## 3       0 MCP_5MC208 0.11954049           1          TRUE    1.801    1.807
 ##   BD_range.x perc_overlap n_over_fracs wmean_dist wmean_dist_CI_low_global
-## 1      0.007     14.28571            2  0.0856853               0.01195401
-## 2      0.006    100.00000            1  0.1143601               0.01195401
-## 3      0.006    100.00000            1  0.1195405               0.01195401
+## 1      0.007     14.28571            2  0.0856853               0.01311537
+## 2      0.006    100.00000            1  0.1143601               0.01311537
+## 3      0.006    100.00000            1  0.1195405               0.01311537
 ##   wmean_dist_CI_high_global wmean_dist_CI_low wmean_dist_CI_high
-## 1                0.05063228       0.039877079         0.07282845
-## 2                0.05063228       0.019841120         0.03901316
-## 3                0.05063228       0.009225712         0.03748855
+## 1                0.04941416        0.04090863         0.07126606
+## 2                0.04941416        0.02032485         0.03833291
+## 3                0.04941416        0.01152331         0.03618756
 ```
 
 ```r
@@ -1894,6 +1886,38 @@ Two ASVs showed up in four timepoints:
 ASV 3fa2974b was statistically significant in timepoints 24, 48, 72, 120
 ASV 83c246 was statistically significant in timepoints 24, 48, 72, 240
 
+
+No of Timepoints Top ASVs were in Community Samples (excluding SidersPond)
+
+| Treatment     | No TP Comm    |
+|---------------|:-------------:|
+| 5ed8f8f3      | 9/9           |
+| 801efb1       | 9/9           |
+| a6db2d87      | 9/9           |
+| acc9603a      | 9/9           |
+| cf33813       | 9/9           |
+| 3fa2974b      | 9/9           |
+| 83c246        | 9/9           |
+
+
+
+```r
+sub=subset(df_l2fc, incorp=="TRUE")
+phyo_comm=subset_samples(phyo2, Comm_Frac=="Community" & Treatment!="SidersPond")
+otu=sub$OTU
+my_subset <- subset(tax_table(phyo_comm), rownames(tax_table(phyo_comm)) %in% otu)
+comm_abund=phyloseq(otu_table(phyo_comm), my_subset, tree)
+try=otu_table(comm_abund)
+deco=decostand(t(try),'pa')
+
+{par(mar=c(15,5,1,1))
+  barplot((colSums(deco))/9,las=2,cex.names = 0.7,ylim=c(0,1),
+          ylab="Percentage Incorp ASVs \n in Comm Samples")
+  box(which='plot')}
+```
+
+![](/Users/ahern/Documents/GitHub/Exp3_MC2/docs/index_files/figure-html/unnamed-chunk-24-1.png)<!-- -->
+
 Lets look at the relative abudance of those five ASVs in the dense and light fractions 
 
 
@@ -1978,7 +2002,7 @@ c2=c('gray96',(rev(magma(30))))
               fsize=c(0.7,1,1),split=c(1,0.3),standardize = F)}
 ```
 
-![](/Users/ahern/Documents/GitHub/Exp3_MC2/docs/index_files/figure-html/unnamed-chunk-24-1.png)<!-- -->
+![](/Users/ahern/Documents/GitHub/Exp3_MC2/docs/index_files/figure-html/unnamed-chunk-25-1.png)<!-- -->
 
 
 
@@ -1996,7 +2020,7 @@ c2=c('gray96',(rev(magma(30))))
                fsize=c(0.7,1,1),split=c(1,0.3),standardize = F)}
 ```
 
-![](/Users/ahern/Documents/GitHub/Exp3_MC2/docs/index_files/figure-html/unnamed-chunk-25-1.png)<!-- -->
+![](/Users/ahern/Documents/GitHub/Exp3_MC2/docs/index_files/figure-html/unnamed-chunk-26-1.png)<!-- -->
 
 Two ASVs only had significant values for 13C Glucose assimilation at 9MC2 T24
 
@@ -2023,7 +2047,7 @@ plot(sample_data(f1)$TP,otu_table(f1), bg = sample_data(f1)$col, pch =sample_dat
 }
 ```
 
-![](/Users/ahern/Documents/GitHub/Exp3_MC2/docs/index_files/figure-html/unnamed-chunk-26-1.png)<!-- -->
+![](/Users/ahern/Documents/GitHub/Exp3_MC2/docs/index_files/figure-html/unnamed-chunk-27-1.png)<!-- -->
 
 One ASV only had significant values at 9MC2 T24 and 11MC2 T48
 
@@ -2042,7 +2066,7 @@ plot(sample_data(f)$TP,otu_table(f), bg = sample_data(f)$col, pch =sample_data(f
 }
 ```
 
-![](/Users/ahern/Documents/GitHub/Exp3_MC2/docs/index_files/figure-html/unnamed-chunk-27-1.png)<!-- -->
+![](/Users/ahern/Documents/GitHub/Exp3_MC2/docs/index_files/figure-html/unnamed-chunk-28-1.png)<!-- -->
 
 Three ASVs had significant values from 
 
@@ -2067,7 +2091,7 @@ plot(sample_data(f1)$TP,otu_table(f1), bg = sample_data(f1)$col, pch =sample_dat
 }
 ```
 
-![](/Users/ahern/Documents/GitHub/Exp3_MC2/docs/index_files/figure-html/unnamed-chunk-28-1.png)<!-- -->
+![](/Users/ahern/Documents/GitHub/Exp3_MC2/docs/index_files/figure-html/unnamed-chunk-29-1.png)<!-- -->
 
 ## HR-SIP: ASVs All
 
@@ -2191,13 +2215,24 @@ deco=decostand(t(try),'pa')
 {heatmap(t(deco), col=c('white','black'), Rowv = NA, Colv=NA)}
 ```
 
-![](/Users/ahern/Documents/GitHub/Exp3_MC2/docs/index_files/figure-html/unnamed-chunk-32-1.png)<!-- -->
+![](/Users/ahern/Documents/GitHub/Exp3_MC2/docs/index_files/figure-html/unnamed-chunk-33-1.png)<!-- -->
 
 ```r
 #sort(summary(as.factor(sub$OTU)),decreasing=T)
 ```
 
 ASVs were found in 61.52% of community samples excluding SidersPond
+
+
+
+```r
+{par(mar=c(15,5,1,1))
+  barplot((colSums(deco))/9,las=2,cex.names = 0.7,ylim=c(0,1),
+          ylab="Percentage Incorp ASVs \n in Comm Samples")
+  box(which='plot')}
+```
+
+![](/Users/ahern/Documents/GitHub/Exp3_MC2/docs/index_files/figure-html/unnamed-chunk-34-1.png)<!-- -->
 
 #### Log2 Fold Change
 
@@ -2401,7 +2436,7 @@ deco=decostand(t(try),'pa')
 {heatmap(t(deco), col=c('white','black'), Rowv = NA, Colv=NA)}
 ```
 
-![](/Users/ahern/Documents/GitHub/Exp3_MC2/docs/index_files/figure-html/unnamed-chunk-35-1.png)<!-- -->
+![](/Users/ahern/Documents/GitHub/Exp3_MC2/docs/index_files/figure-html/unnamed-chunk-37-1.png)<!-- -->
 
 ```r
 #sort(summary(as.factor(sub$OTU)),decreasing=T)
@@ -2456,7 +2491,7 @@ points(t240$log2FoldChange,1:42, pch = 23, bg=t240$colors,cex=1)
 }
 ```
 
-![](/Users/ahern/Documents/GitHub/Exp3_MC2/docs/index_files/figure-html/unnamed-chunk-36-1.png)<!-- -->
+![](/Users/ahern/Documents/GitHub/Exp3_MC2/docs/index_files/figure-html/unnamed-chunk-38-1.png)<!-- -->
 
 
 
@@ -2469,6 +2504,9 @@ points(t240$log2FoldChange,1:42, pch = 23, bg=t240$colors,cex=1)
 | 3fa2974    | Alphaproteobacteria | Rhizobiales      | Xanthobacteraceae |  *Pseudoxanthobacter*            | 4                |
 
 cf33813 Genus = *Allorhizobium-Neorhizobium-Pararhizobium-Rhizobium*
+
+
+
 
 801efb1 significant at timepoints 11MC2 48h, 12MC2 72h, 14MC2 120h, & 15MC2 240h.
 
@@ -2509,7 +2547,7 @@ legend(0,-.3, legend=c("Alphaproteobacteria Allorhizobium-Neorhizobium-Pararhizo
 }
 ```
 
-![](/Users/ahern/Documents/GitHub/Exp3_MC2/docs/index_files/figure-html/unnamed-chunk-38-1.png)<!-- -->
+![](/Users/ahern/Documents/GitHub/Exp3_MC2/docs/index_files/figure-html/unnamed-chunk-40-1.png)<!-- -->
 
 #### Top Genera Rel Abund
 
@@ -2535,7 +2573,7 @@ legend(0,-.3, legend=c("Alphaproteobacteria Allorhizobium-Neorhizobium-Pararhizo
 }
 ```
 
-![](/Users/ahern/Documents/GitHub/Exp3_MC2/docs/index_files/figure-html/unnamed-chunk-39-1.png)<!-- -->
+![](/Users/ahern/Documents/GitHub/Exp3_MC2/docs/index_files/figure-html/unnamed-chunk-41-1.png)<!-- -->
 
 
 #### Top Rel Abund over Time
@@ -2575,7 +2613,7 @@ otu=frac_tab
 }
 ```
 
-![](/Users/ahern/Documents/GitHub/Exp3_MC2/docs/index_files/figure-html/unnamed-chunk-40-1.png)<!-- -->
+![](/Users/ahern/Documents/GitHub/Exp3_MC2/docs/index_files/figure-html/unnamed-chunk-42-1.png)<!-- -->
 
 #### Heatmap of Incorporators 
 
@@ -2603,4 +2641,4 @@ d2=log(data+1)
                fsize=c(0.7,1,1),split=c(1,0.3),standardize = F)}
 ```
 
-![](/Users/ahern/Documents/GitHub/Exp3_MC2/docs/index_files/figure-html/unnamed-chunk-41-1.png)<!-- -->
+![](/Users/ahern/Documents/GitHub/Exp3_MC2/docs/index_files/figure-html/unnamed-chunk-43-1.png)<!-- -->

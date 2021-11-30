@@ -1113,6 +1113,36 @@ Two ASVs showed up in four timepoints:
 ASV 3fa2974b was statistically significant in timepoints 24, 48, 72, 120
 ASV 83c246 was statistically significant in timepoints 24, 48, 72, 240
 
+
+No of Timepoints Top ASVs were in Community Samples (excluding SidersPond)
+
+| Treatment     | No TP Comm    |
+|---------------|:-------------:|
+| 5ed8f8f3      | 9/9           |
+| 801efb1       | 9/9           |
+| a6db2d87      | 9/9           |
+| acc9603a      | 9/9           |
+| cf33813       | 9/9           |
+| 3fa2974b      | 9/9           |
+| 83c246        | 9/9           |
+
+
+```{r,message=FALSE,error=FALSE,warning=FALSE,fig.width=8,fig.height=6}
+sub=subset(df_l2fc, incorp=="TRUE")
+phyo_comm=subset_samples(phyo2, Comm_Frac=="Community" & Treatment!="SidersPond")
+otu=sub$OTU
+my_subset <- subset(tax_table(phyo_comm), rownames(tax_table(phyo_comm)) %in% otu)
+comm_abund=phyloseq(otu_table(phyo_comm), my_subset, tree)
+try=otu_table(comm_abund)
+deco=decostand(t(try),'pa')
+
+{par(mar=c(15,5,1,1))
+  barplot((colSums(deco))/9,las=2,cex.names = 0.7,ylim=c(0,1),
+          ylab="Percentage Incorp ASVs \n in Comm Samples")
+  box(which='plot')}
+
+```
+
 Lets look at the relative abudance of those five ASVs in the dense and light fractions 
 
 ```{r relative-abundance-dense, fig.width=6,fig.height=6,message=FALSE,error=FALSE,warning=FALSE}
@@ -1358,6 +1388,16 @@ deco=decostand(t(try),'pa')
 
 ASVs were found in 61.52% of community samples excluding SidersPond
 
+
+```{r,message=FALSE,error=FALSE,warning=FALSE,fig.height=6,fig.width=8}
+
+{par(mar=c(15,5,1,1))
+  barplot((colSums(deco))/9,las=2,cex.names = 0.7,ylim=c(0,1),
+          ylab="Percentage Incorp ASVs \n in Comm Samples")
+  box(which='plot')}
+
+```
+
 #### Log2 Fold Change
 ```{r hrsip-all-allresults, fig.width=8, fig.height=5}
 t24=subset(asvs_all_df, timepoint=="24")
@@ -1402,7 +1442,7 @@ points(t240$log2FoldChange,1:77, pch = 23, bg=t240$colors,cex=1)
 ```
 
 #### Tree Heatmap
-```{r hrsip-allasvs-tree, fig.width=8, fig.height=5,error=FALSE,message=FALSE,warning=FALSE}
+```{r hrsip-allasvs-tree, fig.width=8, fig.height=8,error=FALSE,message=FALSE,warning=FALSE}
 # script how to get log fold change into dataframe 
 #sub=subset(df_qsip_genus, incorp=="TRUE")
 #d=dcast(sub, OTU ~ timepoint, value.var = "log2FoldChange", fun.aggregate = sum)
@@ -1575,6 +1615,9 @@ points(t240$log2FoldChange,1:42, pch = 23, bg=t240$colors,cex=1)
 | 3fa2974    | Alphaproteobacteria | Rhizobiales      | Xanthobacteraceae |  *Pseudoxanthobacter*            | 4                |
 
 cf33813 Genus = *Allorhizobium-Neorhizobium-Pararhizobium-Rhizobium*
+
+
+
 
 801efb1 significant at timepoints 11MC2 48h, 12MC2 72h, 14MC2 120h, & 15MC2 240h.
 
