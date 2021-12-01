@@ -165,11 +165,19 @@ time_glucose=read$Time
 read=read.csv(file="/Users/ahern/R/trophic_cascades/mc2/c13_glucose.csv",
               header=T)
 
-{par(mfcol=c(1,2),mar=c(4,5.5,1,1),xpd=T)
-plot(time_glucose,glucose,type='o',ylim=c(0,12),xlab= "Time (hours)", ylab = "Glucose\n (um)",col='gray30',bg='#b65090',pch=21,cex.axis=1.3,cex.lab=1.2,cex=1.3)
-  plot(read$T,read$Atom..13C,type='o',ylim=c(0,24),xlab="Time (hours)",
-     ylab="Atom C13\n (%)", col='gray20',bg='gray50',
-     pch=21,cex.axis=1.3,cex.lab=1.2,cex=1.3)
+{par(mfcol=c(1,2),mar=c(4,4,1,1),xpd=F)
+  plot(time_glucose,glucose,type='o',ylim=c(0,12),xlab= "Time (hours)",
+       ylab = "Glucose (um)",col='gray30',bg='#b65090',pch=21,cex.axis=1,cex.lab=1,cex=1.2,lwd=1.4,
+       yaxt='n',xaxt='n')
+  axis(side=2,at=c(0,4,8,12), cex=1.3)
+  axis(side=1, at=c(-144, 0, 48, 120, 240))
+  plot(read$T,read$Atom..13C,type='o',ylim=c(0,30),xlab="Time (hours)",
+       ylab="Atom C13 (%)", col='gray20',bg='gray50',
+       pch=21,cex.axis=1,cex.lab=1,cex=1.2,lwd=1.2,yaxt='n',xaxt='n')
+  axis(side=2, at=c(0, 10,20,30))
+  axis(side=1, at=c(-144, 0, 48, 120, 240))
+  #abline(v=c(24,48,72,120,240), lty=2, col='gray50')
+  #abline(v=-0.5, col='red',lty=2)
 }
 ```
 
@@ -1038,6 +1046,21 @@ ASVs that took up 13-C are in black with the red lines from the vertical line.
 Lets see how they did 
 
 ```{r,warning=FALSE,error=FALSE,message=FALSE, fig.height=8,fig.width=8}
+sub=subset(df_l2fc, incorp=="TRUE")
+otu=sub$OTU
+length(unique(otu))
+# 28 ASVs incorporated 13C
+
+my_subset <- subset(tax_table(phyo_frac), rownames(tax_table(phyo_frac)) %in% otu)
+x<-read.csv(file='/Users/ahern/R/trophic_cascades/mc2/4Nov21/ASVs/asv-table.csv',header=TRUE,row.names=1)
+OTU = otu_table(x, taxa_are_rows=T)
+sums=colSums(OTU)
+phyo_hrsip=phyloseq(OTU, map, my_subset, tree)
+subset2=otu_table(phyo_hrsip)
+sw=sweep(subset2, 2, sums, "/")
+sw2=otu_table(sw, taxa_are_rows = T)
+phyo_hrsip_trans=phyloseq(sw2, map, tax2, tree)
+
 read=read.csv(file="/Users/ahern/TC_Exp3/subset_asvs.csv",header=T,row.names = 1)
 data=data.frame(read[,2:6], row.names=read$OTU)
 colnames(data)=c("9MC2","11MC2","12MC2","14MC2","15MC2")
@@ -1798,3 +1821,38 @@ d2=log(data+1)
 {phylo.heatmap(hrsip_tree_gen, d2, colors=c2, mar=c(1,5,1,1),lwd=3,
                fsize=c(0.7,1,1),split=c(1,0.3),standardize = F)}
 ```
+
+
+
+
+## HR-SIP: Summary 
+
+One issue I've had to deal with in identifying ASVs that took up the 13-C Glucose is the significance of "random" ASVs or taxa that took up 13-C glucose just at one timepoint. I am not familiar with RNA SIP to know whether or not that is an artifact (due to the compositional nature of HT sequencing) or the actual results. So, to remove potential "random" ASVs, I ran the analysis in three ways using the same code:
+
+1. ASVs that composed of greater than 0.1% of the fractionated community
+2. All ASVs
+3. Genera that were greater than 0.1% of the community
+
+
+### Comparing All vs. 0.1% 
+
+
+```{r tables, include=TRUE}
+library(kableExtra)
+dt=read.csv(file='/Users/ahern/R/trophic_cascades/mc2/4Nov21/ASVs/hrsip_summ.csv',header=T)
+colnames(dt)=c("OTU", "Both?", "Class", "Order", "Family", "Genus", "Species", "Sig_>0.1%", "TP_Sig_>0.1%", "Sig_All", "TP_Sig_All", "Abund_Comm")
+
+
+
+dt %>%
+  kbl(caption = "HR-SIP comparing all ASVs vs. >0.1%") %>%
+  kable_classic(full_width = F, html_font = "Cambria") %>%
+  kable_styling(font_size = 9)
+
+```
+
+
+
+
+
+

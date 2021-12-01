@@ -171,11 +171,19 @@ time_glucose=read$Time
 read=read.csv(file="/Users/ahern/R/trophic_cascades/mc2/c13_glucose.csv",
               header=T)
 
-{par(mfcol=c(1,2),mar=c(4,5.5,1,1),xpd=T)
-plot(time_glucose,glucose,type='o',ylim=c(0,12),xlab= "Time (hours)", ylab = "Glucose\n (um)",col='gray30',bg='#b65090',pch=21,cex.axis=1.3,cex.lab=1.2,cex=1.3)
-  plot(read$T,read$Atom..13C,type='o',ylim=c(0,24),xlab="Time (hours)",
-     ylab="Atom C13\n (%)", col='gray20',bg='gray50',
-     pch=21,cex.axis=1.3,cex.lab=1.2,cex=1.3)
+{par(mfcol=c(1,2),mar=c(4,4,1,1),xpd=F)
+  plot(time_glucose,glucose,type='o',ylim=c(0,12),xlab= "Time (hours)",
+       ylab = "Glucose (um)",col='gray30',bg='#b65090',pch=21,cex.axis=1,cex.lab=1,cex=1.2,lwd=1.4,
+       yaxt='n',xaxt='n')
+  axis(side=2,at=c(0,4,8,12), cex=1.3)
+  axis(side=1, at=c(-144, 0, 48, 120, 240))
+  plot(read$T,read$Atom..13C,type='o',ylim=c(0,30),xlab="Time (hours)",
+       ylab="Atom C13 (%)", col='gray20',bg='gray50',
+       pch=21,cex.axis=1,cex.lab=1,cex=1.2,lwd=1.2,yaxt='n',xaxt='n')
+  axis(side=2, at=c(0, 10,20,30))
+  axis(side=1, at=c(-144, 0, 48, 120, 240))
+  #abline(v=c(24,48,72,120,240), lty=2, col='gray50')
+  #abline(v=-0.5, col='red',lty=2)
 }
 ```
 
@@ -1118,264 +1126,262 @@ physeq_S2D2_l_df = SIP_betaDiv_ord(physeq_S2D2_l, parallel=TRUE, method="unifrac
 ```
 ## Run 0 stress 0.03922615 
 ## Run 1 stress 0.03922615 
-## ... Procrustes: rmse 2.668498e-06  max resid 8.64847e-06 
+## ... Procrustes: rmse 7.996383e-06  max resid 2.583681e-05 
 ## ... Similar to previous best
 ## Run 2 stress 0.03922615 
-## ... Procrustes: rmse 4.936019e-06  max resid 1.462441e-05 
+## ... Procrustes: rmse 3.960891e-06  max resid 8.36865e-06 
 ## ... Similar to previous best
 ## Run 3 stress 0.09551262 
-## Run 4 stress 0.1286681 
-## Run 5 stress 0.03922615 
-## ... Procrustes: rmse 5.583594e-06  max resid 2.165232e-05 
+## Run 4 stress 0.03922615 
+## ... Procrustes: rmse 5.005132e-06  max resid 1.88305e-05 
 ## ... Similar to previous best
-## Run 6 stress 0.03922615 
-## ... Procrustes: rmse 1.276167e-05  max resid 5.27947e-05 
-## ... Similar to previous best
+## Run 5 stress 0.1124714 
+## Run 6 stress 0.1124714 
 ## Run 7 stress 0.03922615 
-## ... Procrustes: rmse 5.619111e-06  max resid 2.182518e-05 
+## ... Procrustes: rmse 8.183292e-06  max resid 3.283166e-05 
 ## ... Similar to previous best
-## Run 8 stress 0.1286419 
-## Run 9 stress 0.03922615 
+## Run 8 stress 0.1216414 
+## Run 9 stress 0.1124714 
+## Run 10 stress 0.1124714 
+## Run 11 stress 0.3250832 
+## Run 12 stress 0.03922615 
 ## ... New best solution
-## ... Procrustes: rmse 3.964777e-06  max resid 1.369136e-05 
+## ... Procrustes: rmse 3.05858e-06  max resid 9.216156e-06 
 ## ... Similar to previous best
-## Run 10 stress 0.03922615 
-## ... Procrustes: rmse 5.364771e-06  max resid 2.083902e-05 
-## ... Similar to previous best
-## Run 11 stress 0.03922616 
-## ... Procrustes: rmse 1.013518e-05  max resid 2.918843e-05 
-## ... Similar to previous best
-## Run 12 stress 0.0955126 
 ## Run 13 stress 0.03922615 
-## ... Procrustes: rmse 7.580626e-06  max resid 2.434731e-05 
+## ... Procrustes: rmse 9.612266e-07  max resid 2.05138e-06 
 ## ... Similar to previous best
-## Run 14 stress 0.09563252 
-## Run 15 stress 0.09563253 
-## Run 16 stress 0.09551264 
-## Run 17 stress 0.1124714 
+## Run 14 stress 0.03922615 
+## ... Procrustes: rmse 2.062269e-06  max resid 6.184777e-06 
+## ... Similar to previous best
+## Run 15 stress 0.1118231 
+## Run 16 stress 0.03922615 
+## ... Procrustes: rmse 7.704885e-06  max resid 2.731639e-05 
+## ... Similar to previous best
+## Run 17 stress 0.03922615 
+## ... Procrustes: rmse 1.46469e-06  max resid 3.188093e-06 
+## ... Similar to previous best
 ## Run 18 stress 0.03922615 
-## ... Procrustes: rmse 7.183229e-06  max resid 2.907112e-05 
+## ... Procrustes: rmse 1.933673e-05  max resid 6.329502e-05 
 ## ... Similar to previous best
 ## Run 19 stress 0.09563253 
-## Run 20 stress 0.1254631 
+## Run 20 stress 0.1124714 
 ## *** Solution reached
 ## Run 0 stress 0.04587765 
 ## Run 1 stress 0.04587765 
-## ... Procrustes: rmse 7.178231e-06  max resid 2.502684e-05 
+## ... New best solution
+## ... Procrustes: rmse 3.293884e-06  max resid 1.105693e-05 
 ## ... Similar to previous best
 ## Run 2 stress 0.04587765 
-## ... Procrustes: rmse 9.116677e-06  max resid 3.179072e-05 
+## ... Procrustes: rmse 3.767862e-06  max resid 1.233629e-05 
 ## ... Similar to previous best
 ## Run 3 stress 0.04587765 
-## ... Procrustes: rmse 5.125171e-06  max resid 1.734526e-05 
+## ... Procrustes: rmse 3.283648e-06  max resid 6.925659e-06 
 ## ... Similar to previous best
 ## Run 4 stress 0.04587765 
-## ... New best solution
-## ... Procrustes: rmse 2.646414e-06  max resid 9.150049e-06 
+## ... Procrustes: rmse 2.99366e-06  max resid 9.548993e-06 
 ## ... Similar to previous best
-## Run 5 stress 0.04587765 
-## ... Procrustes: rmse 3.767522e-06  max resid 1.303619e-05 
-## ... Similar to previous best
+## Run 5 stress 0.04678697 
 ## Run 6 stress 0.04587765 
-## ... Procrustes: rmse 4.745741e-06  max resid 1.647814e-05 
+## ... Procrustes: rmse 2.15365e-06  max resid 5.98304e-06 
 ## ... Similar to previous best
 ## Run 7 stress 0.04587765 
-## ... Procrustes: rmse 2.362925e-06  max resid 7.744211e-06 
+## ... Procrustes: rmse 4.923561e-06  max resid 1.644166e-05 
 ## ... Similar to previous best
 ## Run 8 stress 0.04587765 
-## ... Procrustes: rmse 1.426126e-06  max resid 4.802446e-06 
+## ... Procrustes: rmse 2.550402e-06  max resid 4.627481e-06 
 ## ... Similar to previous best
 ## Run 9 stress 0.04587765 
-## ... Procrustes: rmse 3.616332e-06  max resid 1.25964e-05 
+## ... New best solution
+## ... Procrustes: rmse 1.110243e-06  max resid 2.222493e-06 
 ## ... Similar to previous best
 ## Run 10 stress 0.04587765 
-## ... Procrustes: rmse 2.255113e-06  max resid 7.145777e-06 
+## ... Procrustes: rmse 3.769884e-06  max resid 1.297508e-05 
 ## ... Similar to previous best
 ## Run 11 stress 0.04587765 
-## ... Procrustes: rmse 4.553483e-06  max resid 1.537834e-05 
+## ... New best solution
+## ... Procrustes: rmse 5.623714e-07  max resid 9.740063e-07 
 ## ... Similar to previous best
-## Run 12 stress 0.04587765 
-## ... Procrustes: rmse 2.648538e-06  max resid 8.881911e-06 
+## Run 12 stress 0.2166286 
+## Run 13 stress 0.04587765 
+## ... Procrustes: rmse 6.857664e-06  max resid 1.567407e-05 
 ## ... Similar to previous best
-## Run 13 stress 0.2167682 
 ## Run 14 stress 0.04587765 
-## ... Procrustes: rmse 4.470376e-06  max resid 1.558068e-05 
+## ... Procrustes: rmse 3.887228e-06  max resid 1.343371e-05 
 ## ... Similar to previous best
 ## Run 15 stress 0.04587765 
-## ... Procrustes: rmse 3.207399e-06  max resid 1.11878e-05 
+## ... Procrustes: rmse 2.451189e-06  max resid 8.432732e-06 
 ## ... Similar to previous best
-## Run 16 stress 0.1880269 
-## Run 17 stress 0.04587765 
-## ... Procrustes: rmse 5.726501e-06  max resid 2.072928e-05 
+## Run 16 stress 0.04587765 
+## ... Procrustes: rmse 5.138111e-06  max resid 1.781224e-05 
 ## ... Similar to previous best
-## Run 18 stress 0.2003726 
+## Run 17 stress 0.2332292 
+## Run 18 stress 0.2430114 
 ## Run 19 stress 0.04587765 
-## ... Procrustes: rmse 1.436166e-06  max resid 4.819158e-06 
+## ... Procrustes: rmse 5.237125e-06  max resid 1.817918e-05 
 ## ... Similar to previous best
 ## Run 20 stress 0.04587765 
-## ... Procrustes: rmse 4.939826e-06  max resid 1.721159e-05 
+## ... Procrustes: rmse 3.439641e-06  max resid 1.193875e-05 
 ## ... Similar to previous best
 ## *** Solution reached
 ## Run 0 stress 0.03459215 
-## Run 1 stress 0.1020201 
-## Run 2 stress 0.06024648 
+## Run 1 stress 0.06024709 
+## Run 2 stress 0.0345921 
+## ... New best solution
+## ... Procrustes: rmse 2.992239e-05  max resid 0.0001118153 
+## ... Similar to previous best
 ## Run 3 stress 0.03459211 
+## ... Procrustes: rmse 4.729841e-06  max resid 1.22067e-05 
+## ... Similar to previous best
+## Run 4 stress 0.06024709 
+## Run 5 stress 0.03459213 
+## ... Procrustes: rmse 2.270367e-05  max resid 8.498461e-05 
+## ... Similar to previous best
+## Run 6 stress 0.0345921 
+## ... Procrustes: rmse 5.735677e-06  max resid 1.306208e-05 
+## ... Similar to previous best
+## Run 7 stress 0.03459209 
 ## ... New best solution
-## ... Procrustes: rmse 2.513392e-05  max resid 8.779018e-05 
+## ... Procrustes: rmse 1.66227e-05  max resid 6.426493e-05 
 ## ... Similar to previous best
-## Run 4 stress 0.03459212 
-## ... Procrustes: rmse 7.195099e-05  max resid 0.0002748597 
-## ... Similar to previous best
-## Run 5 stress 0.06024695 
-## Run 6 stress 0.03459512 
-## ... Procrustes: rmse 0.0004523959  max resid 0.001736165 
-## ... Similar to previous best
-## Run 7 stress 0.1100201 
-## Run 8 stress 0.0345921 
+## Run 8 stress 0.1034541 
+## Run 9 stress 0.03459207 
 ## ... New best solution
-## ... Procrustes: rmse 5.224583e-06  max resid 1.756924e-05 
+## ... Procrustes: rmse 2.787467e-05  max resid 0.0001062586 
 ## ... Similar to previous best
-## Run 9 stress 0.06024646 
-## Run 10 stress 0.03459208 
-## ... New best solution
-## ... Procrustes: rmse 3.471708e-05  max resid 0.0001351796 
+## Run 10 stress 0.1100237 
+## Run 11 stress 0.03459208 
+## ... Procrustes: rmse 4.58898e-05  max resid 0.0001773359 
 ## ... Similar to previous best
-## Run 11 stress 0.2573914 
-## Run 12 stress 0.1155561 
-## Run 13 stress 0.03459208 
-## ... Procrustes: rmse 9.703322e-06  max resid 3.77447e-05 
+## Run 12 stress 0.1020201 
+## Run 13 stress 0.3659297 
+## Run 14 stress 0.03459213 
+## ... Procrustes: rmse 7.058317e-05  max resid 0.0002743379 
 ## ... Similar to previous best
-## Run 14 stress 0.06024651 
-## Run 15 stress 0.03459208 
-## ... Procrustes: rmse 4.902934e-06  max resid 1.121605e-05 
+## Run 15 stress 0.03459209 
+## ... Procrustes: rmse 3.299644e-05  max resid 0.0001284558 
 ## ... Similar to previous best
-## Run 16 stress 0.03459208 
-## ... Procrustes: rmse 3.849381e-06  max resid 1.088744e-05 
-## ... Similar to previous best
-## Run 17 stress 0.03459211 
-## ... Procrustes: rmse 3.882539e-05  max resid 0.0001504117 
-## ... Similar to previous best
-## Run 18 stress 0.06024652 
-## Run 19 stress 0.03459211 
-## ... Procrustes: rmse 9.423451e-05  max resid 0.000366887 
-## ... Similar to previous best
-## Run 20 stress 0.03459213 
-## ... Procrustes: rmse 5.877273e-05  max resid 0.000228772 
+## Run 16 stress 0.1063514 
+## Run 17 stress 0.06024684 
+## Run 18 stress 0.1104648 
+## Run 19 stress 0.1111053 
+## Run 20 stress 0.03459211 
+## ... Procrustes: rmse 4.353162e-05  max resid 0.0001678822 
 ## ... Similar to previous best
 ## *** Solution reached
 ## Run 0 stress 0.03673642 
 ## Run 1 stress 0.03673642 
 ## ... New best solution
-## ... Procrustes: rmse 9.043107e-06  max resid 3.134072e-05 
+## ... Procrustes: rmse 9.975522e-06  max resid 3.608951e-05 
 ## ... Similar to previous best
-## Run 2 stress 0.03673642 
-## ... Procrustes: rmse 1.729048e-05  max resid 5.785206e-05 
+## Run 2 stress 0.03673643 
+## ... Procrustes: rmse 2.635101e-05  max resid 9.422937e-05 
 ## ... Similar to previous best
 ## Run 3 stress 0.03673642 
-## ... Procrustes: rmse 9.170391e-07  max resid 1.884774e-06 
+## ... New best solution
+## ... Procrustes: rmse 5.041196e-06  max resid 1.832943e-05 
 ## ... Similar to previous best
 ## Run 4 stress 0.03673642 
-## ... Procrustes: rmse 3.808266e-06  max resid 1.142132e-05 
+## ... Procrustes: rmse 4.011084e-06  max resid 1.472215e-05 
 ## ... Similar to previous best
 ## Run 5 stress 0.03673642 
-## ... Procrustes: rmse 8.015857e-06  max resid 2.68179e-05 
+## ... Procrustes: rmse 9.192175e-06  max resid 3.389578e-05 
 ## ... Similar to previous best
 ## Run 6 stress 0.03673642 
-## ... New best solution
-## ... Procrustes: rmse 2.469078e-06  max resid 6.175555e-06 
+## ... Procrustes: rmse 1.243471e-05  max resid 3.725336e-05 
 ## ... Similar to previous best
-## Run 7 stress 0.3653547 
+## Run 7 stress 0.03673642 
+## ... Procrustes: rmse 4.79015e-06  max resid 1.485909e-05 
+## ... Similar to previous best
 ## Run 8 stress 0.03673642 
-## ... Procrustes: rmse 5.912937e-06  max resid 1.747428e-05 
+## ... New best solution
+## ... Procrustes: rmse 5.894298e-06  max resid 1.467213e-05 
 ## ... Similar to previous best
 ## Run 9 stress 0.03673642 
-## ... Procrustes: rmse 5.176054e-06  max resid 1.863652e-05 
+## ... Procrustes: rmse 2.933384e-06  max resid 7.898621e-06 
 ## ... Similar to previous best
-## Run 10 stress 0.03673642 
-## ... Procrustes: rmse 1.018894e-05  max resid 3.59554e-05 
-## ... Similar to previous best
+## Run 10 stress 0.1941542 
 ## Run 11 stress 0.03673642 
-## ... Procrustes: rmse 5.159116e-06  max resid 1.640339e-05 
+## ... Procrustes: rmse 8.474744e-06  max resid 2.923282e-05 
 ## ... Similar to previous best
 ## Run 12 stress 0.03673642 
-## ... Procrustes: rmse 4.875157e-06  max resid 1.749256e-05 
+## ... Procrustes: rmse 2.076631e-06  max resid 5.193678e-06 
 ## ... Similar to previous best
 ## Run 13 stress 0.03673642 
-## ... Procrustes: rmse 7.369175e-06  max resid 2.45155e-05 
+## ... Procrustes: rmse 2.484819e-06  max resid 4.602651e-06 
 ## ... Similar to previous best
 ## Run 14 stress 0.03673642 
-## ... Procrustes: rmse 1.515304e-05  max resid 5.221783e-05 
+## ... New best solution
+## ... Procrustes: rmse 2.045051e-06  max resid 5.469318e-06 
 ## ... Similar to previous best
 ## Run 15 stress 0.03673642 
-## ... Procrustes: rmse 7.164008e-06  max resid 2.557184e-05 
+## ... Procrustes: rmse 6.870327e-06  max resid 2.409705e-05 
 ## ... Similar to previous best
 ## Run 16 stress 0.03673642 
-## ... Procrustes: rmse 3.836881e-06  max resid 7.187603e-06 
+## ... Procrustes: rmse 2.214475e-06  max resid 4.556362e-06 
 ## ... Similar to previous best
-## Run 17 stress 0.1133692 
-## Run 18 stress 0.03673642 
-## ... Procrustes: rmse 3.825639e-06  max resid 1.085648e-05 
+## Run 17 stress 0.03673642 
+## ... New best solution
+## ... Procrustes: rmse 1.747875e-06  max resid 3.974544e-06 
 ## ... Similar to previous best
-## Run 19 stress 0.03673642 
-## ... Procrustes: rmse 1.732889e-05  max resid 5.854223e-05 
+## Run 18 stress 0.03673643 
+## ... Procrustes: rmse 2.876459e-05  max resid 9.689431e-05 
+## ... Similar to previous best
+## Run 19 stress 0.03673643 
+## ... Procrustes: rmse 9.50086e-06  max resid 3.399289e-05 
 ## ... Similar to previous best
 ## Run 20 stress 0.03673642 
-## ... Procrustes: rmse 8.608073e-06  max resid 2.70692e-05 
+## ... Procrustes: rmse 1.620555e-06  max resid 4.763379e-06 
 ## ... Similar to previous best
 ## *** Solution reached
 ## Run 0 stress 0.01746445 
-## Run 1 stress 0.01746451 
-## ... Procrustes: rmse 0.0001524069  max resid 0.0003493715 
+## Run 1 stress 0.01746448 
+## ... Procrustes: rmse 2.110158e-05  max resid 4.4511e-05 
 ## ... Similar to previous best
-## Run 2 stress 0.01746448 
-## ... Procrustes: rmse 0.0001336822  max resid 0.0002916016 
+## Run 2 stress 0.03804692 
+## Run 3 stress 0.1989441 
+## Run 4 stress 0.01746448 
+## ... Procrustes: rmse 0.000134796  max resid 0.0003051408 
 ## ... Similar to previous best
-## Run 3 stress 0.01746445 
+## Run 5 stress 0.04392426 
+## Run 6 stress 0.01746449 
+## ... Procrustes: rmse 0.0001347721  max resid 0.000306015 
+## ... Similar to previous best
+## Run 7 stress 0.01746447 
+## ... Procrustes: rmse 0.0001289277  max resid 0.0002881952 
+## ... Similar to previous best
+## Run 8 stress 0.01746454 
+## ... Procrustes: rmse 0.0001656215  max resid 0.0003635355 
+## ... Similar to previous best
+## Run 9 stress 0.01746444 
 ## ... New best solution
-## ... Procrustes: rmse 0.0001082206  max resid 0.0002496767 
+## ... Procrustes: rmse 0.0001020505  max resid 0.0002107901 
 ## ... Similar to previous best
-## Run 4 stress 0.03804712 
-## Run 5 stress 0.01746455 
-## ... Procrustes: rmse 5.211788e-05  max resid 0.0001235156 
+## Run 10 stress 0.01746446 
+## ... Procrustes: rmse 1.07646e-05  max resid 2.062677e-05 
 ## ... Similar to previous best
-## Run 6 stress 0.01746446 
-## ... Procrustes: rmse 7.834502e-06  max resid 1.511939e-05 
+## Run 11 stress 0.01746452 
+## ... Procrustes: rmse 5.350108e-05  max resid 0.0001369957 
 ## ... Similar to previous best
-## Run 7 stress 0.01746448 
-## ... Procrustes: rmse 3.055778e-05  max resid 7.388913e-05 
+## Run 12 stress 0.01746449 
+## ... Procrustes: rmse 3.498606e-05  max resid 9.034234e-05 
 ## ... Similar to previous best
-## Run 8 stress 0.2278521 
-## Run 9 stress 0.01746442 
-## ... New best solution
-## ... Procrustes: rmse 5.821857e-05  max resid 0.0001254844 
+## Run 13 stress 0.01746447 
+## ... Procrustes: rmse 2.82591e-05  max resid 7.966982e-05 
 ## ... Similar to previous best
-## Run 10 stress 0.03804703 
-## Run 11 stress 0.01746443 
-## ... Procrustes: rmse 4.047559e-05  max resid 8.191779e-05 
+## Run 14 stress 0.01746449 
+## ... Procrustes: rmse 3.310008e-05  max resid 6.829026e-05 
 ## ... Similar to previous best
-## Run 12 stress 0.01746443 
-## ... Procrustes: rmse 3.151163e-05  max resid 6.38401e-05 
+## Run 15 stress 0.03804682 
+## Run 16 stress 0.03804706 
+## Run 17 stress 0.01746449 
+## ... Procrustes: rmse 0.0001340384  max resid 0.0002833139 
 ## ... Similar to previous best
-## Run 13 stress 0.01746449 
-## ... Procrustes: rmse 8.769202e-05  max resid 0.0001706547 
+## Run 18 stress 0.04658865 
+## Run 19 stress 0.0174645 
+## ... Procrustes: rmse 4.386e-05  max resid 0.0001090485 
 ## ... Similar to previous best
-## Run 14 stress 0.01746448 
-## ... Procrustes: rmse 7.977526e-05  max resid 0.000169864 
-## ... Similar to previous best
-## Run 15 stress 0.0174645 
-## ... Procrustes: rmse 8.883102e-05  max resid 0.0002122099 
-## ... Similar to previous best
-## Run 16 stress 0.03804704 
-## Run 17 stress 0.01746443 
-## ... Procrustes: rmse 3.222413e-05  max resid 6.267401e-05 
-## ... Similar to previous best
-## Run 18 stress 0.01746452 
-## ... Procrustes: rmse 0.0001021863  max resid 0.0002116941 
-## ... Similar to previous best
-## Run 19 stress 0.01746442 
-## ... Procrustes: rmse 2.506408e-05  max resid 4.856596e-05 
-## ... Similar to previous best
-## Run 20 stress 0.03804702 
+## Run 20 stress 0.03804696 
 ## *** Solution reached
 ```
 
@@ -1434,13 +1440,13 @@ wmean %>% head(n=3)
 ## 2       0 MCP_5MC207 0.11436009           1          TRUE    1.807    1.813
 ## 3       0 MCP_5MC208 0.11954049           1          TRUE    1.801    1.807
 ##   BD_range.x perc_overlap n_over_fracs wmean_dist wmean_dist_CI_low_global
-## 1      0.007     14.28571            2  0.0856853               0.01311537
-## 2      0.006    100.00000            1  0.1143601               0.01311537
-## 3      0.006    100.00000            1  0.1195405               0.01311537
+## 1      0.007     14.28571            2  0.0856853               0.01775911
+## 2      0.006    100.00000            1  0.1143601               0.01775911
+## 3      0.006    100.00000            1  0.1195405               0.01775911
 ##   wmean_dist_CI_high_global wmean_dist_CI_low wmean_dist_CI_high
-## 1                0.04941416        0.04090863         0.07126606
-## 2                0.04941416        0.02032485         0.03833291
-## 3                0.04941416        0.01152331         0.03618756
+## 1                0.05316477        0.02498499         0.05965434
+## 2                0.05316477        0.02503668         0.04898477
+## 3                0.05316477        0.01857340         0.04935801
 ```
 
 ```r
@@ -1741,7 +1747,7 @@ deco=decostand(t(try),'pa')
 
 Incorporators were found in 71.03% of community samples 
 
-####  The Plots
+#### Log2Fold Change Plots
 
 ##### ASVs log2 fold change
 Plot log2 fold change (relative to the control 5MC2) for each time timepoint.
@@ -1793,6 +1799,68 @@ points(t240$log2FoldChange,1:54, pch = 23, bg=t240$colors,cex=1)
 
 ASVs that took up 13-C are in black with the red lines from the vertical line. 
 
+##### Heatmap of Incorporators
+
+Lets see how they did 
+
+
+```r
+sub=subset(df_l2fc, incorp=="TRUE")
+otu=sub$OTU
+length(unique(otu))
+```
+
+```
+## [1] 28
+```
+
+```r
+# 28 ASVs incorporated 13C
+
+my_subset <- subset(tax_table(phyo_frac), rownames(tax_table(phyo_frac)) %in% otu)
+x<-read.csv(file='/Users/ahern/R/trophic_cascades/mc2/4Nov21/ASVs/asv-table.csv',header=TRUE,row.names=1)
+OTU = otu_table(x, taxa_are_rows=T)
+sums=colSums(OTU)
+phyo_hrsip=phyloseq(OTU, map, my_subset, tree)
+subset2=otu_table(phyo_hrsip)
+sw=sweep(subset2, 2, sums, "/")
+sw2=otu_table(sw, taxa_are_rows = T)
+phyo_hrsip_trans=phyloseq(sw2, map, tax2, tree)
+
+read=read.csv(file="/Users/ahern/TC_Exp3/subset_asvs.csv",header=T,row.names = 1)
+data=data.frame(read[,2:6], row.names=read$OTU)
+colnames(data)=c("9MC2","11MC2","12MC2","14MC2","15MC2")
+phyo_hrsip_f=subset_samples(phyo_hrsip,Comm_Frac=="Frac" )
+hrsip_tree=phy_tree(phyo_hrsip_f)
+library(viridis)
+library(phytools)
+c2=c('gray96',(rev(magma(30))))
+{phylo.heatmap(hrsip_tree, data, colors=c2, mar=c(1,5,1,1),lwd=3,
+              fsize=c(0.7,1,1),split=c(1,0.3),standardize = F)}
+```
+
+![](/Users/ahern/Documents/GitHub/Exp3_MC2/docs/index_files/figure-html/unnamed-chunk-23-1.png)<!-- -->
+
+
+
+```r
+read=read.csv(file="/Users/ahern/TC_Exp3/subset_asvs.csv",header=T,row.names = 1)
+data=data.frame(read[,2:6], row.names=read$ID2)
+colnames(data)=c("9MC2","11MC2","12MC2","14MC2","15MC2")
+phyo_hrsip_f=subset_samples(phyo_hrsip,Comm_Frac=="Frac" )
+hrsip_tree=phy_tree(phyo_hrsip_f)
+hrsip_tree$tip.label=c('Alphaproteobacteria Paracaedibacteraceae 6310bd','Alphaproteobacteria Ancylobacter 1583d8','Alphaproteobacteria Pseudoxanthobacter 3fa297','Alphaproteobacteria Allo-Neo-Para-Rhizobium cf3381','Alphaproteobacteria Allo-Neo-Para-Rhizobium 98f535','Alphaproteobacteria Hirschia a5e4fa','Alphaproteobacteria Terasakiellaceae 801efb','Alphaproteobacteria Magnetospirillum d23dba','Alphaproteobacteria Rickettsiaceae 9d5fa8','Alphaproteobacteria Rickettsiaceae d40d89','Deltaproteobacteria Nannocystis a6db2d','Bacteroidia OLB12 f1e343','Rhodothermia uncultured bacterium 8b1b6b','Gammaproteobacteria Oceanobacter 3e5cc4','Gammaproteobacteria Legionella b93f0c','Gammaproteobacteria Janthinobacterium efbe1f','Gammaproteobacteria Zoogloea 83c246','Gammaproteobacteria Dechloromonas 7af6ae','Gammaproteobacteria Rhodocyclaceae acc960','Gammaproteobacteria Gallionellaceae 2bb6b6','Gammaproteobacteria Methylotenera e416d0','Gammaproteobacteria Methylophilus 1e104b','Gammaproteobacteria Denitratisoma 7a4067','Gammaproteobacteria Denitratisoma 8a37f0','Gammaproteobacteria Burkholderiaceae 27af01','Gammaproteobacteria Aquabacterium c1d9ea','Verrucomicrobiae Diplosphaera 5ed8f8','Verrucomicrobiae Opitutus 5c21f0')
+library(viridis)
+library(phytools)
+c2=c('gray96',(rev(magma(30))))
+{phylo.heatmap(hrsip_tree,data, colors=c2, mar=c(1,5,1,1),lwd=2,
+               fsize=c(0.7,1,1),split=c(1,0.3),standardize = F)}
+```
+
+![](/Users/ahern/Documents/GitHub/Exp3_MC2/docs/index_files/figure-html/unnamed-chunk-24-1.png)<!-- -->
+
+
+### Relative Abundance Plots 
 
 ##### Relative Abundance ASVs
 Get just the ASVs that incorporated 13C
@@ -1837,7 +1905,21 @@ box(which='plot')
 
 ![](/Users/ahern/Documents/GitHub/Exp3_MC2/docs/index_files/figure-html/asv-qsip-comm-1.png)<!-- -->
 
-Ok turns out that the most abundant ASVs are in both teh community and fractionated samples. This makes sense because of the sparsity filtering. 
+Ok turns out that the most abundant ASVs are in both teh community and fractionated samples. This makes sense because of the sparsity filtering.
+
+
+What proportion of the community samples did not take up 13-C Glucose 
+
+```r
+1-colSums(comm_tab)
+```
+
+```
+## SidersPond   MCP_5MC2   MCP_6MC2   MCP_7MC2   MCP_8MC2   MCP_9MC2  MCP_11MC2 
+## 0.97763997 0.20681292 0.19378966 0.22582015 0.21249218 0.21919825 0.23744482 
+##  MCP_12MC2  MCP_14MC2  MCP_15MC2 
+## 0.13805977 0.10623791 0.04091494
+```
 
 ##### Rel Abund Fracs
 
@@ -1863,6 +1945,8 @@ text(60,1.05,"15MC2 240h",font=1)
 
 Was there a shift in community and a shift in the fractions? 
 
+
+#### Top ASVs 
 ##### ASVs in most timepoints 
 Five ASVs showed up in all five timepoints:
 
@@ -1916,7 +2000,7 @@ deco=decostand(t(try),'pa')
   box(which='plot')}
 ```
 
-![](/Users/ahern/Documents/GitHub/Exp3_MC2/docs/index_files/figure-html/unnamed-chunk-24-1.png)<!-- -->
+![](/Users/ahern/Documents/GitHub/Exp3_MC2/docs/index_files/figure-html/unnamed-chunk-27-1.png)<!-- -->
 
 Lets look at the relative abudance of those five ASVs in the dense and light fractions 
 
@@ -1985,42 +2069,103 @@ legend(0,-.35, legend=c("3fa2974b Pseudoxanthobacter", "cf33813 Desulfococcus", 
 ![](/Users/ahern/Documents/GitHub/Exp3_MC2/docs/index_files/figure-html/asv-top5-hrsip-1.png)<!-- -->
 
 
-##### Heatmap of Incorporators
 
 
 
-```r
-read=read.csv(file="/Users/ahern/TC_Exp3/subset_asvs.csv",header=T,row.names = 1)
-data=data.frame(read[,2:6], row.names=read$OTU)
-colnames(data)=c("9MC2","11MC2","12MC2","14MC2","15MC2")
-phyo_hrsip_f=subset_samples(phyo_hrsip,Comm_Frac=="Frac" )
-hrsip_tree=phy_tree(phyo_hrsip_f)
-library(viridis)
-library(phytools)
-c2=c('gray96',(rev(magma(30))))
-{phylo.heatmap(hrsip_tree, data, colors=c2, mar=c(1,5,1,1),lwd=3,
-              fsize=c(0.7,1,1),split=c(1,0.3),standardize = F)}
-```
-
-![](/Users/ahern/Documents/GitHub/Exp3_MC2/docs/index_files/figure-html/unnamed-chunk-25-1.png)<!-- -->
-
+#### What proportion did not Glucose?
+So there were 28 taxa that took up 13-C Glucose. 
 
 
 ```r
-read=read.csv(file="/Users/ahern/TC_Exp3/subset_asvs.csv",header=T,row.names = 1)
-data=data.frame(read[,2:6], row.names=read$ID2)
-colnames(data)=c("9MC2","11MC2","12MC2","14MC2","15MC2")
-phyo_hrsip_f=subset_samples(phyo_hrsip,Comm_Frac=="Frac" )
-hrsip_tree=phy_tree(phyo_hrsip_f)
-hrsip_tree$tip.label=c('Alphaproteobacteria Paracaedibacteraceae 6310bd','Alphaproteobacteria Ancylobacter 1583d8','Alphaproteobacteria Pseudoxanthobacter 3fa297','Alphaproteobacteria Allo-Neo-Para-Rhizobium cf3381','Alphaproteobacteria Allo-Neo-Para-Rhizobium 98f535','Alphaproteobacteria Hirschia a5e4fa','Alphaproteobacteria Terasakiellaceae 801efb','Alphaproteobacteria Magnetospirillum d23dba','Alphaproteobacteria Rickettsiaceae 9d5fa8','Alphaproteobacteria Rickettsiaceae d40d89','Deltaproteobacteria Nannocystis a6db2d','Bacteroidia OLB12 f1e343','Rhodothermia uncultured bacterium 8b1b6b','Gammaproteobacteria Oceanobacter 3e5cc4','Gammaproteobacteria Legionella b93f0c','Gammaproteobacteria Janthinobacterium efbe1f','Gammaproteobacteria Zoogloea 83c246','Gammaproteobacteria Dechloromonas 7af6ae','Gammaproteobacteria Rhodocyclaceae acc960','Gammaproteobacteria Gallionellaceae 2bb6b6','Gammaproteobacteria Methylotenera e416d0','Gammaproteobacteria Methylophilus 1e104b','Gammaproteobacteria Denitratisoma 7a4067','Gammaproteobacteria Denitratisoma 8a37f0','Gammaproteobacteria Burkholderiaceae 27af01','Gammaproteobacteria Aquabacterium c1d9ea','Verrucomicrobiae Diplosphaera 5ed8f8','Verrucomicrobiae Opitutus 5c21f0')
-library(viridis)
-library(phytools)
-c2=c('gray96',(rev(magma(30))))
-{phylo.heatmap(hrsip_tree,data, colors=c2, mar=c(1,5,1,1),lwd=2,
-               fsize=c(0.7,1,1),split=c(1,0.3),standardize = F)}
+sub=subset(df_l2fc, incorp=="TRUE")
+phyo_comm=subset_samples(phyo2, Comm_Frac=="Community" & Treatment!="SidersPond")
+phyo_comm2=transform_sample_counts(phyo_comm, function(x) (x/sum(x)))
+otu=sub$OTU
+'%!in%' <- function(x,y)!('%in%'(x,y))
+my_subset <- subset(tax_table(phyo_comm2), rownames(tax_table(phyo_comm2)) %!in% otu)
+comm_tab1=phyloseq(otu_table(phyo_comm2), my_subset, tree)
+try=otu_table(comm_tab1)
+
+{par(mar=c(7,5,1,1))
+  barplot(try,las=2,cex.names = 1,ylim=c(0,1),space=0,
+          ylab="Percentage Incorp ASVs \n in Comm Samples")
+  box(which='plot')}
 ```
 
-![](/Users/ahern/Documents/GitHub/Exp3_MC2/docs/index_files/figure-html/unnamed-chunk-26-1.png)<!-- -->
+![](/Users/ahern/Documents/GitHub/Exp3_MC2/docs/index_files/figure-html/unnamed-chunk-28-1.png)<!-- -->
+
+
+```r
+1-colSums(frac_tab)
+```
+
+```
+##  MCP_9MC203  MCP_9MC204  MCP_9MC205  MCP_9MC206  MCP_9MC207  MCP_9MC208 
+##  0.70340408  0.77409078  0.76719476  0.77949330  0.69667064  0.56687685 
+##  MCP_9MC209  MCP_9MC210  MCP_9MC211  MCP_9MC212  MCP_9MC213  MCP_9MC214 
+##  0.49048412  0.47774573  0.49394447  0.55569629  0.65804419  0.70308463 
+##  MCP_9MC215 MCP_11MC206 MCP_11MC207 MCP_11MC208 MCP_11MC209 MCP_11MC210 
+##  0.60257646  0.63846764  0.49167389  0.36223124  0.34378970  0.30527642 
+## MCP_11MC211 MCP_11MC212 MCP_11MC213 MCP_11MC214 MCP_12MC206 MCP_12MC207 
+##  0.33520300  0.37461861  0.42612813  0.50203252  0.51547269  0.32925176 
+## MCP_12MC208 MCP_12MC209 MCP_12MC210 MCP_12MC211 MCP_12MC212 MCP_12MC213 
+##  0.22353653  0.21127904  0.22389518  0.24338882  0.31217675  0.37746252 
+## MCP_12MC214 MCP_14MC205 MCP_14MC206 MCP_14MC207 MCP_14MC208 MCP_14MC209 
+##  0.42573157  0.15200030  0.10211657  0.14422092  0.27135938  0.30086294 
+## MCP_14MC210 MCP_14MC211 MCP_14MC212 MCP_14MC213 MCP_14MC214 MCP_15MC206 
+##  0.39105757  0.45196154  0.55350475  0.65372168  0.55156722  0.05180990 
+## MCP_15MC207 MCP_15MC208 MCP_15MC209 MCP_15MC210 MCP_15MC211 MCP_15MC212 
+##  0.06632597  0.09045082  0.12061279  0.18553833  0.22646744  0.27352733 
+## MCP_15MC213 MCP_15MC214  MCP_5MC206  MCP_5MC207  MCP_5MC208  MCP_5MC209 
+##  0.24383637  0.16623930  0.76925478  0.65850427  0.63249143  0.58083416 
+##  MCP_5MC210  MCP_5MC211  MCP_5MC212  MCP_5MC213  MCP_5MC214  MCP_5MC215 
+##  0.62991881  0.63434445  0.65524032  0.69834994  0.68556896  0.72712779
+```
+
+```r
+frac_hrsip=subset_samples(phyo_hrsip_trans, Buoyant_density<1.759)
+```
+
+```
+## Found more than one class "phylo" in cache; using the first, from namespace 'phyloseq'
+```
+
+```
+## Also defined by 'tidytree'
+```
+
+```
+## Found more than one class "phylo" in cache; using the first, from namespace 'phyloseq'
+```
+
+```
+## Also defined by 'tidytree'
+```
+
+```
+## Found more than one class "phylo" in cache; using the first, from namespace 'phyloseq'
+```
+
+```
+## Also defined by 'tidytree'
+```
+
+```
+## Found more than one class "phylo" in cache; using the first, from namespace 'phyloseq'
+```
+
+```
+## Also defined by 'tidytree'
+```
+
+```r
+frac1=otu_table(frac_hrsip)
+```
+
+On average. 86.98 ± 9.56% of the fractionated samples included the 13-C glucose incorporators. The heavier fractions (> 1.759) 89.39 ± 8.12% of the community were 13-C glucose incorporators while, in  the lighter fractions (<1.759), the incorporators composed of 81.37 ± 10.42% of the community. 
+
+#### Random plots for Olivia 
+This is to look at the relative abundance of the randos in the heatmap who assimilated glucose at random timepoints. 
 
 Two ASVs only had significant values for 13C Glucose assimilation at 9MC2 T24
 
@@ -2047,7 +2192,7 @@ plot(sample_data(f1)$TP,otu_table(f1), bg = sample_data(f1)$col, pch =sample_dat
 }
 ```
 
-![](/Users/ahern/Documents/GitHub/Exp3_MC2/docs/index_files/figure-html/unnamed-chunk-27-1.png)<!-- -->
+![](/Users/ahern/Documents/GitHub/Exp3_MC2/docs/index_files/figure-html/unnamed-chunk-30-1.png)<!-- -->
 
 One ASV only had significant values at 9MC2 T24 and 11MC2 T48
 
@@ -2066,7 +2211,7 @@ plot(sample_data(f)$TP,otu_table(f), bg = sample_data(f)$col, pch =sample_data(f
 }
 ```
 
-![](/Users/ahern/Documents/GitHub/Exp3_MC2/docs/index_files/figure-html/unnamed-chunk-28-1.png)<!-- -->
+![](/Users/ahern/Documents/GitHub/Exp3_MC2/docs/index_files/figure-html/unnamed-chunk-31-1.png)<!-- -->
 
 Three ASVs had significant values from 
 
@@ -2091,7 +2236,7 @@ plot(sample_data(f1)$TP,otu_table(f1), bg = sample_data(f1)$col, pch =sample_dat
 }
 ```
 
-![](/Users/ahern/Documents/GitHub/Exp3_MC2/docs/index_files/figure-html/unnamed-chunk-29-1.png)<!-- -->
+![](/Users/ahern/Documents/GitHub/Exp3_MC2/docs/index_files/figure-html/unnamed-chunk-32-1.png)<!-- -->
 
 ## HR-SIP: ASVs All
 
@@ -2215,7 +2360,7 @@ deco=decostand(t(try),'pa')
 {heatmap(t(deco), col=c('white','black'), Rowv = NA, Colv=NA)}
 ```
 
-![](/Users/ahern/Documents/GitHub/Exp3_MC2/docs/index_files/figure-html/unnamed-chunk-33-1.png)<!-- -->
+![](/Users/ahern/Documents/GitHub/Exp3_MC2/docs/index_files/figure-html/unnamed-chunk-36-1.png)<!-- -->
 
 ```r
 #sort(summary(as.factor(sub$OTU)),decreasing=T)
@@ -2232,7 +2377,7 @@ ASVs were found in 61.52% of community samples excluding SidersPond
   box(which='plot')}
 ```
 
-![](/Users/ahern/Documents/GitHub/Exp3_MC2/docs/index_files/figure-html/unnamed-chunk-34-1.png)<!-- -->
+![](/Users/ahern/Documents/GitHub/Exp3_MC2/docs/index_files/figure-html/unnamed-chunk-37-1.png)<!-- -->
 
 #### Log2 Fold Change
 
@@ -2436,7 +2581,7 @@ deco=decostand(t(try),'pa')
 {heatmap(t(deco), col=c('white','black'), Rowv = NA, Colv=NA)}
 ```
 
-![](/Users/ahern/Documents/GitHub/Exp3_MC2/docs/index_files/figure-html/unnamed-chunk-37-1.png)<!-- -->
+![](/Users/ahern/Documents/GitHub/Exp3_MC2/docs/index_files/figure-html/unnamed-chunk-40-1.png)<!-- -->
 
 ```r
 #sort(summary(as.factor(sub$OTU)),decreasing=T)
@@ -2491,7 +2636,7 @@ points(t240$log2FoldChange,1:42, pch = 23, bg=t240$colors,cex=1)
 }
 ```
 
-![](/Users/ahern/Documents/GitHub/Exp3_MC2/docs/index_files/figure-html/unnamed-chunk-38-1.png)<!-- -->
+![](/Users/ahern/Documents/GitHub/Exp3_MC2/docs/index_files/figure-html/unnamed-chunk-41-1.png)<!-- -->
 
 
 
@@ -2547,7 +2692,7 @@ legend(0,-.3, legend=c("Alphaproteobacteria Allorhizobium-Neorhizobium-Pararhizo
 }
 ```
 
-![](/Users/ahern/Documents/GitHub/Exp3_MC2/docs/index_files/figure-html/unnamed-chunk-40-1.png)<!-- -->
+![](/Users/ahern/Documents/GitHub/Exp3_MC2/docs/index_files/figure-html/unnamed-chunk-43-1.png)<!-- -->
 
 #### Top Genera Rel Abund
 
@@ -2573,7 +2718,7 @@ legend(0,-.3, legend=c("Alphaproteobacteria Allorhizobium-Neorhizobium-Pararhizo
 }
 ```
 
-![](/Users/ahern/Documents/GitHub/Exp3_MC2/docs/index_files/figure-html/unnamed-chunk-41-1.png)<!-- -->
+![](/Users/ahern/Documents/GitHub/Exp3_MC2/docs/index_files/figure-html/unnamed-chunk-44-1.png)<!-- -->
 
 
 #### Top Rel Abund over Time
@@ -2613,7 +2758,7 @@ otu=frac_tab
 }
 ```
 
-![](/Users/ahern/Documents/GitHub/Exp3_MC2/docs/index_files/figure-html/unnamed-chunk-42-1.png)<!-- -->
+![](/Users/ahern/Documents/GitHub/Exp3_MC2/docs/index_files/figure-html/unnamed-chunk-45-1.png)<!-- -->
 
 #### Heatmap of Incorporators 
 
@@ -2641,4 +2786,677 @@ d2=log(data+1)
                fsize=c(0.7,1,1),split=c(1,0.3),standardize = F)}
 ```
 
-![](/Users/ahern/Documents/GitHub/Exp3_MC2/docs/index_files/figure-html/unnamed-chunk-43-1.png)<!-- -->
+![](/Users/ahern/Documents/GitHub/Exp3_MC2/docs/index_files/figure-html/unnamed-chunk-46-1.png)<!-- -->
+
+
+
+
+## HR-SIP: Summary 
+
+One issue I've had to deal with in identifying ASVs that took up the 13-C Glucose is the significance of "random" ASVs or taxa that took up 13-C glucose just at one timepoint. I am not familiar with RNA SIP to know whether or not that is an artifact (due to the compositional nature of HT sequencing) or the actual results. So, to remove potential "random" ASVs, I ran the analysis in three ways using the same code:
+
+1. ASVs that composed of greater than 0.1% of the fractionated community
+2. All ASVs
+3. Genera that were greater than 0.1% of the community
+
+
+### Comparing All vs. 0.1% 
+
+
+
+```r
+library(kableExtra)
+```
+
+```
+## 
+## Attaching package: 'kableExtra'
+```
+
+```
+## The following object is masked from 'package:dplyr':
+## 
+##     group_rows
+```
+
+```r
+dt=read.csv(file='/Users/ahern/R/trophic_cascades/mc2/4Nov21/ASVs/hrsip_summ.csv',header=T)
+colnames(dt)=c("OTU", "Both?", "Class", "Order", "Family", "Genus", "Species", "Sig_>0.1%", "TP_Sig_>0.1%", "Sig_All", "TP_Sig_All", "Abund_Comm")
+
+
+
+dt %>%
+  kbl(caption = "HR-SIP comparing all ASVs vs. >0.1%") %>%
+  kable_classic(full_width = F, html_font = "Cambria") %>%
+  kable_styling(font_size = 9)
+```
+
+<table class=" lightable-classic table" style="font-family: Cambria; width: auto !important; margin-left: auto; margin-right: auto; font-size: 9px; margin-left: auto; margin-right: auto;">
+<caption style="font-size: initial !important;">HR-SIP comparing all ASVs vs. &gt;0.1%</caption>
+ <thead>
+  <tr>
+   <th style="text-align:left;"> OTU </th>
+   <th style="text-align:left;"> Both? </th>
+   <th style="text-align:left;"> Class </th>
+   <th style="text-align:left;"> Order </th>
+   <th style="text-align:left;"> Family </th>
+   <th style="text-align:left;"> Genus </th>
+   <th style="text-align:left;"> Species </th>
+   <th style="text-align:right;"> Sig_&gt;0.1% </th>
+   <th style="text-align:left;"> TP_Sig_&gt;0.1% </th>
+   <th style="text-align:right;"> Sig_All </th>
+   <th style="text-align:left;"> TP_Sig_All </th>
+   <th style="text-align:right;"> Abund_Comm </th>
+  </tr>
+ </thead>
+<tbody>
+  <tr>
+   <td style="text-align:left;"> 5ed8f8f3 </td>
+   <td style="text-align:left;"> BOTH </td>
+   <td style="text-align:left;"> Verrucomicrobiae </td>
+   <td style="text-align:left;"> Opitutales </td>
+   <td style="text-align:left;"> Opitutaceae </td>
+   <td style="text-align:left;"> Diplosphaera </td>
+   <td style="text-align:left;"> Desulfococcus sp. </td>
+   <td style="text-align:right;"> 5 </td>
+   <td style="text-align:left;"> 24, 48, 72, 120, 240 </td>
+   <td style="text-align:right;"> 5 </td>
+   <td style="text-align:left;"> 24, 48, 72, 120, 240 </td>
+   <td style="text-align:right;"> 1.0000000 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 801efb14 </td>
+   <td style="text-align:left;"> BOTH </td>
+   <td style="text-align:left;"> Alphaproteobacteria </td>
+   <td style="text-align:left;"> Rhodospirillales </td>
+   <td style="text-align:left;"> Terasakiellaceae </td>
+   <td style="text-align:left;"> uncult. </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:right;"> 5 </td>
+   <td style="text-align:left;"> 24, 48, 72, 120, 240 </td>
+   <td style="text-align:right;"> 5 </td>
+   <td style="text-align:left;"> 24, 48, 72, 120, 240 </td>
+   <td style="text-align:right;"> 1.0000000 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> a6db2d87 </td>
+   <td style="text-align:left;"> BOTH </td>
+   <td style="text-align:left;"> Deltaproteobacteria </td>
+   <td style="text-align:left;"> Myxococcales </td>
+   <td style="text-align:left;"> Nannocystaceae </td>
+   <td style="text-align:left;"> Nannocystis </td>
+   <td style="text-align:left;"> Nannocystis sp. </td>
+   <td style="text-align:right;"> 5 </td>
+   <td style="text-align:left;"> 24, 48, 72, 120, 240 </td>
+   <td style="text-align:right;"> 5 </td>
+   <td style="text-align:left;"> 24, 48, 72, 120, 240 </td>
+   <td style="text-align:right;"> 1.0000000 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> acc9603a </td>
+   <td style="text-align:left;"> BOTH </td>
+   <td style="text-align:left;"> Gammaproteobacteria </td>
+   <td style="text-align:left;"> Betaproteobacteriales </td>
+   <td style="text-align:left;"> Rhodocyclaceae </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:right;"> 5 </td>
+   <td style="text-align:left;"> 24, 48, 72, 120, 240 </td>
+   <td style="text-align:right;"> 5 </td>
+   <td style="text-align:left;"> 24, 48, 72, 120, 240 </td>
+   <td style="text-align:right;"> 1.0000000 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> cf338131 </td>
+   <td style="text-align:left;"> BOTH </td>
+   <td style="text-align:left;"> Alphaproteobacteria </td>
+   <td style="text-align:left;"> Rhizobiales </td>
+   <td style="text-align:left;"> Rhizobiaceae </td>
+   <td style="text-align:left;"> Allo-Neo-Para-Rhizobium </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:right;"> 5 </td>
+   <td style="text-align:left;"> 24, 48, 72, 120, 240 </td>
+   <td style="text-align:right;"> 5 </td>
+   <td style="text-align:left;"> 24, 48, 72, 120, 240 </td>
+   <td style="text-align:right;"> 1.0000000 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 3fa2974b </td>
+   <td style="text-align:left;"> BOTH </td>
+   <td style="text-align:left;"> Alphaproteobacteria </td>
+   <td style="text-align:left;"> Rhizobiales </td>
+   <td style="text-align:left;"> Xanthobacteraceae </td>
+   <td style="text-align:left;"> Pseudoxanthobacter </td>
+   <td style="text-align:left;"> Ambiguous </td>
+   <td style="text-align:right;"> 4 </td>
+   <td style="text-align:left;"> 24, 48, 72, 120 </td>
+   <td style="text-align:right;"> 4 </td>
+   <td style="text-align:left;"> 24, 48, 72, 120 </td>
+   <td style="text-align:right;"> 1.0000000 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 83c246c4 </td>
+   <td style="text-align:left;"> BOTH </td>
+   <td style="text-align:left;"> Gammaproteobacteria </td>
+   <td style="text-align:left;"> Betaproteobacteriales </td>
+   <td style="text-align:left;"> Rhodocyclaceae </td>
+   <td style="text-align:left;"> Zoogloea </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:right;"> 4 </td>
+   <td style="text-align:left;"> 24, 48, 72, 240 </td>
+   <td style="text-align:right;"> 4 </td>
+   <td style="text-align:left;"> 24, 48, 72, 240 </td>
+   <td style="text-align:right;"> 1.0000000 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 27af011f </td>
+   <td style="text-align:left;"> BOTH </td>
+   <td style="text-align:left;"> Gammaproteobacteria </td>
+   <td style="text-align:left;"> Betaproteobacteriales </td>
+   <td style="text-align:left;"> Burkholderiaceae </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:right;"> 3 </td>
+   <td style="text-align:left;"> 72, 120, 240 </td>
+   <td style="text-align:right;"> 3 </td>
+   <td style="text-align:left;"> 72, 120, 240 </td>
+   <td style="text-align:right;"> 0.8888889 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 9d5fa833 </td>
+   <td style="text-align:left;"> BOTH </td>
+   <td style="text-align:left;"> Alphaproteobacteria </td>
+   <td style="text-align:left;"> Rickettsiales </td>
+   <td style="text-align:left;"> Rickettsiaceae </td>
+   <td style="text-align:left;"> uncult. </td>
+   <td style="text-align:left;"> uncult. </td>
+   <td style="text-align:right;"> 3 </td>
+   <td style="text-align:left;"> 48, 72, 120 </td>
+   <td style="text-align:right;"> 3 </td>
+   <td style="text-align:left;"> 48, 72, 120 </td>
+   <td style="text-align:right;"> 0.5555556 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> c1d9eada </td>
+   <td style="text-align:left;"> BOTH </td>
+   <td style="text-align:left;"> Gammaproteobacteria </td>
+   <td style="text-align:left;"> Betaproteobacteriales </td>
+   <td style="text-align:left;"> Burkholderiaceae </td>
+   <td style="text-align:left;"> Aquabacterium </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:right;"> 3 </td>
+   <td style="text-align:left;"> 72, 120, 240 </td>
+   <td style="text-align:right;"> 2 </td>
+   <td style="text-align:left;"> 72, 120 </td>
+   <td style="text-align:right;"> 0.8888889 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 5c21f017 </td>
+   <td style="text-align:left;"> BOTH </td>
+   <td style="text-align:left;"> Verrucomicrobiae </td>
+   <td style="text-align:left;"> Opitutales </td>
+   <td style="text-align:left;"> Opitutaceae </td>
+   <td style="text-align:left;"> Opitutus </td>
+   <td style="text-align:left;"> uncult. </td>
+   <td style="text-align:right;"> 3 </td>
+   <td style="text-align:left;"> 48, 72, 120 </td>
+   <td style="text-align:right;"> 1 </td>
+   <td style="text-align:left;"> 120 </td>
+   <td style="text-align:right;"> 0.4444444 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 7af6ae68 </td>
+   <td style="text-align:left;"> BOTH </td>
+   <td style="text-align:left;"> Gammaproteobacteria </td>
+   <td style="text-align:left;"> Betaproteobacteriales </td>
+   <td style="text-align:left;"> Rhodocyclaceae </td>
+   <td style="text-align:left;"> Dechloromonas </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:right;"> 3 </td>
+   <td style="text-align:left;"> 48, 72, 120 </td>
+   <td style="text-align:right;"> 1 </td>
+   <td style="text-align:left;"> 120 </td>
+   <td style="text-align:right;"> 0.6666667 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 98f53519 </td>
+   <td style="text-align:left;"> BOTH </td>
+   <td style="text-align:left;"> Alphaproteobacteria </td>
+   <td style="text-align:left;"> Rhizobiales </td>
+   <td style="text-align:left;"> Rhizobiaceae </td>
+   <td style="text-align:left;"> Allo-Neo-Para-Rhizobium </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:right;"> 2 </td>
+   <td style="text-align:left;"> 120, 240 </td>
+   <td style="text-align:right;"> 2 </td>
+   <td style="text-align:left;"> 120, 240 </td>
+   <td style="text-align:right;"> 1.0000000 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> a5e4fa1c </td>
+   <td style="text-align:left;"> BOTH </td>
+   <td style="text-align:left;"> Alphaproteobacteria </td>
+   <td style="text-align:left;"> Caulobacterales </td>
+   <td style="text-align:left;"> Hyphomonadaceae </td>
+   <td style="text-align:left;"> Hirschia </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:right;"> 2 </td>
+   <td style="text-align:left;"> 120, 240 </td>
+   <td style="text-align:right;"> 2 </td>
+   <td style="text-align:left;"> 120, 240 </td>
+   <td style="text-align:right;"> 0.3333333 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> b93f0c1f </td>
+   <td style="text-align:left;"> BOTH </td>
+   <td style="text-align:left;"> Gammaproteobacteria </td>
+   <td style="text-align:left;"> Legionellales </td>
+   <td style="text-align:left;"> Legionellaceae </td>
+   <td style="text-align:left;"> Legionella </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:right;"> 2 </td>
+   <td style="text-align:left;"> 120, 240 </td>
+   <td style="text-align:right;"> 2 </td>
+   <td style="text-align:left;"> 120, 240 </td>
+   <td style="text-align:right;"> 0.2222222 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> efbe1f58 </td>
+   <td style="text-align:left;"> BOTH </td>
+   <td style="text-align:left;"> Gammaproteobacteria </td>
+   <td style="text-align:left;"> Betaproteobacteriales </td>
+   <td style="text-align:left;"> Burkholderiaceae </td>
+   <td style="text-align:left;"> Janthinobacterium </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:right;"> 2 </td>
+   <td style="text-align:left;"> 24, 48 </td>
+   <td style="text-align:right;"> 2 </td>
+   <td style="text-align:left;"> 24, 48 </td>
+   <td style="text-align:right;"> 1.0000000 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 6310bd54 </td>
+   <td style="text-align:left;"> BOTH </td>
+   <td style="text-align:left;"> Alphaproteobacteria </td>
+   <td style="text-align:left;"> Paracaedibacterales </td>
+   <td style="text-align:left;"> Paracaedibacteraceae </td>
+   <td style="text-align:left;"> uncult. </td>
+   <td style="text-align:left;"> metagenome </td>
+   <td style="text-align:right;"> 2 </td>
+   <td style="text-align:left;"> 120, 240 </td>
+   <td style="text-align:right;"> 1 </td>
+   <td style="text-align:left;"> 120 </td>
+   <td style="text-align:right;"> 0.4444444 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 8b1b6b50 </td>
+   <td style="text-align:left;"> BOTH </td>
+   <td style="text-align:left;"> Rhodothermia </td>
+   <td style="text-align:left;"> Balneolales </td>
+   <td style="text-align:left;"> Balneolaceae </td>
+   <td style="text-align:left;"> uncult. </td>
+   <td style="text-align:left;"> uncult. </td>
+   <td style="text-align:right;"> 2 </td>
+   <td style="text-align:left;"> 72, 120 </td>
+   <td style="text-align:right;"> 1 </td>
+   <td style="text-align:left;"> 120 </td>
+   <td style="text-align:right;"> 1.0000000 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 1583d8af </td>
+   <td style="text-align:left;"> BOTH </td>
+   <td style="text-align:left;"> Alphaproteobacteria </td>
+   <td style="text-align:left;"> Rhizobiales </td>
+   <td style="text-align:left;"> Xanthobacteraceae </td>
+   <td style="text-align:left;"> Ancylobacter </td>
+   <td style="text-align:left;"> Ambiguous </td>
+   <td style="text-align:right;"> 1 </td>
+   <td style="text-align:left;"> 240 </td>
+   <td style="text-align:right;"> 1 </td>
+   <td style="text-align:left;"> 240 </td>
+   <td style="text-align:right;"> 1.0000000 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 1e104b99 </td>
+   <td style="text-align:left;"> BOTH </td>
+   <td style="text-align:left;"> Gammaproteobacteria </td>
+   <td style="text-align:left;"> Betaproteobacteriales </td>
+   <td style="text-align:left;"> Methylophilaceae </td>
+   <td style="text-align:left;"> Methylophilus </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:right;"> 1 </td>
+   <td style="text-align:left;"> 120 </td>
+   <td style="text-align:right;"> 1 </td>
+   <td style="text-align:left;"> 120 </td>
+   <td style="text-align:right;"> 1.0000000 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 2bb6b66b </td>
+   <td style="text-align:left;"> BOTH </td>
+   <td style="text-align:left;"> Gammaproteobacteria </td>
+   <td style="text-align:left;"> Betaproteobacteriales </td>
+   <td style="text-align:left;"> Gallionellaceae </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:right;"> 1 </td>
+   <td style="text-align:left;"> 240 </td>
+   <td style="text-align:right;"> 1 </td>
+   <td style="text-align:left;"> 240 </td>
+   <td style="text-align:right;"> 0.1111111 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 7a4067bb </td>
+   <td style="text-align:left;"> BOTH </td>
+   <td style="text-align:left;"> Gammaproteobacteria </td>
+   <td style="text-align:left;"> Betaproteobacteriales </td>
+   <td style="text-align:left;"> Rhodocyclaceae </td>
+   <td style="text-align:left;"> Denitratisoma </td>
+   <td style="text-align:left;"> uncult. </td>
+   <td style="text-align:right;"> 1 </td>
+   <td style="text-align:left;"> 240 </td>
+   <td style="text-align:right;"> 1 </td>
+   <td style="text-align:left;"> 240 </td>
+   <td style="text-align:right;"> 0.1111111 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 8a37f09d </td>
+   <td style="text-align:left;"> BOTH </td>
+   <td style="text-align:left;"> Gammaproteobacteria </td>
+   <td style="text-align:left;"> Betaproteobacteriales </td>
+   <td style="text-align:left;"> Rhodocyclaceae </td>
+   <td style="text-align:left;"> Denitratisoma </td>
+   <td style="text-align:left;"> uncult. </td>
+   <td style="text-align:right;"> 1 </td>
+   <td style="text-align:left;"> 240 </td>
+   <td style="text-align:right;"> 1 </td>
+   <td style="text-align:left;"> 240 </td>
+   <td style="text-align:right;"> 0.1111111 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> d40d89b5 </td>
+   <td style="text-align:left;"> BOTH </td>
+   <td style="text-align:left;"> Alphaproteobacteria </td>
+   <td style="text-align:left;"> Rickettsiales </td>
+   <td style="text-align:left;"> Rickettsiaceae </td>
+   <td style="text-align:left;"> uncult. </td>
+   <td style="text-align:left;"> uncult. </td>
+   <td style="text-align:right;"> 1 </td>
+   <td style="text-align:left;"> 240 </td>
+   <td style="text-align:right;"> 1 </td>
+   <td style="text-align:left;"> 240 </td>
+   <td style="text-align:right;"> 0.1111111 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> e416d091 </td>
+   <td style="text-align:left;"> BOTH </td>
+   <td style="text-align:left;"> Gammaproteobacteria </td>
+   <td style="text-align:left;"> Betaproteobacteriales </td>
+   <td style="text-align:left;"> Methylophilaceae </td>
+   <td style="text-align:left;"> Methylotenera </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:right;"> 1 </td>
+   <td style="text-align:left;"> 24 </td>
+   <td style="text-align:right;"> 1 </td>
+   <td style="text-align:left;"> 24 </td>
+   <td style="text-align:right;"> 0.8888889 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> f1e34308 </td>
+   <td style="text-align:left;"> BOTH </td>
+   <td style="text-align:left;"> Bacteroidia </td>
+   <td style="text-align:left;"> Cytophagales </td>
+   <td style="text-align:left;"> Microscillaceae </td>
+   <td style="text-align:left;"> OLB12 </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:right;"> 1 </td>
+   <td style="text-align:left;"> 24 </td>
+   <td style="text-align:right;"> 1 </td>
+   <td style="text-align:left;"> 120 </td>
+   <td style="text-align:right;"> 1.0000000 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 3e5cc400 </td>
+   <td style="text-align:left;"> &gt;0.1% </td>
+   <td style="text-align:left;"> Gammaproteobacteria </td>
+   <td style="text-align:left;"> Oceanospirillales </td>
+   <td style="text-align:left;"> Saccharospirillaceae </td>
+   <td style="text-align:left;"> Oceanobacter </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:right;"> 1 </td>
+   <td style="text-align:left;"> 120 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:left;"> 0 </td>
+   <td style="text-align:right;"> 1.0000000 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> d23dbaf2 </td>
+   <td style="text-align:left;"> &gt;0.1% </td>
+   <td style="text-align:left;"> Alphaproteobacteria </td>
+   <td style="text-align:left;"> Rhodospirillales </td>
+   <td style="text-align:left;"> Magnetospirillaceae </td>
+   <td style="text-align:left;"> Magnetospirillum </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:right;"> 1 </td>
+   <td style="text-align:left;"> 240 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:left;"> 0 </td>
+   <td style="text-align:right;"> 0.1111111 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 4ef19fc8 </td>
+   <td style="text-align:left;"> All </td>
+   <td style="text-align:left;"> Bacteroidia </td>
+   <td style="text-align:left;"> Chitinophagales </td>
+   <td style="text-align:left;"> Chitinophagaceae </td>
+   <td style="text-align:left;"> Sediminibacterium </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:left;"> 0 </td>
+   <td style="text-align:right;"> 3 </td>
+   <td style="text-align:left;"> 48, 72, 120 </td>
+   <td style="text-align:right;"> 0.5555556 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 6daaa6b7 </td>
+   <td style="text-align:left;"> All </td>
+   <td style="text-align:left;"> Bacteroidia </td>
+   <td style="text-align:left;"> Cytophagales </td>
+   <td style="text-align:left;"> Cyclobacteriaceae </td>
+   <td style="text-align:left;"> Marinoscillum </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:left;"> 0 </td>
+   <td style="text-align:right;"> 2 </td>
+   <td style="text-align:left;"> 120, 240 </td>
+   <td style="text-align:right;"> 0.2222222 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 733b45a9 </td>
+   <td style="text-align:left;"> All </td>
+   <td style="text-align:left;"> Ignavibacteria </td>
+   <td style="text-align:left;"> OPB56 </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:left;"> 0 </td>
+   <td style="text-align:right;"> 2 </td>
+   <td style="text-align:left;"> 120, 240 </td>
+   <td style="text-align:right;"> 0.7777778 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 0b14e620 </td>
+   <td style="text-align:left;"> All </td>
+   <td style="text-align:left;"> Alphaproteobacteria </td>
+   <td style="text-align:left;"> Paracaedibacterales </td>
+   <td style="text-align:left;"> Paracaedibacteraceae </td>
+   <td style="text-align:left;"> uncult. </td>
+   <td style="text-align:left;"> Ambiguous </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:left;"> 0 </td>
+   <td style="text-align:right;"> 1 </td>
+   <td style="text-align:left;"> 240 </td>
+   <td style="text-align:right;"> 0.1111111 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 2385de7f </td>
+   <td style="text-align:left;"> All </td>
+   <td style="text-align:left;"> Verrucomicrobiae </td>
+   <td style="text-align:left;"> Opitutales </td>
+   <td style="text-align:left;"> Opitutaceae </td>
+   <td style="text-align:left;"> Cephaloticoccus </td>
+   <td style="text-align:left;"> uncult. </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:left;"> 0 </td>
+   <td style="text-align:right;"> 1 </td>
+   <td style="text-align:left;"> 120 </td>
+   <td style="text-align:right;"> 0.3333333 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 2dd9a81f </td>
+   <td style="text-align:left;"> All </td>
+   <td style="text-align:left;"> Alphaproteobacteria </td>
+   <td style="text-align:left;"> Rickettsiales </td>
+   <td style="text-align:left;"> Rickettsiaceae </td>
+   <td style="text-align:left;"> uncult. </td>
+   <td style="text-align:left;"> uncult. </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:left;"> 0 </td>
+   <td style="text-align:right;"> 1 </td>
+   <td style="text-align:left;"> 120 </td>
+   <td style="text-align:right;"> 0.1111111 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 344b7cd3 </td>
+   <td style="text-align:left;"> All </td>
+   <td style="text-align:left;"> Deltaproteobacteria </td>
+   <td style="text-align:left;"> Myxococcales </td>
+   <td style="text-align:left;"> Nannocystaceae </td>
+   <td style="text-align:left;"> Nannocystis </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:left;"> 0 </td>
+   <td style="text-align:right;"> 1 </td>
+   <td style="text-align:left;"> 120 </td>
+   <td style="text-align:right;"> 0.3333333 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 3eef1228 </td>
+   <td style="text-align:left;"> All </td>
+   <td style="text-align:left;"> Bacteroidia </td>
+   <td style="text-align:left;"> Cytophagales </td>
+   <td style="text-align:left;"> Spirosomaceae </td>
+   <td style="text-align:left;"> Dyadobacter </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:left;"> 0 </td>
+   <td style="text-align:right;"> 1 </td>
+   <td style="text-align:left;"> 48 </td>
+   <td style="text-align:right;"> 0.5555556 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 705df1f2 </td>
+   <td style="text-align:left;"> All </td>
+   <td style="text-align:left;"> Bacteroidia </td>
+   <td style="text-align:left;"> Chitinophagales </td>
+   <td style="text-align:left;"> Chitinophagaceae </td>
+   <td style="text-align:left;"> Terrimonas </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:left;"> 0 </td>
+   <td style="text-align:right;"> 1 </td>
+   <td style="text-align:left;"> 120 </td>
+   <td style="text-align:right;"> 0.6666667 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 7beab4f2 </td>
+   <td style="text-align:left;"> All </td>
+   <td style="text-align:left;"> Alphaproteobacteria </td>
+   <td style="text-align:left;"> Azospirillales </td>
+   <td style="text-align:left;"> Azospirillaceae </td>
+   <td style="text-align:left;"> Azospirillum </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:left;"> 0 </td>
+   <td style="text-align:right;"> 1 </td>
+   <td style="text-align:left;"> 240 </td>
+   <td style="text-align:right;"> 0.3333333 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> b396df71 </td>
+   <td style="text-align:left;"> All </td>
+   <td style="text-align:left;"> Gammaproteobacteria </td>
+   <td style="text-align:left;"> Legionellales </td>
+   <td style="text-align:left;"> Legionellaceae </td>
+   <td style="text-align:left;"> Legionella </td>
+   <td style="text-align:left;"> uncult. </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:left;"> 0 </td>
+   <td style="text-align:right;"> 1 </td>
+   <td style="text-align:left;"> 72 </td>
+   <td style="text-align:right;"> 0.6666667 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> b86bcfa1 </td>
+   <td style="text-align:left;"> All </td>
+   <td style="text-align:left;"> Bacteroidia </td>
+   <td style="text-align:left;"> Sphingobacteriales </td>
+   <td style="text-align:left;"> Sphingobacteriaceae </td>
+   <td style="text-align:left;"> Solitalea </td>
+   <td style="text-align:left;"> uncult. </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:left;"> 0 </td>
+   <td style="text-align:right;"> 1 </td>
+   <td style="text-align:left;"> 120 </td>
+   <td style="text-align:right;"> 0.3333333 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> c69352f1 </td>
+   <td style="text-align:left;"> All </td>
+   <td style="text-align:left;"> Alphaproteobacteria </td>
+   <td style="text-align:left;"> Rhizobiales </td>
+   <td style="text-align:left;"> Rhizobiaceae </td>
+   <td style="text-align:left;"> Allo-Neo-Para-Rhizobium </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:left;"> 0 </td>
+   <td style="text-align:right;"> 1 </td>
+   <td style="text-align:left;"> 240 </td>
+   <td style="text-align:right;"> 0.6666667 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> dbea4398 </td>
+   <td style="text-align:left;"> All </td>
+   <td style="text-align:left;"> Deltaproteobacteria </td>
+   <td style="text-align:left;"> Myxococcales </td>
+   <td style="text-align:left;"> Nannocystaceae </td>
+   <td style="text-align:left;"> Nannocystis </td>
+   <td style="text-align:left;"> uncult. </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:left;"> 0 </td>
+   <td style="text-align:right;"> 1 </td>
+   <td style="text-align:left;"> 120 </td>
+   <td style="text-align:right;"> 0.4444444 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> ddfd49f9 </td>
+   <td style="text-align:left;"> All </td>
+   <td style="text-align:left;"> Gammaproteobacteria </td>
+   <td style="text-align:left;"> Betaproteobacteriales </td>
+   <td style="text-align:left;"> Burkholderiaceae </td>
+   <td style="text-align:left;"> Ralstonia </td>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:left;"> 0 </td>
+   <td style="text-align:right;"> 1 </td>
+   <td style="text-align:left;"> 72 </td>
+   <td style="text-align:right;"> 0.3333333 </td>
+  </tr>
+</tbody>
+</table>
+
+
+
+
+
+
