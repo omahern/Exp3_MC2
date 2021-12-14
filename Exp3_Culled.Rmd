@@ -153,7 +153,7 @@ df_l2ft = plyr::ldply(physeq_S2D2_l,
 ```
 
 
-```{r}
+```{r, message=FALSE, error=FALSE, warning=FALSE}
 df_l2ft=read.csv('/Users/oliviaahern/Documents/GitHub/Exp3_MC2/data_greaterthan0.1.csv',header=T,row.names=1)
 sub=subset(df_l2ft, Good=="Yes")
 d=dcast(sub, OTU ~ timepoint, value.var = "log2FoldChange", fun.aggregate = sum)
@@ -191,7 +191,7 @@ c2=c('gray96',(rev(magma(30))))
 
 ## Fig. 1: State Data
 ### Three Panels
-```{r fig1-threepanels, fig.height=8,fig.width=8}
+```{r fig1-threepanels, fig.height=8,fig.width=8, message=FALSE, error=FALSE, warning=FALSE}
 data=read.csv(file="/Users/oliviaahern/Documents/R/mc2/m2_do_02_edit.csv",header=T)
 read1=subset(data, T<275)
 read=subset(read1, T > -1)
@@ -237,7 +237,7 @@ read=read.csv(file="/Users/oliviaahern/Documents/R/mc2/c13_glucose.csv",
 
 ### Two Panels 
 
-```{r fig1-twopanels, fig.height=8,fig.width=8}
+```{r fig1-twopanels, fig.height=8,fig.width=8, message=FALSE, error=FALSE, warning=FALSE}
 read=read.csv(file="/Users/oliviaahern/Documents/R/mc2/states_gluc.csv",
               header=T)
 glucose=read$Glucose_um
@@ -334,7 +334,7 @@ gp.pcoa2 <- ordinate(GP_comm, 'PCoA', distance=gp.dist.comm)
 ```
 
 
-```{r figure-2-pcoas, fig.height=4, fig.width=10}
+```{r figure-2-pcoas, fig.height=4, fig.width=10, message=FALSE, error=FALSE, warning=FALSE}
 {par(mar=c(5,5,1,7), mfrow=c(1,2))
   plot(gp.pcoa$vectors[,1],gp.pcoa$vectors[,2],pch=sample_data(GP)$pch,
       bg=as.character(sample_data(GP)$col),cex=bd3,
@@ -528,6 +528,8 @@ classplot = ggplot(data, aes(x = reorder(Sample, TP), y = Abundance, fill = Clas
 
 classplot
 ```
+
+
 ## Supp Fig. 4
 
 ```{r supp-fig-2-bdwindows}
