@@ -26,19 +26,21 @@ library(vegan)
 library(HTSSIP)
 library(ape)
 library(CoDaSeq)
+library(philr)
+
 ```
 
 # 16S Data 
 
 ### HR-SIP 
 ```{r, message=FALSE, error=FALSE, warning=FALSE}
-x<-read.csv(file='/Users/ahern/R/trophic_cascades/mc2/4Nov21/ASVs/asv-table_2.csv',header=TRUE,row.names=1)
+x<-read.csv(file='/Users/oliviaahern/Documents/R/mc2/4Nov21/ASVs/asv-table_2.csv',header=TRUE,row.names=1)
 OTU = otu_table(x, taxa_are_rows=T)
-taxa<-read.csv(file="/Users/ahern/R/trophic_cascades/mc2/4Nov21/ASVs/taxonomy_4nov21.csv",header=TRUE,row.names=1)
+taxa<-read.csv(file="/Users/oliviaahern/Documents/R/mc2/4Nov21/ASVs/taxonomy_4nov21.csv",header=TRUE,row.names=1)
 t<-as.matrix(taxa)
 tax2<-tax_table(t)
-map<-import_qiime_sample_data("/Users/ahern/R/trophic_cascades/mc2/26oct21/ASV_run3/map_2.txt")
-tree=read.tree("/Users/ahern/R/trophic_cascades/mc2/4Nov21/ASVs/tree.nwk")
+map<-import_qiime_sample_data("/Users/oliviaahern/Documents/R/mc2/26oct21/ASV_run3/map_2.txt")
+tree=read.tree("/Users/oliviaahern/Documents/R/mc2/4Nov21/ASVs/tree.nwk")
 phyo = phyloseq(OTU, tax2,map,tree)
 phyo1 = subset_taxa(phyo, !Order=="Chloroplast")
 phyo2 = subset_taxa(phyo1, !Family=="Mitochondria")
@@ -152,7 +154,7 @@ df_l2ft = plyr::ldply(physeq_S2D2_l,
 
 
 ```{r}
-df_l2ft=read.csv('data_greaterthan0.1.csv',header=T,row.names=1)
+df_l2ft=read.csv('/Users/oliviaahern/Documents/GitHub/Exp3_MC2/data_greaterthan0.1.csv',header=T,row.names=1)
 sub=subset(df_l2ft, Good=="Yes")
 d=dcast(sub, OTU ~ timepoint, value.var = "log2FoldChange", fun.aggregate = sum)
 
@@ -161,7 +163,8 @@ subset=c('acc9603a819dc23a606ac6c1b9105b6d','5ed8f8f3a98e669d81b30c56825e0870','
 
 
 my_subset <- subset(tax_table(phyo_frac), rownames(tax_table(phyo_frac)) %in% subset)
-x<-read.csv(file='/Users/ahern/R/trophic_cascades/mc2/4Nov21/ASVs/asv-table.csv',header=TRUE,row.names=1)
+x<-read.csv(file='/Users/oliviaahern/Documents/R/mc2/4Nov21/ASVs/asv-table_2.csv',header=TRUE,row.names=1)
+
 OTU = otu_table(x, taxa_are_rows=T)
 sums=colSums(OTU)
 phyo_hrsip=phyloseq(OTU, map, my_subset, tree)
@@ -189,7 +192,7 @@ c2=c('gray96',(rev(magma(30))))
 ## Fig. 1: State Data
 ### Three Panels
 ```{r fig1-threepanels, fig.height=8,fig.width=8}
-data=read.csv(file="/Users/ahern/R/trophic_cascades/mc2/m2_do_02_edit.csv",header=T)
+data=read.csv(file="/Users/oliviaahern/Documents/R/mc2/m2_do_02_edit.csv",header=T)
 read1=subset(data, T<275)
 read=subset(read1, T > -1)
 dim(read1)
@@ -197,10 +200,10 @@ dim(read)
 time=read$T
 ph= read$pH.M2
 do=read$DO.M2..uM.
-read=read.csv(file="/Users/ahern/R/trophic_cascades/mc2/states.csv",header=T)
+read=read.csv(file="/Users/oliviaahern/Documents/R/mc2/states.csv",header=T)
 glucose=read$Glucose_um
 time_glucose=read$Time
-read=read.csv(file="/Users/ahern/R/trophic_cascades/mc2/c13_glucose.csv",
+read=read.csv(file="/Users/oliviaahern/Documents/R/mc2/c13_glucose.csv",
               header=T)
 
 {layout(matrix(c(1,1,2,3), 2, 2, byrow = TRUE),
@@ -235,7 +238,7 @@ read=read.csv(file="/Users/ahern/R/trophic_cascades/mc2/c13_glucose.csv",
 ### Two Panels 
 
 ```{r fig1-twopanels, fig.height=8,fig.width=8}
-read=read.csv(file="/Users/ahern/R/trophic_cascades/mc2/states_gluc.csv",
+read=read.csv(file="/Users/oliviaahern/Documents/R/mc2/states_gluc.csv",
               header=T)
 glucose=read$Glucose_um
 time_glucose=read$Time
@@ -276,13 +279,13 @@ time_glucose=read$Time
 
 ```{r, message=FALSE, error=FALSE, warning=FALSE}
 library(philr)
-x<-read.csv(file='/Users/ahern/R/trophic_cascades/mc2/4Nov21/ASVs/asv-table.csv',header=TRUE,row.names=1)
+x<-read.csv(file='/Users/oliviaahern/Documents/R/mc2/4Nov21/ASVs/asv-table.csv',header=TRUE,row.names=1)
 OTU = otu_table(x, taxa_are_rows=T)
-taxa<-read.csv(file="/Users/ahern/R/trophic_cascades/mc2/4Nov21/ASVs/taxonomy_4nov21.csv",header=TRUE,row.names=1)
+taxa<-read.csv(file="/Users/oliviaahern/Documents/R/mc2/4Nov21/ASVs/taxonomy_4nov21.csv",header=TRUE,row.names=1)
 t<-as.matrix(taxa)
 tax2<-tax_table(t)
-map<-import_qiime_sample_data("/Users/ahern/R/trophic_cascades/mc2/26oct21/ASV_run3/map_2.txt")
-tree=read.tree("/Users/ahern/R/trophic_cascades/mc2/4Nov21/ASVs/tree.nwk")
+map<-import_qiime_sample_data("/Users/oliviaahern/Documents/R/mc2/26oct21/ASV_run3/map_2.txt")
+tree=read.tree("/Users/oliviaahern/Documents/R/mc2/4Nov21/ASVs/tree.nwk")
 phyo = phyloseq(OTU, tax2,map,tree)
 phyo1 = subset_taxa(phyo, !Order=="Chloroplast")
 phyo2 = subset_taxa(phyo1, !Family=="Mitochondria")
