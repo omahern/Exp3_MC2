@@ -1,0 +1,555 @@
+---
+title: "TC Exp3 MC2 Culled"
+output: 
+  html_document:
+    keep_md: true
+    toc: true
+    toc_float: true
+    toc_depth: 4
+    code_folding: hide
+    number_sections: true
+    theme: cosmo
+
+knit: (function(input_file, encoding) {
+  out_dir <- 'docs_cull';
+  rmarkdown::render(input_file,
+ encoding=encoding,
+ output_file=file.path(dirname(input_file), out_dir, 'index.html'))})
+---
+
+# Workspace Setup
+```{r setup, message=FALSE, error=FALSE, warning=FALSE}
+library(phyloseq)
+library(reshape2)
+library(tidyverse)
+library(vegan)
+library(HTSSIP)
+library(ape)
+library(CoDaSeq)
+```
+
+# 16S Data 
+
+### HR-SIP 
+```{r, message=FALSE, error=FALSE, warning=FALSE}
+x<-read.csv(file='/Users/ahern/R/trophic_cascades/mc2/4Nov21/ASVs/asv-table_2.csv',header=TRUE,row.names=1)
+OTU = otu_table(x, taxa_are_rows=T)
+taxa<-read.csv(file="/Users/ahern/R/trophic_cascades/mc2/4Nov21/ASVs/taxonomy_4nov21.csv",header=TRUE,row.names=1)
+t<-as.matrix(taxa)
+tax2<-tax_table(t)
+map<-import_qiime_sample_data("/Users/ahern/R/trophic_cascades/mc2/26oct21/ASV_run3/map_2.txt")
+tree=read.tree("/Users/ahern/R/trophic_cascades/mc2/4Nov21/ASVs/tree.nwk")
+phyo = phyloseq(OTU, tax2,map,tree)
+phyo1 = subset_taxa(phyo, !Order=="Chloroplast")
+phyo2 = subset_taxa(phyo1, !Family=="Mitochondria")
+
+phyo_frac=subset_samples(phyo2, Comm_Frac=="Frac")
+input=otu_table(phyo_frac)
+d.subset <- codaSeq.filter(input, samples.by.row=F,min.reads=2,min.prop	= 0.001)
+#d.subset <- codaSeq.filter(input, samples.by.row=F,min.occurrence	= 0.05)
+
+OTU=otu_table(d.subset,taxa_are_rows = T)
+phyo_frac=phyloseq(OTU,map,tax2,tree)
+
+params = get_treatment_params(phyo_frac, c('Treatment', 'TP'))
+
+params = dplyr::filter(params, Treatment!="5MC2")
+
+ex = "(Treatment=='${Treatment}' & TP=='${TP}') | (Treatment=='5MC2' & TP == '-0.45')"
+sample_data(phyo_frac)$Treatment <- relevel(as.factor(sample_data(phyo_frac)$Treatment) , ref = "5MC2")
+#sample_data(all)$Treatment <- relevel(as.factor(get_variable(all, "Treatment")), ref="5MC2")
+
+physeq_S2D2_l = phyloseq_subset(phyo_frac, params, ex)
+physeq_S2D2_l
+```
+
+
+#### BD Shifts 
+```{r bd-shifts, message=FALSE, error=FALSE, warning=FALSE}
+wmean = plyr::ldply(physeq_S2D2_l, BD_shift, nperm=10, ex="Treatment=='5MC2'", perm_method='treatment', normalized=F)
+
+wmean %>% head(n=3)
+
+wmean = wmean %>%
+  mutate(Treatment = gsub('.+(13C-[A-z]+).+', '\\1', .id))
+
+wmean = wmean %>%
+  mutate(.id = gsub(' \\| ', '\n', .id))
+wmean %>% .$.id %>% unique
+
+# calculating BD shift windows
+wmean = wmean %>%
+  mutate(BD_shift = wmean_dist > wmean_dist_CI_high) %>%
+  arrange(Treatment, BD_min.x) %>%
+  group_by(Treatment) %>%
+  mutate(window = (BD_shift == TRUE & lag(BD_shift) == TRUE & lag(BD_shift, 2) == TRUE) |
+           (BD_shift == TRUE & lag(BD_shift) == TRUE & lead(BD_shift) == TRUE) |
+           (BD_shift == TRUE & lead(BD_shift) == TRUE & lead(BD_shift, 2) == TRUE),
+         BD_shift = BD_shift == TRUE & window == TRUE,
+         BD_shift = ifelse(is.na(BD_shift), FALSE, BD_shift)) %>%
+  ungroup()
+
+
+y_lab="Beta Diversity"
+x_lab="Buoyant Density"
+# plotting, with facetting by 13C-treatment
+ggplot(wmean, aes(BD_min.x, wmean_dist)) +
+  geom_line(alpha=0.7) +
+  geom_linerange(aes(ymin=wmean_dist_CI_low,
+                     ymax=wmean_dist_CI_high),
+                 alpha=0.3) +
+  geom_point(aes(color=BD_shift)) +
+  labs(x=x_lab, y=y_lab, 
+       title='Beta diversity of 5MC2 vs 13-C Treatments') +
+  facet_grid( ~ .id) +
+  theme_bw() +
+  theme(axis.text.x = element_text(angle=45, hjust=1))
+
+
+mc9=subset(wmean, Treatment=="(Treatment=='9MC2' & TP=='24.00') | (Treatment=='5MC2' & TP == '-0.45')"   )
+mc11=subset(wmean, Treatment=="(Treatment=='11MC2' & TP=='48.00') | (Treatment=='5MC2' & TP == '-0.45')"   )
+mc12=subset(wmean, Treatment=="(Treatment=='12MC2' & TP=='72.00') | (Treatment=='5MC2' & TP == '-0.45')"   )
+mc14=subset(wmean, Treatment=="(Treatment=='14MC2' & TP=='120.00') | (Treatment=='5MC2' & TP == '-0.45')"   )
+mc15=subset(wmean, Treatment=="(Treatment=='15MC2' & TP=='240.00') | (Treatment=='5MC2' & TP == '-0.45')"   )
+
+palette(c('gray80', 'blue'))
+{
+plot(mc9$BD_min.x,mc9$wmean_dist,type='o', xlim=c(1.731,1.819),pch=21,ylim=c(0.05,0.25),
+      xlab = "Buoyant Density", ylab = "Difference in Beta Diversity", bg='blue', cex=1.2)
+rect(xleft=c(1.768,1.775,1.778,1.785,1.795), xright=c(1.785,1.795,1.801,1.807,1.813), 
+     ybottom=c(0,0,0,0,0), ytop=c(1,1,1,1,1), 
+     col= c(rgb(0,.5,1.0,alpha=0.05),rgb(0,.6,1.0,alpha=0.05),
+            rgb(0,.7,1.0,alpha=0.05),rgb(0,.8,1.0,alpha=0.05),rgb(0,.9,1.0,alpha=0.05)),
+     #lty=c(1,2,1,2,1), 
+     lwd=0.5)
+segments(x0=c(1.768,1.775,1.778,1.785,1.795), x1=c(1.785,1.795,1.801,1.807,1.813),
+         y0=c(0.2,0.21,0.22,0.23,0.24),y1=c(0.2,0.21,0.22,0.23,0.24))
+lines(mc11$BD_min.x, mc11$wmean_dist, type='o', pch = 22, bg=as.factor(mc11$BD_shift), cex=1.2)
+lines(mc12$BD_min.x, mc12$wmean_dist, type='o', pch = 23, bg=as.factor(mc12$BD_shift), cex=1.2)
+lines(mc14$BD_min.x, mc14$wmean_dist, type='o', pch = 24, bg=as.factor(mc14$BD_shift), cex=1.2)
+lines(mc15$BD_min.x, mc15$wmean_dist, type='o', pch = 25, bg=as.factor(mc15$BD_shift), cex=1.2)
+legend('topleft', legend=c("Significant","Not Sig","9MC2","11MC2","12MC2","14MC2","15MC2"),
+       pch =c(21,21,21,22,23,24,25), pt.bg=c("blue","gray80","gray80","gray80","gray80","gray80","gray80"),
+       bty='n')}
+
+
+```
+
+#### Code
+```{r, eval=FALSE}
+ncores=1
+#density_windows = data.frame(density_min = c(1.76,1.77,1.78), density_max = c(1.81,1.815,1.82))
+density_windows=data.frame(density_min = c(1.768,1.775,1.778,1.785,1.795), density_max = c(1.785,1.795,1.801,1.807,1.813))
+doParallel::registerDoParallel(ncores)
+df_l2ft = plyr::ldply(physeq_S2D2_l, 
+                      HRSIP, 
+                      design = ~Treatment, 
+                      density_windows=density_windows,
+                      padj_cutoff = 0.1,sparsity_apply = "all",
+                      sparsity_threshold = c(0.2,0.25,0.3),
+                      .parallel=FALSE)
+```
+
+
+```{r}
+df_l2ft=read.csv('data_greaterthan0.1.csv',header=T,row.names=1)
+sub=subset(df_l2ft, Good=="Yes")
+d=dcast(sub, OTU ~ timepoint, value.var = "log2FoldChange", fun.aggregate = sum)
+
+
+subset=c('acc9603a819dc23a606ac6c1b9105b6d','5ed8f8f3a98e669d81b30c56825e0870','cf3381318906e1e08f58bca905636dc0','a6db2d87f1e7a32216e5041a1920f12e','83c246c4ed456dea2a15d054f16009b3','801efb14d6457f799fd2becee6d07b72','3fa2974b1f70109275811beb1ae321c9','f1e34308d952529287ada31976faec95','8b1b6b50ee8e9d52ac980948823b441f','c1d9eada909d2d5dbe078f25f1038508','98f53519513214e968c569829a1471bb','7af6ae689696e9ea838fbb88ee9afb78','27af011f1ebcc0867bb168193e6a9d27','efbe1f58b1e2984ddc53a64f047d94ff','9d5fa8335722caf15c7501355831afdd','6310bd545c25bc818bce75d76bc259a1','b93f0c1f2e8178c7ce1d957ab357dd77','d94c20c00db235bb6fccc68f06f100c7')
+
+
+my_subset <- subset(tax_table(phyo_frac), rownames(tax_table(phyo_frac)) %in% subset)
+x<-read.csv(file='/Users/ahern/R/trophic_cascades/mc2/4Nov21/ASVs/asv-table.csv',header=TRUE,row.names=1)
+OTU = otu_table(x, taxa_are_rows=T)
+sums=colSums(OTU)
+phyo_hrsip=phyloseq(OTU, map, my_subset, tree)
+subset2=otu_table(phyo_hrsip)
+sw=sweep(subset2, 2, sums, "/")
+sw2=otu_table(sw, taxa_are_rows = T)
+phyo_hrsip_trans=phyloseq(sw2, map, tax2, tree)
+
+read=read.csv(file="subsets_asvs_0.01.csv",header=T,row.names = 1)
+data=data.frame(read[,2:6], row.names=read$OTU)
+colnames(data)=c("9MC2","11MC2","12MC2","14MC2","15MC2")
+phyo_hrsip_f=subset_samples(phyo_hrsip,Comm_Frac=="Frac" )
+hrsip_tree=phy_tree(phyo_hrsip_f)
+library(viridis)
+library(phytools)
+c2=c('gray96',(rev(magma(30))))
+{phylo.heatmap(hrsip_tree, data, colors=c2, mar=c(1,5,1,1),lwd=2,
+              fsize=c(0.7,1,1),split=c(1,0.3),standardize = F)}
+```
+
+
+# Paper Figures 
+
+
+## Fig. 1: State Data
+### Three Panels
+```{r fig1-threepanels, fig.height=8,fig.width=8}
+data=read.csv(file="/Users/ahern/R/trophic_cascades/mc2/m2_do_02_edit.csv",header=T)
+read1=subset(data, T<275)
+read=subset(read1, T > -1)
+dim(read1)
+dim(read)
+time=read$T
+ph= read$pH.M2
+do=read$DO.M2..uM.
+read=read.csv(file="/Users/ahern/R/trophic_cascades/mc2/states.csv",header=T)
+glucose=read$Glucose_um
+time_glucose=read$Time
+read=read.csv(file="/Users/ahern/R/trophic_cascades/mc2/c13_glucose.csv",
+              header=T)
+
+{layout(matrix(c(1,1,2,3), 2, 2, byrow = TRUE),
+   widths=c(1,1), heights=c(1,1))
+  par(mar=c(5,5,1,5))
+  plot(time, do,type='l',col='blue',xlab="Time (hours)", ylab = "", xlim=c(-144,240), xaxt='n')
+  axis(side=1, at=c(-144, 0, 48, 120, 240))
+  rect(xleft=0, xright=240, ybottom=111, ytop=300, col= rgb(0.7,0.7,0.7,alpha=0.2),
+    border=NA)
+  mtext(side=2,"Dissolved Oxygen (uM)", col = 'blue', padj=-5)
+  par(new = TRUE)
+  plot(time, ph,col='red',type = "l", axes = FALSE, bty = "n", xlab = "", ylab = "")
+  mtext(side=4, "pH", col ='red', line=3)
+  axis(side=4, at = c(6.5, 6.7, 7, 7.2, 7.4))
+  
+  par(mar=c(5,5,1,1))
+  plot(time_glucose,glucose,type='o',ylim=c(0,12),xlab= "Time (hours)",
+       ylab = "Glucose (um)",col='gray30',bg='#b65090',pch=21,cex.axis=1,cex.lab=1,cex=1.2,lwd=1.4,
+       yaxt='n',xaxt='n')
+  axis(side=2,at=c(0,4,8,12), cex=1.3)
+  axis(side=1, at=c(-144, 0, 48, 120, 240))
+  
+  plot(read$T,read$Atom..13C,type='o',ylim=c(0,30),xlab="Time (hours)", ylab="Atom C13 (%)", col='gray20',bg='gray50',
+       pch=21,cex.axis=1,cex.lab=1,cex=1.2,lwd=1.2,yaxt='n',xaxt='n')
+  axis(side=2, at=c(0, 10,20,30))
+  axis(side=1, at=c(-144, 0, 48, 120, 240))
+  #abline(v=c(24,48,72,120,240), lty=2, col='gray50')
+  #abline(v=-0.5, col='red',lty=2)
+}
+```
+
+### Two Panels 
+
+```{r fig1-twopanels, fig.height=8,fig.width=8}
+read=read.csv(file="/Users/ahern/R/trophic_cascades/mc2/states_gluc.csv",
+              header=T)
+glucose=read$Glucose_um
+time_glucose=read$Time
+
+{ par(mar=c(2,7,1,5), mfrow=c(2,1))
+  plot(time, do,type='l',col='blue',xlab=" ", ylab = "", xlim=c(-144,240), xaxt='n')
+  rect(xleft=0, xright=240, ybottom=111, ytop=300, col= rgb(0.7,0.7,0.7,alpha=0.2),
+    border=NA)
+  mtext(side=2,"Dissolved Oxygen (uM)", col = 'blue', padj=-5)
+    axis(side=1, at=c(-144, 0, 48, 120, 240))
+  par(new = TRUE)
+  plot(time, ph,col='red',type = "l", axes = FALSE, bty = "n", xlab = "", ylab = "")
+  mtext(side=4, "pH", col ='red', line=3)
+  axis(side=4, at = c(6.5, 6.7, 7, 7.2, 7.4))
+
+ 
+   par(mar=c(5,7,1,5))
+  plot(read$Time,read$Glucose_um,type='o',ylim=c(0,12),xlab= " ",
+       ylab = " ",col='black',bg='gray70',pch=21,cex.axis=1,cex.lab=1,cex=1.2,lwd=1.4,
+       yaxt='n', xaxt='n') #xaxt=c(-144,0,48,120,240))
+  rect(xleft=0, xright=240, ybottom=0, ytop=12, col= rgb(0.7,0.7,0.7,alpha=0.2),
+    border=NA)
+  mtext(side=2, "Glucose (um)", padj=-5)
+  axis(side=2,at=c(0,4,8,12), cex=1.3)
+  axis(side=1, at=c(-144, 0, 48, 120, 240))
+  par(new = TRUE)
+  plot(read$Time,read$Atom..13C,pch=23, 
+       bg='black',type = "o", axes = FALSE, bty = "n", xlab = "", ylab = "", ylim=c(0,30), cex=1.2)
+  mtext(side=4, "Atomic 13C (%)", line=3)
+  axis(side=4, at=c(0, 10,20,30))
+  mtext(side=1, "Time (hours)", line=3)
+  legend('topleft',legend=c("Glucose","13C"), pch =c(21,23), pt.bg= c('gray70','black'), bty='n')
+}
+```
+
+
+## Fig. 2: Beta Diversity 
+
+```{r, message=FALSE, error=FALSE, warning=FALSE}
+library(philr)
+x<-read.csv(file='/Users/ahern/R/trophic_cascades/mc2/4Nov21/ASVs/asv-table.csv',header=TRUE,row.names=1)
+OTU = otu_table(x, taxa_are_rows=T)
+taxa<-read.csv(file="/Users/ahern/R/trophic_cascades/mc2/4Nov21/ASVs/taxonomy_4nov21.csv",header=TRUE,row.names=1)
+t<-as.matrix(taxa)
+tax2<-tax_table(t)
+map<-import_qiime_sample_data("/Users/ahern/R/trophic_cascades/mc2/26oct21/ASV_run3/map_2.txt")
+tree=read.tree("/Users/ahern/R/trophic_cascades/mc2/4Nov21/ASVs/tree.nwk")
+phyo = phyloseq(OTU, tax2,map,tree)
+phyo1 = subset_taxa(phyo, !Order=="Chloroplast")
+phyo2 = subset_taxa(phyo1, !Family=="Mitochondria")
+
+phyo_frac=subset_samples(phyo2, Comm_Frac=="Frac")
+GP <- transform_sample_counts(phyo_frac, function(x) x+1)
+phy_tree(GP) <- makeNodeLabel(phy_tree(GP), method="number", prefix='n')
+name.balance(phy_tree(GP), tax_table(GP), 'n1')
+
+otu.table <- t(otu_table(GP))
+treefr <- phy_tree(GP)
+metadata <- sample_data(GP)
+tax <- tax_table(GP)
+
+gp.philr <- philr(otu.table, treefr, 
+                  part.weights='enorm.x.gm.counts', 
+                  ilr.weights='blw.sqrt')
+
+
+gp.dist <- dist(gp.philr, method="euclidean")
+gp.pcoa <- ordinate(GP, 'PCoA', distance=gp.dist)
+bd3=(sample_data(phyo_frac)$bd_cex)
+cex_legs=c(4,3.5,3,2.5,2,1.5,1,0.5)
+
+
+
+phyo_comm=subset_samples(phyo2, Comm_Frac=="Community")
+GP_comm <- transform_sample_counts(phyo_comm, function(x) x+1)
+phy_tree(GP_comm) <- makeNodeLabel(phy_tree(GP_comm), method="number", prefix='n')
+name.balance(phy_tree(GP_comm), tax_table(GP_comm), 'n1')
+
+otu.tablec <- t(otu_table(GP_comm))
+treec <- phy_tree(GP_comm)
+metadatac <- sample_data(GP_comm)
+taxc <- tax_table(GP_comm)
+
+gp.philr.comm <- philr(otu.tablec, treec, 
+                  part.weights='enorm.x.gm.counts', 
+                  ilr.weights='blw.sqrt')
+
+
+gp.dist.comm <- dist(gp.philr.comm, method="euclidean")
+gp.pcoa2 <- ordinate(GP_comm, 'PCoA', distance=gp.dist.comm)
+
+
+```
+
+
+```{r figure-2-pcoas, fig.height=4, fig.width=10}
+{par(mar=c(5,5,1,7), mfrow=c(1,2))
+  plot(gp.pcoa$vectors[,1],gp.pcoa$vectors[,2],pch=sample_data(GP)$pch,
+      bg=as.character(sample_data(GP)$col),cex=bd3,
+      xlab = "PCoA1 65.51%", ylab= "PCoA2 21.78%",xpd=F)
+  ordiellipse(gp.pcoa$vectors,
+              group=as.factor(sample_data(GP)$Treatment),
+              label=T,xpd=F,
+              kind ='sd',conf=0.8)
+  par(xpd=T)
+  legend(28,20,legend=c("5MC2","6MC2","7MC2","8MC2","9MC2","11MC2","12MC2","14MC2","15MC2","1.819-1.81","1.809-1.8","1.799-17.9","1.789-1.78","1.779-1.77","1.769-1.76","1.759-1.75","1.749-1.73"), pt.bg=c('#b94c3f','#d08f36','#a67e3b','#99af3e','#62a352','#45c097','#697cd4','#9350a1','#b94a73', rep('gray70',8)), pch=21,bty='n', 
+         pt.cex = c(1,1,1,1,1,1,1,1,1, 4,3.5,3,2.5,2,1.5,1,0.5))
+  
+  
+plot(gp.pcoa2$vectors[,1],gp.pcoa2$vectors[,2],pch=sample_data(GP_comm)$pch,bg=as.character(sample_data(GP_comm)$col), xlab = "PCoA1 64.62%", ylab= "PCoA2 29.12%", cex=2)
+legend(35,10, legend=sample_data(GP_comm)$Treatment, pch=22, pt.bg=sample_data(GP_comm)$col, bty='n')
+  }
+```
+
+*Figure 2* Beta diversity of the fractionated and community samples. 
+
+```{r, fig.height=6, fig.width=6}
+{par(mar=c(5,5,1,7))
+  plot(gp.pcoa$vectors[,1],gp.pcoa$vectors[,2],pch=sample_data(GP)$pch,
+      bg=as.character(sample_data(GP)$col),cex=bd3,
+      xlab = "PCoA1 65.51%", ylab= "PCoA2 21.78%",xpd=F)
+  ordiellipse(gp.pcoa$vectors,
+              group=as.factor(sample_data(GP)$Treatment),
+              label=T,xpd=F,
+              kind ='sd',conf=0.8)
+  par(xpd=T)
+  legend(28,15,legend=c("5MC2","6MC2","7MC2","8MC2","9MC2","11MC2","12MC2","14MC2","15MC2","1.819-1.81","1.809-1.8","1.799-17.9","1.789-1.78","1.779-1.77","1.769-1.76","1.759-1.75","1.749-1.73"), pt.bg=c('#b94c3f','#d08f36','#a67e3b','#99af3e','#62a352','#45c097','#697cd4','#9350a1','#b94a73', rep('gray70',8)), pch=21,bty='n', 
+         pt.cex = c(1,1,1,1,1,1,1,1,1, 4,3.5,3,2.5,2,1.5,1,0.5))}
+
+```
+
+# Supplemental
+
+## Supp Fig. 1
+This will be the plot with carbon uptake 
+
+
+## Supp Fig. 2
+### Normal Barplot
+```{r supp-fig-1-barplot, fig.width=9, fig.height=6, message=FALSE, error=FALSE, warning=FALSE}
+phyo_abund=transform_sample_counts(phyo2, function(x) (x/sum(x)))
+pd <- psmelt(phyo_abund)
+
+colors=readRDS('colors.rds')
+library(grid)
+#palette(as.character(t(colors)))
+d_rgn = ggplot(pd, aes(x = reorder(Sample, TP), y = Abundance, fill = Strain)) +
+  scale_fill_manual(values=as.character(t(colors))) +
+  geom_bar(stat = "identity", width=0.97, color='black',
+           lwd=0.1) +
+  facet_grid(~TP, scale='free_x', space="free", shrink=TRUE) +
+  labs(x=" ", y = "ASV Relative Abundance") +
+  theme_bw() +
+  theme(axis.text = element_text(color ='black',size=12, hjust=1,vjust=1),
+        axis.text.x=element_text(size=8, angle=90),
+        axis.title = element_text(color='black',face='bold',size=14),
+        legend.position = "none",
+        panel.grid=element_blank(),
+        strip.text.x = element_text(
+          size = 10, color = "black", face = "bold"),
+        strip.background = element_rect(
+          color="white", fill="white", size=1, linetype="solid"),
+        panel.spacing = unit(0.05, "lines"))
+
+d_rgn
+```
+
+
+
+### Interactive >0.1%
+```{r supp-fig-interactive, message= FALSE, warning=FALSE, error=FALSE, fig.width=9,fig.height=6}
+library(plyr)
+# get abundance in %
+phy <- transform_sample_counts(phyo2, function(x) x/sum(x))
+# create dataframe from phyloseq object
+dat <- psmelt(phy)
+# convert Phylum to a character vector from a factor because R
+dat$Strain <- as.character(dat$Strain)
+# group dataframe by Phylum, calculate median rel. abundance
+medians <- ddply(dat, ~Strain, function(x) c(median=median(x$Abundance)))
+# find Phyla whose rel. abund. is less than 0.1%
+remainder <- medians[medians$median <= 0.001,]$Strain
+# change their name to "Other"
+dat[dat$Strain %in% remainder,]$Strain <- 'Other <0.1%'
+
+blah=data.frame(tax_table(phyo_abund))
+nan=cbind(blah$Strain, (colors))
+nano = data.frame(nan)
+colnames(nano) = c("Strain", "Colors")
+subs=levels(as.factor(dat$Strain))
+sub=subset(nano, Strain %in% subs)
+color2=c(sub$Colors, 'gray80')
+
+# boxplot
+p_rgn = ggplot(dat, aes(x = reorder(Sample, TP), y = Abundance, fill = Strain)) +
+  scale_fill_manual(values=as.character(t((color2)))) +
+  geom_bar(stat = "identity", width=0.97, color='black',
+           lwd=0.1) +
+  #facet_grid(~TP, scale='free_x', space="free", shrink=TRUE) +
+  labs(x=" ", y = "ASV Relative Abundance") +
+  theme_bw() +
+  theme(axis.text = element_text(color ='black',size=12, hjust=1,vjust=1),
+        axis.text.x=element_text(size=8, angle=90),
+        axis.title = element_text(color='black',face='bold',size=14),
+        legend.position = "none",
+        panel.grid=element_blank(),
+        #strip.text.x = element_text(
+         # size = 10, color = "black", face = "bold"),
+        #strip.background = element_rect(
+         # color="white", fill="white", size=1, linetype="solid"),
+        #panel.spacing = unit(0.05, "lines")
+        )
+#p_rgn
+library(plotly)
+fig <- ggplotly(p_rgn)
+fig
+
+
+```
+
+
+
+Taxa table for looking at the interactive plot: 
+
+```{r}
+DT::datatable(tax_table(phyo2))
+```
+
+## Supp Fig. 3
+
+```{r, message=FALSE,error=FALSE, warning=FALSE}
+library(plyr)
+glom=tax_glom(phyo2, taxrank = "Class")
+abund=transform_sample_counts(glom, function(x) (x/sum(x)))
+
+# Compile taxa by Order (filtering out low abundance taxa)
+physeq2 = filter_taxa(phyo2, function(x) mean(x) > 0.1, TRUE)
+physeq2
+physeq3 = transform_sample_counts(glom, function(x) x / sum(x) )
+physeq3
+
+#stom <- psmelt(physeq3)
+glom <- tax_glom(physeq3, taxrank = 'Class')
+
+data <- psmelt(glom) # create dataframe from phyloseq object
+data$Class <- as.character(data$Class) #convert to character
+
+#simple way to rename phyla with < 1% abundance
+data$Class[data$Abundance < 0.01] <- "< 1% abund."
+
+library(plyr)
+medians <- ddply(data, ~Class, function(x) c(median=median(x$Abundance)))
+remainder <- medians[medians$median <= 0.01,]$Class
+
+data[data$Class %in% remainder,]$Class <- "Class < 1% abund."
+#rename phyla with < 1% relative abundance
+data$Class[data$Abundance < 0.01] <- "Class < 1% abund."
+
+is.numeric(data$Abundance)
+
+
+# boxplot
+classplot = ggplot(data, aes(x = reorder(Sample, TP), y = Abundance, fill = Class)) +
+  scale_fill_manual(values=c("#670024",
+"#ff5b73",
+"#cb8400",
+"#bddf8d",
+'gray70',
+"#009044",
+"#00c8be",
+"#bb2b95")) +
+  geom_bar(stat = "identity", width=0.97, color='black',
+           lwd=0.1) +
+  facet_grid(~TP+Comm_Frac, scale='free_x', space="free", shrink=TRUE) +
+  labs(x=" ", y = "Class Relative Abundance") +
+  theme_bw() +
+  theme(axis.text = element_text(color ='black',size=12, hjust=1,vjust=1),
+        axis.text.x=element_text(size=8, angle=90),
+        axis.title = element_text(color='black',face='bold',size=14),
+        legend.position = "bottom",
+        panel.grid=element_blank(),
+        strip.text.x = element_text(
+          size = 10, color = "black", face = "bold"),
+        strip.background = element_rect(
+          color="white", fill="white", size=1, linetype="solid"),
+        panel.spacing = unit(0.05, "lines"))
+
+classplot
+```
+## Supp Fig. 4
+
+```{r supp-fig-2-bdwindows}
+palette(c('gray80', 'blue'))
+{
+plot(mc9$BD_min.x,mc9$wmean_dist,type='o', xlim=c(1.731,1.819),pch=21,ylim=c(0.05,0.25),
+      xlab = "Buoyant Density (g/mL)", ylab = "Difference in Beta Diversity", bg='blue', cex=1.2)
+rect(xleft=c(1.768,1.775,1.778,1.785,1.795), xright=c(1.785,1.795,1.801,1.807,1.813), 
+     ybottom=c(0,0,0,0,0), ytop=c(1,1,1,1,1), 
+     col= c(rgb(0,.5,1.0,alpha=0.05),rgb(0,.6,1.0,alpha=0.05),
+            rgb(0,.7,1.0,alpha=0.05),rgb(0,.8,1.0,alpha=0.05),rgb(0,.9,1.0,alpha=0.05)),
+     #lty=c(1,2,1,2,1), 
+     lwd=0.5)
+segments(x0=c(1.768,1.775,1.778,1.785,1.795), x1=c(1.785,1.795,1.801,1.807,1.813),
+         y0=c(0.2,0.21,0.22,0.23,0.24),y1=c(0.2,0.21,0.22,0.23,0.24))
+lines(mc11$BD_min.x, mc11$wmean_dist, type='o', pch = 22, bg=as.factor(mc11$BD_shift), cex=1.2)
+lines(mc12$BD_min.x, mc12$wmean_dist, type='o', pch = 23, bg=as.factor(mc12$BD_shift), cex=1.2)
+lines(mc14$BD_min.x, mc14$wmean_dist, type='o', pch = 24, bg=as.factor(mc14$BD_shift), cex=1.2)
+lines(mc15$BD_min.x, mc15$wmean_dist, type='o', pch = 25, bg=as.factor(mc15$BD_shift), cex=1.2)
+legend('topleft', legend=c("Significant","Not Sig","9MC2","11MC2","12MC2","14MC2","15MC2"),
+       pch =c(21,21,21,22,23,24,25), pt.bg=c("blue","gray80","gray80","gray80","gray80","gray80","gray80"),
+       bty='n')}
+```
+
+*SI Fig 3* Buoyant density windows. Beta diversity (weighted UniFrac)  of 13-C treatments versus 12-C control (5MC2) along the buoyant density gradient (g/ mL^1). Colors denote significant shifts in beta diversity relative to the control.
+
+*Note* I changed this figure to look at the "treatments" rather than "control" to illustrate the differences in beta diversity 
+

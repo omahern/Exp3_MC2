@@ -506,6 +506,12 @@ gp.pcoa <- ordinate(GP, 'PCoA', distance=gp.dist)
        pc=c(22,21,22,22,22,22,22,22,22,22,22),bty='n')
   }
 
+
+b=betadisper(gp.dist, sample_data(GP)$Treatment)
+a=anova(b)
+tuk=TukeyHSD(b)
+permutest(b, pairwise = TRUE, permutations = 999)
+
 adonis(gp.dist~ sample_data(GP)$Treatment)
 anosim(gp.dist,sample_data(GP)$Treatment)
 ```
@@ -555,9 +561,14 @@ Phylogenetic distance of Fractions with points scaled to the buoyant density.
 
 
 ```{r}
+b=betadisper(gp.dist,sample_data(GP)$Treatment)
+permutest(b, pairwise = TRUE, permutations = 999)
+
 adonis(gp.dist~sample_data(phyo_frac)$Treatment)
 anosim(gp.dist,sample_data(phyo_frac)$Treatment)
 ```
+
+Note oerdispersion for 5MC2 vs. 14MC2, 12MC2, and 11MC2. May have to remove 5MC2 for beta diversity statistiscs. 
 
   
 ### CLR 
@@ -601,6 +612,13 @@ legend(6.5,5,legend=c('Community',"Fraction","5MC2","6MC2","7MC2","8MC2",
 }
 
 euc=dist(otu, 'euc')
+
+
+b=betadisper(euc, sample_data(comp_clr)$Treatment)
+a=anova(b)
+tuk=TukeyHSD(b)
+permutest(b, pairwise = TRUE, permutations = 999)
+
 adonis(euc~sample_data(comp_clr)$Treatment)
 anosim(euc,sample_data(comp_clr)$Treatment)
 
@@ -631,6 +649,12 @@ legend(9,5,legend=c('Community',"Fraction","5MC2","6MC2","7MC2","8MC2",
 }
 
 euc=dist(otu,'euc')
+
+b=betadisper(euc, sample_data(comp_clr_nopond)$Treatment)
+a=anova(b)
+tuk=TukeyHSD(b)
+permutest(b, pairwise = TRUE, permutations = 999)
+
 adonis(euc~sample_data(comp_clr_nopond)$Treatment)
 anosim(euc,sample_data(comp_clr_nopond)$Treatment)
 
@@ -659,6 +683,11 @@ ordiellipse(p$x,
          pt.cex = c(1,1,1,1,1,1,1,1,1, 4,3.5,3,2.5,2,1.5,1,0.5))
 }
 
+euc=dist(otu,'euc')
+b=betadisper(euc, sample_data(comp_clr_frac)$Treatment)
+a=anova(b)
+tuk=TukeyHSD(b)
+permutest(b, pairwise = TRUE, permutations = 999)
 ```
 
 PCA of centered log ratio transformed ASV abundance of fractionated samples. Points are scaled to the buoyant density of the library. 
