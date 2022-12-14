@@ -18,6 +18,7 @@ knit: (function(input_file, encoding) {
 ---
 
 # Workspace Setup
+
 ```{r setup, message=FALSE, error=FALSE, warning=FALSE}
 library(phyloseq)
 library(reshape2)
@@ -27,12 +28,17 @@ library(HTSSIP)
 library(ape)
 library(CoDaSeq)
 library(philr)
-
+library(ggtree)
+library(cowplot)
+library(ggplot2)
+library(viridis)
+library(phytools)
 ```
 
-# 16S Data 
+# 16S Data
 
-### HR-SIP 
+### HR-SIP
+
 ```{r, message=FALSE, error=FALSE, warning=FALSE}
 x<-read.csv(file='/Users/oliviaahern/Documents/R/mc2/4Nov21/ASVs/asv-table_2.csv',header=TRUE,row.names=1)
 OTU = otu_table(x, taxa_are_rows=T)
@@ -65,9 +71,9 @@ physeq_S2D2_l = phyloseq_subset(phyo_frac, params, ex)
 physeq_S2D2_l
 ```
 
+#### BD Shifts
 
-#### BD Shifts 
-```{r bd-shifts, message=FALSE, error=FALSE, warning=FALSE}
+```{r bd-shifts, message=FALSE, error=FALSE, warning=FALSE, eval=FALSE}
 wmean = plyr::ldply(physeq_S2D2_l, BD_shift, nperm=10, ex="Treatment=='5MC2'", perm_method='treatment', normalized=F)
 
 wmean %>% head(n=3)
@@ -138,6 +144,7 @@ legend('topleft', legend=c("Significant","Not Sig","9MC2","11MC2","12MC2","14MC2
 ```
 
 #### Code
+
 ```{r, eval=FALSE}
 ncores=1
 #density_windows = data.frame(density_min = c(1.76,1.77,1.78), density_max = c(1.81,1.815,1.82))
@@ -151,7 +158,6 @@ df_l2ft = plyr::ldply(physeq_S2D2_l,
                       sparsity_threshold = c(0.2,0.25,0.3),
                       .parallel=FALSE)
 ```
-
 
 ```{r, message=FALSE, error=FALSE, warning=FALSE}
 df_l2ft=read.csv('/Users/oliviaahern/Documents/GitHub/Exp3_MC2/data_greaterthan0.1.csv',header=T,row.names=1)
@@ -185,12 +191,12 @@ c2=c('gray96',(rev(magma(30))))
               fsize=c(0.7,1,1),split=c(1,0.3),standardize = F)}
 ```
 
-
-# Paper Figures 
-
+# Paper Figures
 
 ## Fig. 1: State Data
+
 ### Three Panels
+
 ```{r fig1-threepanels, fig.height=8,fig.width=8, message=FALSE, error=FALSE, warning=FALSE}
 data=read.csv(file="/Users/oliviaahern/Documents/R/mc2/m2_do_02_edit.csv",header=T)
 read1=subset(data, T<275)
@@ -235,7 +241,7 @@ read=read.csv(file="/Users/oliviaahern/Documents/R/mc2/c13_glucose.csv",
 }
 ```
 
-### Two Panels 
+### Two Panels
 
 ```{r fig1-twopanels, fig.height=8,fig.width=8, message=FALSE, error=FALSE, warning=FALSE}
 read=read.csv(file="/Users/oliviaahern/Documents/R/mc2/states_gluc.csv",
@@ -274,10 +280,9 @@ time_glucose=read$Time
 }
 ```
 
+## Fig. 2: PCoA
 
-## Fig. 2: Beta Diversity 
-
-```{r, message=FALSE, error=FALSE, warning=FALSE}
+```{r figure-2, message=FALSE, error=FALSE, warning=FALSE}
 library(philr)
 x<-read.csv(file='/Users/oliviaahern/Documents/R/mc2/4Nov21/ASVs/asv-table.csv',header=TRUE,row.names=1)
 OTU = otu_table(x, taxa_are_rows=T)
@@ -291,6 +296,9 @@ phyo1 = subset_taxa(phyo, !Order=="Chloroplast")
 phyo2 = subset_taxa(phyo1, !Family=="Mitochondria")
 
 phyo_frac=subset_samples(phyo2, Comm_Frac=="Frac")
+phyo_frac2=subset_taxa(phyo_frac, Strain !="529768d439b63fc1fd2991f7c6ea2071")
+phyo_frac=subset_taxa(phyo_frac2, Strain !="ee279c64d4b8ca7b8abd12858f46f0b7")
+
 GP <- transform_sample_counts(phyo_frac, function(x) x+1)
 phy_tree(GP) <- makeNodeLabel(phy_tree(GP), method="number", prefix='n')
 name.balance(phy_tree(GP), tax_table(GP), 'n1')
@@ -329,10 +337,64 @@ gp.philr.comm <- philr(otu.tablec, treec,
 
 gp.dist.comm <- dist(gp.philr.comm, method="euclidean")
 gp.pcoa2 <- ordinate(GP_comm, 'PCoA', distance=gp.dist.comm)
+```
+
+```{r, eval=FALSE}
+TP=sample_data(phyo_comm)$TP
+C13_Per=sample_data(phyo_comm)$C13_Per
+Moles_C13=sample_data(phyo_comm)$Moles_C13
+CN=sample_data(phyo_comm)$CN
+yield=sample_data(phyo_comm)$yield_ngul
+
+set.seed(1234)
+ord <- dbrda(gp.philr.comm ~ Moles_C13 + C13_Per + CN + yield + TP, dist = 'euc')
+anova(ord, by = 'margin')
+
+{plot(ord, type='points', xlab='dbRDA1 66.7%', ylab='dbRDA2 29.3%')
+points(ord, bg=sample_data(phyo_comm)$col,pch=21, cex=2)
+}
+set.seed(1234)
+ano=adonis2(gp.dist.comm~Moles_C13 + C13_Per + CN + yield + TP, by='margin')
+ano
+ano=adonis2(gp.dist.comm~Moles_C13 + C13_Per + CN + yield + TP, by=NULL)
+ano
+
+set.seed(1234)
+phyo_frac_nocontrol=subset_samples(phyo_frac, Treatment !="5MC2")
+# Remove taxa not seen more than 2 times in at least 10% of the samples. This protects against an OTU with small mean & trivially large C.V.
+GP <-  filter_taxa(phyo_frac_nocontrol, function(x) sum(x > 2) > (0.1*length(x)), TRUE)
+GP <- transform_sample_counts(GP, function(x) x+1)
+phy_tree(GP) <- makeNodeLabel(phy_tree(GP), method="number", prefix='n')
+name.balance(phy_tree(GP), tax_table(GP), 'n1')
+
+otu.table <- t(otu_table(GP))
+tree <- phy_tree(GP)
+metadata <- sample_data(GP)
+tax <- tax_table(GP)
+
+gp.philr <- philr(otu.table, tree, 
+                  part.weights='enorm.x.gm.counts', 
+                  ilr.weights='blw.sqrt')
+gp.dist <- dist(gp.philr, method="euclidean")
+
+
+anosim(gp.dist, sample_data(phyo_frac_nocontrol)$Treatment, perm=999)
+
+TP=sample_data(phyo_frac_nocontrol)$TP
+C13_Per=sample_data(phyo_frac_nocontrol)$C13_Per
+Moles_C13=sample_data(phyo_frac_nocontrol)$Moles_C13
+CN=sample_data(phyo_frac_nocontrol)$CN
+yield=sample_data(phyo_frac_nocontrol)$yield_ngul
+Treat=sample_data(phyo_frac_nocontrol)$Treatment
+BD=sample_data(phyo_frac_nocontrol)$Buoyant_density
+
+adonis2(gp.dist ~ Moles_C13 + C13_Per + CN + BD + TP + yield, by="margin")
+
+ord <- dbrda(gp.dist ~ Moles_C13 + C13_Per + CN + BD + TP + yield + Condition(Treat), dist = 'euc', na.rm=T)
+anova(ord, by = 'margin')
 
 
 ```
-
 
 ```{r figure-2-pcoas, fig.height=4, fig.width=10, message=FALSE, error=FALSE, warning=FALSE}
 {par(mar=c(5,5,1,7), mfrow=c(1,2))
@@ -353,7 +415,7 @@ legend(35,10, legend=sample_data(GP_comm)$Treatment, pch=22, pt.bg=sample_data(G
   }
 ```
 
-*Figure 2* Beta diversity of the fractionated and community samples. 
+*Figure 2* Beta diversity of the fractionated and community samples.
 
 ```{r, fig.height=6, fig.width=6}
 {par(mar=c(5,5,1,7))
@@ -370,14 +432,116 @@ legend(35,10, legend=sample_data(GP_comm)$Treatment, pch=22, pt.bg=sample_data(G
 
 ```
 
+## Fig. 3: 13C Incorporators
+
+```{r}
+phyo_frac2=subset_samples(phyo2, Comm_Frac=="Frac")
+df_l2ft=read.csv('/Users/oliviaahern/Documents/GitHub/Exp3_MC2/data_greaterthan0.1.csv',header=T,row.names=1)
+sub=subset(df_l2ft, Good=="Yes")
+#d=dcast(sub, OTU ~ timepoint, value.var = "log2FoldChange", fun.aggregate = sum)
+
+
+otu=sub$OTU
+length(unique(otu))
+incorporators=unique(otu)
+
+my_subset <- subset(tax_table(phyo_frac2), rownames(tax_table(phyo_frac2)) %in% incorporators)
+phyo_frac_sip=phyloseq(otu_table(phyo_frac2), my_subset, tree, map)
+hrsiptree=phy_tree(phyo_frac_sip)
+
+read=read.csv(file='subsets_asvs_0.012.csv', header=T,row.names=1)
+data=data.frame(read[,1:5])
+viv=viridis::cividis(50)
+
+{phylo.heatmap(hrsip_tree, data, colors=c2, mar=c(1,5,1,1),lwd=3,
+              fsize=c(0.7,1,1),split=c(1,0.3),standardize = F)}
+
+
+```
+
 # Supplemental
 
-## Supp Fig. 1
-This will be the plot with carbon uptake 
+## SI Figure 1
 
+This will be the plot with carbon uptake
 
-## Supp Fig. 2
+```{r, fig.width=6, fig.height=8}
+read=read.csv(file="/Users/oliviaahern/Documents/R/mc2/states.csv",header=T)
+
+{par(mfrow=c(5,1),mar=c(2,7,3,1),xpd=T)
+plot(read$Time,read$ethanol_um,type='o',ylim=c(0,22),ylab="Chemostat\n Concentration\n (um)", col='gray30',bg='#ba4f45',pch=21,cex.axis=1.3,cex.lab=1.2,cex=1.3)
+text(-200,25,"Ethanol Feed (um)")
+segments(-144,0,-144,23,col='gray50',lty=2)
+segments(-60,0,-60,23,col='gray50',lty=2)
+text(-62,25,"49.9")
+segments(-44,0,-44,23,col='gray50',lty=2)
+text(-44,25,"18.6")
+segments(-0.5,0,-0.5,23,col='gray50',lty=2)
+text(-0.5,25,"31.7")
+segments(120,0,120,23,col='gray50',lty=2)
+text(120,25,"16")
+segments(240,0,240,23,col='gray50',lty=2)
+text(240,25,"53.2")
+
+plot(read$Time,read$methanol_um,type='o',ylim=c(0,22),ylab="Chemostat\n Concentration\n (um)", col='gray30',bg='#ad993c',pch=21,cex.axis=1.3,cex.lab=1.2,cex=1.3)
+text(-200,25,"Methanol Feed (um)")
+segments(-144,0,-144,23,col='gray50',lty=2)
+segments(-60,0,-60,23,col='gray50',lty=2)
+text(-65,25,"45.01")
+segments(-44,0,-44,23,col='gray50',lty=2)
+text(-44,25,"18.71")
+segments(-0.5,0,-0.5,23,col='gray50',lty=2)
+text(-0.5,25,"25.93")
+segments(120,0,120,23,col='gray50',lty=2)
+text(120,25,"20.05")
+segments(240,0,240,23,col='gray50',lty=2)
+text(240,25,"48.09")
+
+plot(read$Time,read$Acetate_um,type='o',ylim=c(0,12),xlab= "Time (hours)", ylab = "Chemostat\n Concentration\n (um)",col='gray30',bg='#56ae6c',pch=21,cex.axis=1.3,cex.lab=1.2,cex=1.3)
+text(-200,14,"Acetate Feed (um)")
+segments(-144,0,-144,12.5,col='gray50',lty=2)
+text(-144,14,"154.36")
+segments(-60,0,-60,12.5,col='gray50',lty=2)
+text(-65,14,"102.14" )
+segments(-44,0,-44,12.5,col='gray50',lty=2)
+text(-40,14, "101.58" )
+segments(-0.5,0,-0.5,12.5,col='gray50',lty=2)
+text(-0.5,14,"167.42")
+segments(120,0,120,12.5,col='gray50',lty=2)
+text(120,14,"85.19")
+segments(240,0,240,12.5,col='gray50',lty=2)
+text(240,14,"123.53")
+
+plot(read$Time,read$Xylose_um,type='o',ylim=c(0,12),xlab= "Time (hours)", ylab = "Chemostat\n Concentration\n (um)",col='gray30',bg='#7065bb',pch=21,cex.axis=1.3,cex.lab=1.2,cex=1.3)
+text(-200,14,"Xylose Feed (um)")
+segments(-144,0,-144,12.5,col='gray50',lty=2)
+text(-144,14,"58.86")
+segments(-60,0,-60,12.5,col='gray50',lty=2)
+text(-62,14,"42" )
+segments(-44,0,-44,12.5,col='gray50',lty=2)
+text(-44,14, "37.43" )
+segments(-0.5,0,-0.5,12.5,col='gray50',lty=2)
+text(-0.5,14,"57.71")
+segments(120,0,120,12.5,col='gray50',lty=2)
+text(120,14,"24.29")
+segments(240,0,240,12.5,col='gray50',lty=2)
+text(240,14,"35.71")
+plot(read$Time,read$Glucose_um,type='o',ylim=c(0,12),xlab= "Time (hours)", ylab = "Chemostat\n Concentration\n (um)",col='gray30',bg='#b65090',pch=21,cex.axis=1.3,cex.lab=1.2,cex=1.3)
+text(-200,14,"Glucose Feed (um)")
+segments(-144,0,-144,12.5,col='gray50',lty=2)
+segments(-60,0,-60,12.5,col='gray50',lty=2)
+segments(-44,0,-44,12.5,col='gray50',lty=2)
+segments(-0.5,0,-0.5,12.5,col='gray50',lty=2)
+segments(120,0,120,12.5,col='gray50',lty=2)
+segments(240,0,240,12.5,col='gray50',lty=2)
+text(240,14,"35.39")}
+
+```
+
+## Barplots 
+
 ### Normal Barplot
+
 ```{r supp-fig-1-barplot, fig.width=9, fig.height=6, message=FALSE, error=FALSE, warning=FALSE}
 phyo_abund=transform_sample_counts(phyo2, function(x) (x/sum(x)))
 pd <- psmelt(phyo_abund)
@@ -406,9 +570,8 @@ d_rgn = ggplot(pd, aes(x = reorder(Sample, TP), y = Abundance, fill = Strain)) +
 d_rgn
 ```
 
+### Interactive \>0.1%
 
-
-### Interactive >0.1%
 ```{r supp-fig-interactive, message= FALSE, warning=FALSE, error=FALSE, fig.width=9,fig.height=6}
 library(plyr)
 # get abundance in %
@@ -459,17 +622,15 @@ fig
 
 ```
 
-
-
-Taxa table for looking at the interactive plot: 
+Taxa table for looking at the interactive plot:
 
 ```{r}
 DT::datatable(tax_table(phyo2))
 ```
 
-## Supp Fig. 3
+## SI Figure 2
 
-```{r, message=FALSE,error=FALSE, warning=FALSE}
+```{r si-figure-2, message=FALSE,error=FALSE, warning=FALSE}
 library(plyr)
 glom=tax_glom(phyo2, taxrank = "Class")
 abund=transform_sample_counts(glom, function(x) (x/sum(x)))
@@ -529,10 +690,222 @@ classplot = ggplot(data, aes(x = reorder(Sample, TP), y = Abundance, fill = Clas
 classplot
 ```
 
+## SI Figure 3
 
-## Supp Fig. 4
+```{r si-fig-3, fig.width=5, fig.height=9, message=FALSE,error=FALSE}
+## focus on two tiempoints first
+data<-read.csv("/Users/oliviaahern/Documents/R/mc2/26oct21/ASV_run3/bd_data.csv",header=T,row.names=1)
+MC5=data[1:10,]
+MC9=data[11:23,]
+MC11=data[24:32,]
+MC12=data[33:41,]
+MC14=data[42:51,]
+MC15=data[52:60,]
+library(viridis)
+col=viridis(6)
 
-```{r supp-fig-2-bdwindows}
+density_windows = data.frame(density_min = c(1.76,1.77,1.78), density_max = c(1.81,1.815,1.82))
+
+
+
+{
+  par(mfrow=c(5,1), mar=c(4,4,1,1))
+  plot(MC5$BD,MC5$R_MAX,type='o', xlim=c(1.731,1.819),pch=23,
+       bg=col[1], xlab = "Buoyant Density", ylab = "Ratio of Maximum")
+  rect(xleft=1.768, xright=1.785, ybottom=0, ytop=1, col= rgb(0,1,1.0,alpha=0.1),lty=2, lwd=0.5)
+  rect(xleft= 1.775, xright=1.795, ybottom=0, ytop=1, col= rgb(0,0.9,1.0,alpha=0.1),lty=2, lwd=0.5)
+  rect(xleft=1.778, xright=1.801, ybottom=0, ytop=1, col= rgb(0,0.8,1.0,alpha=0.1), lty=2, lwd=0.5) # 1.778-1.801
+  rect(xleft=1.785, xright=1.807, ybottom=0, ytop=1, col= rgb(0,0.7,1.0,alpha=0.1),
+       lty=2, lwd=0.5) # 1.785-1.807
+  rect(xleft=1.795, xright=1.813, ybottom=0, ytop=1, col= rgb(0,0.6,1.0,alpha=0.1),
+       lty=2, lwd=0.5) # 1.795-1.813
+  lines(MC5$BD,MC5$R_MAX,type='o',pch=23,
+        bg='gray70', col = 'gray70')
+  lines(MC9$BD,MC9$R_MAX,type='o',pch=21,
+        bg="#62a352", col = "#62a352")
+  legend('topleft', legend=c('5MC2','9MC2'), pt.bg=c('gray70', "#62a352"),
+         pch=c(23,21),bty='n')
+  
+  plot(MC5$BD,MC5$R_MAX,type='o', xlim=c(1.731,1.819),pch=23,
+       bg=col[1], xlab = "Buoyant Density", ylab = "Ratio of Maximum")
+  rect(xleft=1.768, xright=1.785, ybottom=0, ytop=1, col= rgb(0,1,1.0,alpha=0.1),
+       lty=2, lwd=0.5)
+  rect(xleft= 1.775, xright=1.795, ybottom=0, ytop=1, col= rgb(0,.9,1.0,alpha=0.1),
+       lty=2, lwd=0.5)
+  rect(xleft=1.778, xright=1.801, ybottom=0, ytop=1, col= rgb(0,.8,1.0,alpha=0.1), 
+       lty=2, lwd=0.5) # 1.778-1.801
+  rect(xleft=1.785, xright=1.807, ybottom=0, ytop=1, col= rgb(0,1,0.7,1,alpha=0.1),lty=2, lwd=0.5) # 1.785-1.807
+  rect(xleft=1.795, xright=1.813, ybottom=0, ytop=1, col= rgb(0,0.6,1.0,alpha=0.1),
+       lty=2, lwd=0.5) # 1.795-1.813
+  lines(MC5$BD,MC5$R_MAX,type='o',pch=23,
+        bg='gray70', col='gray70')
+  lines(MC11$BD,MC11$R_MAX,type='o',pch=21,
+        bg="#45c097", col= "#45c097")
+  legend('topleft', legend=c('5MC2','11MC2'), pt.bg=c('gray70',"#45c097"),
+         pch=c(23,21),bty='n')
+  
+  plot(MC5$BD,MC5$R_MAX,type='o', xlim=c(1.731,1.819),pch=23,
+       bg=col[1], xlab = "Buoyant Density", ylab = "Ratio of Maximum")
+  rect(xleft=1.768, xright=1.785, ybottom=0, ytop=1, col= rgb(0,1,1.0,alpha=0.1),
+       lty=2, lwd=0.5)
+  rect(xleft= 1.775, xright=1.795, ybottom=0, ytop=1, col= rgb(0,.9,1.0,alpha=0.1),
+       lty=2, lwd=0.5)
+  rect(xleft=1.778, xright=1.801, ybottom=0, ytop=1, col= rgb(0,.8,1.0,alpha=0.1), 
+       lty=2, lwd=0.5) # 1.778-1.801
+  rect(xleft=1.785, xright=1.807, ybottom=0, ytop=1, col= rgb(0,0.7,1.0,alpha=0.1),
+       lty=2, lwd=0.5) # 1.785-1.807
+  rect(xleft=1.795, xright=1.813, ybottom=0, ytop=1, col= rgb(0,0.6,1.0,alpha=0.1),
+       lty=2, lwd=0.5) # 1.795-1.813
+  lines(MC5$BD,MC5$R_MAX,type='o',pch=23,
+        bg='gray70',col='gray70')
+  lines(MC12$BD,MC12$R_MAX,type='o',pch=21,
+        bg="#697cd4", col = "#697cd4")
+  legend('topleft', legend=c('5MC2','12MC2'), pt.bg=c("gray70", "#697cd4"),
+         pch=c(23,21),bty='n')
+  
+  plot(MC5$BD,MC5$R_MAX,type='o', xlim=c(1.731,1.819),pch=23,
+       bg=col[1], xlab = "Buoyant Density", ylab = "Ratio of Maximum")
+  rect(xleft=1.768, xright=1.785, ybottom=0, ytop=1, col= rgb(0,1,1.0,alpha=0.1),
+       lty=2, lwd=0.5)
+  rect(xleft= 1.775, xright=1.795, ybottom=0, ytop=1, col= rgb(0,.9,1.0,alpha=0.1),
+       lty=2, lwd=0.5)
+  rect(xleft=1.778, xright=1.801, ybottom=0, ytop=1, col= rgb(0,.8,1.0,alpha=0.1), 
+       lty=2, lwd=0.5) # 1.778-1.801
+  rect(xleft=1.785, xright=1.807, ybottom=0, ytop=1, col= rgb(0,0.7,1.0,alpha=0.1),
+       lty=2, lwd=0.5) # 1.785-1.807
+  rect(xleft=1.795, xright=1.813, ybottom=0, ytop=1, col= rgb(0,0.6,1.0,alpha=0.1),
+       lty=2, lwd=0.5) # 1.795-1.813
+  lines(MC5$BD,MC5$R_MAX,type='o',pch=23,
+        bg="gray70", col = "gray70")
+  lines(MC14$BD,MC14$R_MAX,type='o',pch=21,
+        bg="#9350a1", col = "#9350a1")
+  legend('topleft', legend=c('5MC2','14MC2'), pt.bg=c("gray70", "#9350a1"),
+         pch=c(23,21),bty='n')
+  
+  plot(MC5$BD,MC5$R_MAX,type='o', xlim=c(1.731,1.819),pch=23,
+       bg=col[1], xlab = "Buoyant Density", ylab = "Ratio of Maximum")
+  rect(xleft=1.768, xright=1.785, ybottom=0, ytop=1, col= rgb(0,1,1.0,alpha=0.1),
+       lty=2, lwd=0.5)
+  rect(xleft= 1.775, xright=1.795, ybottom=0, ytop=1, col= rgb(0,.9,1.0,alpha=0.1),
+       lty=2, lwd=0.5)
+  rect(xleft=1.778, xright=1.801, ybottom=0, ytop=1, col= rgb(0,.8,1.0,alpha=0.1), 
+       lty=2, lwd=0.5) # 1.778-1.801
+  rect(xleft=1.785, xright=1.807, ybottom=0, ytop=1, col= rgb(0,0.7,1.0,alpha=0.1),
+       lty=2, lwd=0.5) # 1.785-1.807
+  rect(xleft=1.795, xright=1.813, ybottom=0, ytop=1, col= rgb(0,0.6,1.0,alpha=0.1),
+       lty=2, lwd=0.5) # 1.795-1.813
+  lines(MC5$BD,MC5$R_MAX,type='o',pch=23,
+        bg="gray70", col = "gray70")
+  lines(MC15$BD,MC15$R_MAX,type='o',pch=21,
+        bg="#b94a73", col = "#b94a73")
+  legend('topleft', legend=c('5MC2','15MC2'), pt.bg=c("gray70", "#b94a73"),
+         pch=c(23,21),bty='n')
+}
+
+## sideways
+{par(mfcol=c(1,5), mar=c(4,4,1,1))
+  plot(MC5$R_MAX, MC5$BD,type='o', ylim=c(1.731,1.819),pch=23,
+       bg=col[1], ylab = "Buoyant Density", xlab = "Ratio of Maximum")
+  rect(ybottom=1.768, ytop=1.785, xright=0, xleft=1, col= rgb(0,1,1.0,alpha=0.1),
+       lty=2, lwd=0.5)
+  rect(ybottom= 1.775, ytop=1.795, xright=0, xleft=1, col= rgb(0,.9,1.0,alpha=0.1),
+       lty=2, lwd=0.5)
+  rect(ybottom=1.778, ytop=1.801, xright=0, xleft=1, col= rgb(0,.8,1.0,alpha=0.1), 
+       lty=2, lwd=0.5) # 1.778-1.801
+  rect(ybottom=1.785, ytop=1.807, xright=0, xleft=1, col= rgb(0,0.7,1.0,alpha=0.1),
+       lty=2, lwd=0.5) # 1.785-1.807
+  rect(ybottom=1.795, ytop=1.813, xright=0, xleft=1, col= rgb(0,0.6,1.0,alpha=0.1),
+       lty=2, lwd=0.5) # 1.795-1.813
+  lines(MC5$R_MAX, MC5$BD,type='o',pch=23,
+        bg='gray70', col = 'gray70')
+  lines(MC9$R_MAX,MC9$BD,type='o',pch=21,
+        bg="#62a352", col = "#62a352")
+  legend('bottomright', legend=c('5MC2','9MC2'), pt.bg=c('gray70', "#62a352"),
+         pch=c(23,21),bty='n')
+  
+  plot(MC5$R_MAX,MC5$BD,type='o', ylim=c(1.731,1.819),pch=23,
+       bg=col[1], ylab = "Buoyant Density", xlab = "Ratio of Maximum")
+  rect(ybottom=1.768, ytop=1.785, xright=0, xleft=1, col= rgb(0,1,1.0,alpha=0.1),
+       lty=2, lwd=0.5)
+  rect(ybottom= 1.775, ytop=1.795, xright=0, xleft=1, col= rgb(0,.9,1.0,alpha=0.1),
+       lty=2, lwd=0.5)
+  rect(ybottom=1.778, ytop=1.801, xright=0, xleft=1, col= rgb(0,.8,1.0,alpha=0.1), 
+       lty=2, lwd=0.5) # 1.778-1.801
+  rect(ybottom=1.785, ytop=1.807, xright=0, xleft=1, col= rgb(0,0.7,1.0,alpha=0.1),
+       lty=2, lwd=0.5) # 1.785-1.807
+  rect(ybottom=1.795, ytop=1.813, xright=0, xleft=1, col= rgb(0,0.6,1.0,alpha=0.1),
+       lty=2, lwd=0.5) # 1.795-1.813
+  lines(MC5$R_MAX,MC5$BD,type='o',pch=23,
+        bg='gray70', col='gray70')
+  lines(MC11$R_MAX,MC11$BD,type='o',pch=21,
+        bg="#45c097", col= "#45c097")
+  legend('bottomright', legend=c('5MC2','11MC2'), pt.bg=c('gray70',"#45c097"),
+         pch=c(23,21),bty='n')
+  
+  plot(MC5$R_MAX,MC5$BD,type='o', ylim=c(1.731,1.819),pch=23,
+       bg=col[1], ylab = "Buoyant Density", xlab = "Ratio of Maximum")
+  rect(ybottom=1.768, ytop=1.785, xright=0, xleft=1, col= rgb(0,1,1.0,alpha=0.1),
+       lty=2, lwd=0.5)
+  rect(ybottom= 1.775, ytop=1.795, xright=0, xleft=1, col= rgb(0,.9,1.0,alpha=0.1),
+       lty=2, lwd=0.5)
+  rect(ybottom=1.778, ytop=1.801, xright=0, xleft=1, col= rgb(0,.8,1.0,alpha=0.1), 
+       lty=2, lwd=0.5) # 1.778-1.801
+  rect(ybottom=1.785, ytop=1.807, xright=0, xleft=1, col= rgb(0,0.7,1.0,alpha=0.1),
+       lty=2, lwd=0.5) # 1.785-1.807
+  rect(ybottom=1.795, ytop=1.813, xright=0, xleft=1, col= rgb(0,0.6,1.0,alpha=0.1),
+       lty=2, lwd=0.5) # 1.795-1.813
+  lines(MC5$R_MAX,MC5$BD,type='o',pch=23,
+        bg='gray70',col='gray70')
+  lines(MC12$R_MAX,MC12$BD,type='o',pch=21,
+        bg="#697cd4", col = "#697cd4")
+  legend('bottomright', legend=c('5MC2','12MC2'), pt.bg=c("gray70", "#697cd4"),
+         pch=c(23,21),bty='n')
+  
+  plot(MC5$R_MAX,MC5$BD,type='o', ylim=c(1.731,1.819),pch=23,
+       bg=col[1], ylab = "Buoyant Density", xlab = "Ratio of Maximum")
+  rect(ybottom=1.768, ytop=1.785, xright=0, xleft=1, col= rgb(0,1,1.0,alpha=0.1),
+       lty=2, lwd=0.5)
+  rect(ybottom= 1.775, ytop=1.795, xright=0, xleft=1, col= rgb(0,.9,1.0,alpha=0.1),
+       lty=2, lwd=0.5)
+  rect(ybottom=1.778, ytop=1.801, xright=0, xleft=1, col= rgb(0,.8,1.0,alpha=0.1), 
+       lty=2, lwd=0.5) # 1.778-1.801
+  rect(ybottom=1.785, ytop=1.807, xright=0, xleft=1, col= rgb(0,0.7,1.0,alpha=0.1),
+       lty=2, lwd=0.5) # 1.785-1.807
+  rect(ybottom=1.795, ytop=1.813, xright=0, xleft=1, col= rgb(0,0.6,1.0,alpha=0.1),
+       lty=2, lwd=0.5) # 1.795-1.813
+  lines(MC5$R_MAX,MC5$BD,type='o',pch=23,
+        bg="gray70", col = "gray70")
+  lines(MC14$R_MAX,MC14$BD,type='o',pch=21,
+        bg="#9350a1", col = "#9350a1")
+  legend('bottomright', legend=c('5MC2','14MC2'), pt.bg=c("gray70", "#9350a1"),
+         pch=c(23,21),bty='n')
+  
+  plot(MC5$R_MAX, MC5$BD,type='o', ylim=c(1.731,1.819),pch=23,
+       bg=col[1], ylab = "Buoyant Density", xlab = "Ratio of Maximum")
+  rect(ybottom=1.768, ytop=1.785, xright=0, xleft=1, col= rgb(0,1,1.0,alpha=0.1),
+       lty=2, lwd=0.5)
+  rect(ybottom= 1.775, ytop=1.795, xright=0, xleft=1, col= rgb(0,.9,1.0,alpha=0.1),
+       lty=2, lwd=0.5)
+  rect(ybottom=1.778, ytop=1.801, xright=0, xleft=1, col= rgb(0,.8,1.0,alpha=0.1), 
+       lty=2, lwd=0.5) # 1.778-1.801
+  rect(ybottom=1.785, ytop=1.807, xright=0, xleft=1, col= rgb(0,0.7,1.0,alpha=0.1),
+       lty=2, lwd=0.5) # 1.785-1.807
+  rect(ybottom=1.795, ytop=1.813, xright=0, xleft=1, col= rgb(0,0.6,1.0,alpha=0.1),
+       lty=2, lwd=0.5) # 1.795-1.813
+  lines(MC5$R_MAX, MC5$BD,type='o',pch=23,
+        bg="gray70", col = "gray70")
+  lines(MC15$R_MAX, MC15$BD,type='o',pch=21,
+        bg="#b94a73", col = "#b94a73")
+  legend('bottomright', legend=c('5MC2','15MC2'), pt.bg=c("gray70", "#b94a73"),
+         pch=c(23,21),bty='n')}
+
+```
+
+*SI Figure 3* Buoyant Density vs. the maximum ratio of RNA concentrations
+
+## SI Figure 4
+
+```{r supp-fig-4-bdwindows, eval=FALSE}
 palette(c('gray80', 'blue'))
 {
 plot(mc9$BD_min.x,mc9$wmean_dist,type='o', xlim=c(1.731,1.819),pch=21,ylim=c(0.05,0.25),
@@ -554,7 +927,399 @@ legend('topleft', legend=c("Significant","Not Sig","9MC2","11MC2","12MC2","14MC2
        bty='n')}
 ```
 
-*SI Fig 3* Buoyant density windows. Beta diversity (weighted UniFrac)  of 13-C treatments versus 12-C control (5MC2) along the buoyant density gradient (g/ mL^1). Colors denote significant shifts in beta diversity relative to the control.
+*SI Fig 3* Buoyant density windows. Beta diversity (weighted UniFrac) of 13-C treatments versus 12-C control (5MC2) along the buoyant density gradient (g/ mL\^1). Colors denote significant shifts in beta diversity relative to the control.
 
-*Note* I changed this figure to look at the "treatments" rather than "control" to illustrate the differences in beta diversity 
+*Note* I changed this figure to look at the "treatments" rather than "control" to illustrate the differences in beta diversity
 
+## SI Figure 5
+
+```{r si-figure-5, error=FALSE, message=FALSE, warning=FALSE, fig.width=9, fig.height = 12}
+phyo_frac=subset_samples(phyo2, Comm_Frac=="Frac")
+
+subset2=otu_table(phyo_frac)
+sw=sweep(subset2, 2, sums, "/")
+sw1=sw*100
+sw2=otu_table(sw1, taxa_are_rows = T)
+phyo_frac_abund=phyloseq(sw2, map, tax2, tree)
+
+subset=subset_taxa(phyo_frac_abund, Strain =="5ed8f8f3a98e669d81b30c56825e0870")
+tab1=subset_samples(subset, Treatment!="5MC2"  & Comm_Frac=="Frac" & Buoyant_density > "1.768")
+tab2=subset_samples(subset, Treatment=="5MC2" & Comm_Frac=="Frac" & Buoyant_density > "1.768")
+otu1=otu_table(tab1)
+bd1=sample_data(tab1)$Buoyant_density
+samp1=sample_data(tab1)$Treatment
+otu2=otu_table(tab2)
+bd2=sample_data(tab2)$Buoyant_density
+
+subset2=subset_taxa(phyo_frac_abund, Strain =="83c246c4ed456dea2a15d054f16009b3")
+tab3=subset_samples(subset2, Treatment!="5MC2" & Comm_Frac=="Frac" & Buoyant_density > "1.768")
+tab4=subset_samples(subset2, Treatment=="5MC2" & Comm_Frac=="Frac" & Buoyant_density > "1.768")
+otu3=otu_table(tab3)
+bd3=sample_data(tab3)$Buoyant_density
+otu4=otu_table(tab4)
+bd4=sample_data(tab4)$Buoyant_density
+
+subset3=subset_taxa(phyo_frac_abund, Strain =="acc9603a819dc23a606ac6c1b9105b6d")
+tab5=subset_samples(subset3, Treatment!="5MC2" & Comm_Frac=="Frac" & Buoyant_density > "1.768")
+tab6=subset_samples(subset3, Treatment=="5MC2" & Comm_Frac=="Frac" & Buoyant_density > "1.768")
+otu5=otu_table(tab5)
+bd5=sample_data(tab5)$Buoyant_density
+otu6=otu_table(tab6)
+bd6=sample_data(tab6)$Buoyant_density
+
+subset4=subset_taxa(phyo_frac_abund, Strain =="c1d9eada909d2d5dbe078f25f1038508")
+tab7=subset_samples(subset4, Treatment!="5MC2" & Comm_Frac=="Frac" & Buoyant_density > "1.768")
+tab8=subset_samples(subset4, Treatment=="5MC2" & Comm_Frac=="Frac" & Buoyant_density > "1.768")
+otu7=otu_table(tab7)
+bd7=sample_data(tab7)$Buoyant_density
+otu8=otu_table(tab8)
+bd8=sample_data(tab8)$Buoyant_density
+
+subset5=subset_taxa(phyo_frac_abund, Strain =="27af011f1ebcc0867bb168193e6a9d27")
+tab9=subset_samples(subset5, Treatment!="5MC2" & Comm_Frac=="Frac" & Buoyant_density > "1.76")
+tab10=subset_samples(subset5, Treatment=="5MC2" & Comm_Frac=="Frac" & Buoyant_density > "1.76")
+otu10=otu_table(tab10)
+bd10=sample_data(tab10)$Buoyant_density
+
+subset6=subset_taxa(phyo_frac_abund, Strain =="801efb14d6457f799fd2becee6d07b72")
+tab11=subset_samples(subset6, Treatment!="5MC2" & Comm_Frac=="Frac" & Buoyant_density > "1.768")
+tab12=subset_samples(subset6, Treatment=="5MC2" & Comm_Frac=="Frac" & Buoyant_density > "1.768")
+otu12=otu_table(tab12)
+bd12=sample_data(tab12)$Buoyant_density
+
+subset7=subset_taxa(phyo_frac_abund, Strain =="a6db2d87f1e7a32216e5041a1920f12e")
+tab13=subset_samples(subset7, Treatment!="5MC2" & Comm_Frac=="Frac" & Buoyant_density > "1.768")
+tab14=subset_samples(subset7, Treatment=="5MC2" & Comm_Frac=="Frac" & Buoyant_density > "1.768")
+otu14=otu_table(tab14)
+bd14=sample_data(tab14)$Buoyant_density
+
+subset8=subset_taxa(phyo_frac_abund, Strain =="cf3381318906e1e08f58bca905636dc0")
+tab15=subset_samples(subset8, Treatment!="5MC2" & Comm_Frac=="Frac" & Buoyant_density > "1.768")
+tab16=subset_samples(subset8, Treatment=="5MC2" & Comm_Frac=="Frac" & Buoyant_density > "1.768")
+otu16=otu_table(tab16)
+bd16=sample_data(tab16)$Buoyant_density
+
+subset9=subset_taxa(phyo_frac_abund, Strain =="f1e34308d952529287ada31976faec95")
+tab17=subset_samples(subset9, Treatment!="5MC2" & Comm_Frac=="Frac" & Buoyant_density > "1.768")
+tab18=subset_samples(subset9, Treatment=="5MC2" & Comm_Frac=="Frac" & Buoyant_density > "1.768")
+otu18=otu_table(tab18)
+bd18=sample_data(tab18)$Buoyant_density
+
+subset10=subset_taxa(phyo_frac_abund, Strain =="3fa2974b1f70109275811beb1ae321c9")
+tab19=subset_samples(subset10, Treatment!="5MC2" & Comm_Frac=="Frac" & Buoyant_density > "1.768")
+tab20=subset_samples(subset10, Treatment=="5MC2" & Comm_Frac=="Frac" & Buoyant_density > "1.768")
+otu20=otu_table(tab20)
+bd20=sample_data(tab20)$Buoyant_density
+
+subset11=subset_taxa(phyo_frac_abund, Strain =="98f53519513214e968c569829a1471bb")
+tab21=subset_samples(subset11, Treatment!="5MC2" & Comm_Frac=="Frac" & Buoyant_density > "1.768")
+tab22=subset_samples(subset11, Treatment=="5MC2" & Comm_Frac=="Frac" & Buoyant_density > "1.768")
+otu22=otu_table(tab22)
+bd22=sample_data(tab22)$Buoyant_density
+
+subset12=subset_taxa(phyo_frac_abund, Strain =="efbe1f58b1e2984ddc53a64f047d94ff")
+tab23=subset_samples(subset12, Treatment!="5MC2" & Comm_Frac=="Frac" & Buoyant_density > "1.768")
+tab24=subset_samples(subset12, Treatment=="5MC2" & Comm_Frac=="Frac" & Buoyant_density > "1.768")
+otu24=otu_table(tab24)
+bd24=sample_data(tab24)$Buoyant_density
+{
+par(mfrow=c(3,4), mar=c(4,4,1,1))
+# ASV 5ed8f8f3a98e669d81b30c56825e0870
+plot(sample_data(subset_samples(tab1, Treatment=="9MC2"))$Buoyant_density, 
+     log(otu_table(subset_samples(tab1, Treatment=="9MC2"))+1), type='o', col="#62a352", 
+     pch=21, bg="#62a352", ylim=c(0,2), xlim=c(1.76, 1.82),
+     xlab="Buoyant Density", ylab="Log Rel Abund ASV",
+     main="5ed8f8f3a98e669d81b30c56825e0870")
+lines(bd2, log(otu2+1), type='o', col='gray70', pch=23, bg='gray70')
+lines(sample_data(subset_samples(tab1, Treatment=="11MC2"))$Buoyant_density, 
+      log(otu_table(subset_samples(tab1, Treatment=="11MC2"))+1), type='o', 
+      pch=21, col="#45c097", bg="#45c097")
+lines(sample_data(subset_samples(tab1, Treatment=="12MC2"))$Buoyant_density, 
+      log(otu_table(subset_samples(tab1, Treatment=="12MC2"))+1), type='o', 
+      pch=21, col="#697cd4", bg="#697cd4")
+lines(sample_data(subset_samples(tab1, Treatment=="14MC2"))$Buoyant_density, 
+      log(otu_table(subset_samples(tab1, Treatment=="14MC2"))+1), type='o', 
+      pch=21, col="#9350a1", bg="#9350a1")
+lines(sample_data(subset_samples(tab1, Treatment=="15MC2"))$Buoyant_density, 
+      log(otu_table(subset_samples(tab1, Treatment=="15MC2"))+1), type='o', 
+      pch=21, col="#b94a73", bg="#b94a73")
+legend('topright', legend=c("5MC2","9MC2", "11MC2", "12MC2", "14MC2", "15MC2"),
+       pch=c(23,21,21,21,21,21), 
+       pt.bg=c('gray70','#62a352', "#45c097", "#697cd4", "#9350a1", "#b94a73"),
+       bty="n")
+# ASV 83c246c4ed456dea2a15d054f16009b3 all but 120 
+plot(sample_data(subset_samples(tab3, Treatment=="9MC2"))$Buoyant_density, 
+     log(otu_table(subset_samples(tab3, Treatment=="9MC2"))+1), type='o', col="#62a352", 
+     pch=21, bg="#62a352", ylim=c(0,2), xlim=c(1.76, 1.82),
+     xlab="Buoyant Density", ylab="Log Rel Abund ASV", 
+     main="83c246c4ed456dea2a15d054f16009b3")
+lines(bd4, otu4, type='o', col='gray70', pch=23, bg='gray70')
+lines(sample_data(subset_samples(tab3, Treatment=="11MC2"))$Buoyant_density, 
+      log(otu_table(subset_samples(tab3, Treatment=="11MC2"))+1), type='o', 
+      pch=21, col="#45c097", bg="#45c097")
+lines(sample_data(subset_samples(tab3, Treatment=="12MC2"))$Buoyant_density, 
+      log(otu_table(subset_samples(tab3, Treatment=="12MC2"))+1), type='o', 
+      pch=21, col="#697cd4", bg="#697cd4")
+lines(sample_data(subset_samples(tab3, Treatment=="15MC2"))$Buoyant_density, 
+      log(otu_table(subset_samples(tab3, Treatment=="15MC2"))+1), type='o', 
+      pch=21, col="#b94a73", bg="#b94a73")
+# ASV acc9603a819dc23a606ac6c1b9105b6d
+plot(sample_data(subset_samples(tab5, Treatment=="9MC2"))$Buoyant_density, 
+     log(otu_table(subset_samples(tab5, Treatment=="9MC2"))+1), type='o', col="#62a352", 
+     pch=21, bg="#62a352", ylim=c(0,2.5), xlim=c(1.76, 1.82),
+     xlab="Buoyant Density", ylab="Log Rel Abund ASV",
+     main="acc9603a819dc23a606ac6c1b9105b6d")
+lines(bd6, log(otu6+1), type='o', col='gray70', pch=23, bg='gray70')
+lines(sample_data(subset_samples(tab5, Treatment=="11MC2"))$Buoyant_density, 
+      log(otu_table(subset_samples(tab5, Treatment=="11MC2"))+1), type='o', 
+      pch=21, col="#45c097", bg="#45c097")
+lines(sample_data(subset_samples(tab5, Treatment=="12MC2"))$Buoyant_density, 
+      log(otu_table(subset_samples(tab5, Treatment=="12MC2"))+1), type='o', 
+      pch=21, col="#697cd4", bg="#697cd4")
+lines(sample_data(subset_samples(tab5, Treatment=="14MC2"))$Buoyant_density, 
+      log(otu_table(subset_samples(tab5, Treatment=="14MC2"))+1), type='o', 
+      pch=21, col="#9350a1", bg="#9350a1")
+lines(sample_data(subset_samples(tab5, Treatment=="15MC2"))$Buoyant_density, 
+      log(otu_table(subset_samples(tab5, Treatment=="15MC2"))+1), type='o', 
+      pch=21, col="#b94a73", bg="#b94a73")
+# ASV c1d9eada909d2d5dbe078f25f1038508 Not 9MC2 and 11MC2 
+plot(sample_data(subset_samples(tab7, Treatment=="12MC2"))$Buoyant_density, 
+     log(otu_table(subset_samples(tab7, Treatment=="12MC2"))+1), type='o',
+     col="#697cd4", 
+     pch=21, bg="#697cd4", ylim=c(0,0.4), xlim=c(1.76, 1.82),
+     xlab="Buoyant Density", ylab="Log Rel Abund ASV",
+     main="c1d9eada909d2d5dbe078f25f1038508")
+lines(bd8, log(otu8+1), type='o', col='gray70', pch=23, bg='gray70')
+lines(sample_data(subset_samples(tab7, Treatment=="14MC2"))$Buoyant_density, 
+      log(otu_table(subset_samples(tab7, Treatment=="14MC2"))+1), type='o', 
+      pch=21, col="#9350a1", bg="#9350a1")
+lines(sample_data(subset_samples(tab7, Treatment=="15MC2"))$Buoyant_density, 
+      log(otu_table(subset_samples(tab7, Treatment=="15MC2"))+1), type='o', 
+      pch=21, col="#b94a73", bg="#b94a73")
+
+#ASV 27af011f1ebcc0867bb168193e6a9d2 No 9MC2 and 11MC2 
+plot(sample_data(subset_samples(tab9, Treatment=="12MC2"))$Buoyant_density, 
+     log(otu_table(subset_samples(tab9, Treatment=="12MC2"))+1), type='o',
+     col="#697cd4", 
+     pch=21, bg="#697cd4", ylim=c(0,1), xlim=c(1.76, 1.82),
+     xlab="Buoyant Density", ylab="Log Rel Abund ASV",
+     main="27af011f1ebcc0867bb168193e6a9d27")
+lines(bd10, log(otu10+1), type='o', col='gray70', pch=23, bg='gray70')
+lines(sample_data(subset_samples(tab9, Treatment=="14MC2"))$Buoyant_density, 
+      log(otu_table(subset_samples(tab9, Treatment=="14MC2"))+1), type='o', 
+      pch=21, col="#9350a1", bg="#9350a1")
+lines(sample_data(subset_samples(tab9, Treatment=="15MC2"))$Buoyant_density, 
+      log(otu_table(subset_samples(tab9, Treatment=="15MC2"))+1), type='o', 
+      pch=21, col="#b94a73", bg="#b94a73")
+# ASV 801efb14d6457f799fd2becee6d07b72
+plot(sample_data(subset_samples(tab11, Treatment=="9MC2"))$Buoyant_density, 
+     log(otu_table(subset_samples(tab11, Treatment=="9MC2"))+1), type='o', col="#62a352", 
+     pch=21, bg="#62a352", ylim=c(0,1.2), xlim=c(1.76, 1.82),
+     xlab="Buoyant Density", ylab="Log Rel Abund ASV",
+     main="801efb14d6457f799fd2becee6d07b72")
+lines(bd12, log(otu12+1), type='o', col='gray70', pch=23, bg='gray70')
+lines(sample_data(subset_samples(tab11, Treatment=="11MC2"))$Buoyant_density, 
+      log(otu_table(subset_samples(tab11, Treatment=="11MC2"))+1), type='o', 
+      pch=21, col="#45c097", bg="#45c097")
+lines(sample_data(subset_samples(tab11, Treatment=="12MC2"))$Buoyant_density, 
+      log(otu_table(subset_samples(tab11, Treatment=="12MC2"))+1), type='o', 
+      pch=21, col="#697cd4", bg="#697cd4")
+lines(sample_data(subset_samples(tab11, Treatment=="14MC2"))$Buoyant_density, 
+      log(otu_table(subset_samples(tab11, Treatment=="14MC2"))+1), type='o', 
+      pch=21, col="#9350a1", bg="#9350a1")
+lines(sample_data(subset_samples(tab11, Treatment=="15MC2"))$Buoyant_density, 
+      log(otu_table(subset_samples(tab11, Treatment=="15MC2"))+1), type='o', 
+      pch=21, col="#b94a73", bg="#b94a73")
+
+
+# ASV a6db2d87f1e7a32216e5041a1920f12e
+plot(sample_data(subset_samples(tab13, Treatment=="9MC2"))$Buoyant_density, 
+     log(otu_table(subset_samples(tab13, Treatment=="9MC2"))+1), type='o', col="#62a352", 
+     pch=21, bg="#62a352", ylim=c(0,1.2), xlim=c(1.76, 1.82),
+     xlab="Buoyant Density", ylab="Log Rel Abund ASV",
+     main="a6db2d87f1e7a32216e5041a1920f12e")
+lines(bd14, log(otu14+1), type='o', col='gray70', pch=23, bg='gray70')
+lines(sample_data(subset_samples(tab13, Treatment=="11MC2"))$Buoyant_density, 
+      log(otu_table(subset_samples(tab13, Treatment=="11MC2"))+1), type='o', 
+      pch=21, col="#45c097", bg="#45c097")
+lines(sample_data(subset_samples(tab13, Treatment=="12MC2"))$Buoyant_density, 
+      log(otu_table(subset_samples(tab13, Treatment=="12MC2"))+1), type='o', 
+      pch=21, col="#697cd4", bg="#697cd4")
+lines(sample_data(subset_samples(tab13, Treatment=="14MC2"))$Buoyant_density, 
+      log(otu_table(subset_samples(tab13, Treatment=="14MC2"))+1), type='o', 
+      pch=21, col="#9350a1", bg="#9350a1")
+lines(sample_data(subset_samples(tab13, Treatment=="15MC2"))$Buoyant_density, 
+      log(otu_table(subset_samples(tab13, Treatment=="15MC2"))+1), type='o', 
+      pch=21, col="#b94a73", bg="#b94a73")
+
+# cf3381318906e1e08f58bca905636dc0
+plot(sample_data(subset_samples(tab15, Treatment=="9MC2"))$Buoyant_density, 
+     log(otu_table(subset_samples(tab15, Treatment=="9MC2"))+1), type='o', col="#62a352", 
+     pch=21, bg="#62a352", ylim=c(3,4.7), xlim=c(1.76, 1.82),
+     xlab="Buoyant Density", ylab="Log Rel Abund ASV",
+     main="cf3381318906e1e08f58bca905636dc0")
+lines(bd16, log(otu16+1), type='o', col='gray70', pch=23, bg='gray70')
+lines(sample_data(subset_samples(tab15, Treatment=="11MC2"))$Buoyant_density, 
+      log(otu_table(subset_samples(tab15, Treatment=="11MC2"))+1), type='o', 
+      pch=21, col="#45c097", bg="#45c097")
+lines(sample_data(subset_samples(tab15, Treatment=="12MC2"))$Buoyant_density, 
+      log(otu_table(subset_samples(tab15, Treatment=="12MC2"))+1), type='o', 
+      pch=21, col="#697cd4", bg="#697cd4")
+lines(sample_data(subset_samples(tab15, Treatment=="14MC2"))$Buoyant_density, 
+      log(otu_table(subset_samples(tab15, Treatment=="14MC2"))+1), type='o', 
+      pch=21, col="#9350a1", bg="#9350a1")
+lines(sample_data(subset_samples(tab15, Treatment=="15MC2"))$Buoyant_density, 
+      log(otu_table(subset_samples(tab15, Treatment=="15MC2"))+1), type='o', 
+      pch=21, col="#b94a73", bg="#b94a73")
+
+# f1e34308d952529287ada31976faec95 no 15MC2
+plot(sample_data(subset_samples(tab17, Treatment=="9MC2"))$Buoyant_density, 
+     log(otu_table(subset_samples(tab17, Treatment=="9MC2"))+1), type='o', col="#62a352", 
+     pch=21, bg="#62a352", ylim=c(0,0.12), xlim=c(1.76, 1.82),
+     xlab="Buoyant Density", ylab="Log Rel Abund ASV",
+     main="f1e34308d952529287ada31976faec95")
+lines(bd18, log(otu18+1), type='o', col='gray70', pch=23, bg='gray70')
+lines(sample_data(subset_samples(tab17, Treatment=="11MC2"))$Buoyant_density, 
+      log(otu_table(subset_samples(tab17, Treatment=="11MC2"))+1), type='o', 
+      pch=21, col="#45c097", bg="#45c097")
+lines(sample_data(subset_samples(tab17, Treatment=="12MC2"))$Buoyant_density, 
+      log(otu_table(subset_samples(tab17, Treatment=="12MC2"))+1), type='o', 
+      pch=21, col="#697cd4", bg="#697cd4")
+lines(sample_data(subset_samples(tab17, Treatment=="14MC2"))$Buoyant_density, 
+      log(otu_table(subset_samples(tab17, Treatment=="14MC2"))+1), type='o', 
+      pch=21, col="#9350a1", bg="#9350a1")
+
+# 3fa2974b1f70109275811beb1ae321c9 No 15MC2
+plot(sample_data(subset_samples(tab19, Treatment=="9MC2"))$Buoyant_density, 
+     log(otu_table(subset_samples(tab19, Treatment=="9MC2"))+1), type='o', col="#62a352", 
+     pch=21, bg="#62a352", ylim=c(0.3,2), xlim=c(1.76, 1.82),
+     xlab="Buoyant Density", ylab="Log Rel Abund ASV",
+     main="3fa2974b1f70109275811beb1ae321c9")
+lines(bd20, log(otu20+1), type='o', col='gray70', pch=23, bg='gray70')
+lines(sample_data(subset_samples(tab19, Treatment=="11MC2"))$Buoyant_density, 
+      log(otu_table(subset_samples(tab19, Treatment=="11MC2"))+1), type='o', 
+      pch=21, col="#45c097", bg="#45c097")
+lines(sample_data(subset_samples(tab19, Treatment=="12MC2"))$Buoyant_density, 
+      log(otu_table(subset_samples(tab19, Treatment=="12MC2"))+1), type='o', 
+      pch=21, col="#697cd4", bg="#697cd4")
+lines(sample_data(subset_samples(tab19, Treatment=="14MC2"))$Buoyant_density, 
+      log(otu_table(subset_samples(tab19, Treatment=="14MC2"))+1), type='o', 
+      pch=21, col="#9350a1", bg="#9350a1")
+
+# ASV 98f53519513214e968c569829a1471bb no 9Mc2
+plot(sample_data(subset_samples(tab21, Treatment=="11MC2"))$Buoyant_density, 
+     log(otu_table(subset_samples(tab21, Treatment=="11MC2"))+1), type='o', 
+     pch=21, col="#45c097", bg="#45c097", ylim=c(0,0.3), xlim=c(1.76, 1.82),
+     xlab="Buoyant Density", ylab="Log Rel Abund ASV",
+     main="98f53519513214e968c569829a1471bb")
+lines(bd22, log(otu22+1), type='o', col='gray70', pch=23, bg='gray70')
+lines(sample_data(subset_samples(tab21, Treatment=="12MC2"))$Buoyant_density, 
+      log(otu_table(subset_samples(tab21, Treatment=="12MC2"))+1), type='o', 
+      pch=21, col="#697cd4", bg="#697cd4")
+lines(sample_data(subset_samples(tab21, Treatment=="14MC2"))$Buoyant_density, 
+      log(otu_table(subset_samples(tab21, Treatment=="14MC2"))+1), type='o', 
+      pch=21, col="#9350a1", bg="#9350a1")
+lines(sample_data(subset_samples(tab21, Treatment=="15MC2"))$Buoyant_density, 
+      log(otu_table(subset_samples(tab21, Treatment=="15MC2"))+1), type='o', 
+      pch=21, col="#b94a73", bg="#b94a73")
+
+# efbe1f58b1e2984ddc53a64f047d94ff NO 14 or 15 
+plot(sample_data(subset_samples(tab23, Treatment=="9MC2"))$Buoyant_density, 
+     log(otu_table(subset_samples(tab23, Treatment=="9MC2"))+1), type='o', col="#62a352", 
+     pch=21, bg="#62a352", ylim=c(2.3,4.3), xlim=c(1.76, 1.82),
+     xlab="Buoyant Density", ylab="Log Rel Abund ASV",
+     main="efbe1f58b1e2984ddc53a64f047d94ff")
+lines(bd24, log(otu24+1), type='o', col='gray70', pch=23, bg='gray70')
+lines(sample_data(subset_samples(tab23, Treatment=="11MC2"))$Buoyant_density, 
+      log(otu_table(subset_samples(tab23, Treatment=="11MC2"))+1), type='o', 
+      pch=21, col="#45c097", bg="#45c097")}
+```
+
+## SI Figure 6
+
+```{r si-figure-6, fig.height=4, fig.width=8}
+read=read.csv(file='asvs_l2f_max2_copy.csv',header=T,row.names=1)
+
+plot(read$copy.number, read$MaxL2FChange_edit, cex=2, pch = 21, bg='navy')
+l=lm(read$MaxL2FChange_edit~read$copy.number)
+anova(l)
+abline(l)
+
+plot(read$copy.number, read$lnpeak)
+l=lm(read$lnpeak~read$copy.number)
+anova(l)
+abline(l)
+
+
+par(mfrow=c(1,2), xpd=T, mar=c(5,5,1,1))
+plot(read$copy.number, read$MaxL2FChange_edit, cex=1.2, pch = 21, bg='gray70',
+     xlab="Copy Number", ylab="Max2 Log Fold Change")
+text(0.2,7, 'a', cex=2)
+l=lm(read$MaxL2FChange_edit~read$copy.number)
+anova(l)
+abline(l, xpd=F)
+
+plot(read$copy.number, read$lnpeak, cex=1.2, pch = 21, bg='gray70',
+     xlab="Copy Number", ylab="Latency")
+text(0.2,5.5, 'b', cex=2)
+
+l=lm(read$lnpeak~read$copy.number)
+anova(l)
+abline(l,xpd=F)
+```
+
+## SI Figure 7
+
+```{r si-figure-7, fig.height=8, fig.width=6, message=FALSE, error=FALSE, warning=FALSE}
+
+phyo_comm=subset_samples(phyo2, Comm_Frac=="Community")
+phyo_comm_abund=transform_sample_counts(phyo_comm, function(x) x/sum(x))
+df_l2ft=read.csv('/Users/oliviaahern/Documents/GitHub/Exp3_MC2/data_greaterthan0.1.csv',header=T,row.names=1)
+sub=subset(df_l2ft, Good=="Yes")
+#d=dcast(sub, OTU ~ timepoint, value.var = "log2FoldChange", fun.aggregate = sum)
+
+otu=sub$OTU
+length(unique(otu))
+incorporators=unique(otu)
+
+my_subset <- subset(tax_table(phyo_comm_abund), rownames(tax_table(phyo_comm_abund)) %in% incorporators)
+comm_abund=phyloseq(otu_table(phyo_comm_abund), my_subset, tree, map)
+try=otu_table(comm_abund)
+
+col_asv=c("#9b2c41","#df6574","#cf513e","#8f3a20","#d6895a","#c6772b","#ceac42","#8e8133","#92b440","#81bc60","#3c7125","#59bd78","#43c29e","#36dee6","#6b7fd8","#53388b","#ca73d4","#c884cb","#a43e90","#8a285c","#db6497")
+{par(mar=c(20,5,1,1), xpd=T)
+barplot(try, las=2, cex.names = 1, ylim=c(0,1),col=col_asv,
+        ylab="Relative Abundance 13C Incorporators ASVs",space=0)
+box(which='plot')
+legend(0,-0.35, legend=incorporators, pt.bg=col_asv, bty='n', pch =22, ncol=2, cex=0.7)
+}
+
+```
+
+## SI Figure 8
+
+```{r si-figure-8, fig.height=8, fig.width=10, message=FALSE, error=FALSE, warning=FALSE}
+
+phyo_comm=subset_samples(phyo2, Comm_Frac=="Frac")
+phyo_comm_abund=transform_sample_counts(phyo_comm, function(x) x/sum(x))
+df_l2ft=read.csv('/Users/oliviaahern/Documents/GitHub/Exp3_MC2/data_greaterthan0.1.csv',header=T,row.names=1)
+sub=subset(df_l2ft, Good=="Yes")
+#d=dcast(sub, OTU ~ timepoint, value.var = "log2FoldChange", fun.aggregate = sum)
+
+otu=sub$OTU
+length(unique(otu))
+incorporators=unique(otu)
+
+my_subset <- subset(tax_table(phyo_comm_abund), rownames(tax_table(phyo_comm_abund)) %in% incorporators)
+comm_abund=phyloseq(otu_table(phyo_comm_abund), my_subset, tree, map)
+try=otu_table(comm_abund)
+
+col_asv=c("#9b2c41","#df6574","#cf513e","#8f3a20","#d6895a","#c6772b","#ceac42","#8e8133","#92b440","#81bc60","#3c7125","#59bd78","#43c29e","#36dee6","#6b7fd8","#53388b","#ca73d4","#c884cb","#a43e90","#8a285c","#db6497")
+{par(mar=c(20,5,1,1), xpd=T)
+barplot(try, las=2, cex.names = 0.8, ylim=c(0,1),col=col_asv,
+        ylab="Relative Abundance 13C Incorporators ASVs",space=0)
+box(which='plot')
+legend(0,-0.4, legend=incorporators, pt.bg=col_asv, bty='n', pch =22, ncol=2, cex=0.7)
+}
+
+```
